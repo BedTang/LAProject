@@ -12,6 +12,8 @@
 #include <QDateTime>
 #include <QTime>
 
+#include <QMessageBox>
+
 //QT TCP
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -36,6 +38,14 @@ public:
     //返回当前时间
     QString updateRealTimeData();
 
+    void updateSeries(float point);
+
+    void updateChartData();
+
+    void updateAxisRange();
+
+
+
 private slots:
     void on_pushButton_clicked();
 
@@ -44,6 +54,19 @@ private slots:
     void on_pushButton3_clicked();
 
     void on_pushButton4_clicked();
+
+    void on_IPpushButton_clicked();
+
+    void on_IPpushButton2_clicked();
+
+
+
+    //TCP客户端槽函数
+    void ReadData();
+    void ReadError(QAbstractSocket::SocketError);
+
+    int ServerReadData();
+    void NewConnectionSlot();
 
 private:
     Ui::Widget *ui;
@@ -67,7 +90,7 @@ private:
     QTcpSocket *currentClient= new QTcpSocket();
     QList<QTcpSocket*> WhattcpClient;
 
-
+    int timeCount;
 
 };
 #endif // WIDGET_H
