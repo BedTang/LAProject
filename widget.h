@@ -18,6 +18,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QNetworkInterface>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -40,7 +41,7 @@ public:
 
     void updateSeries(float point);
 
-    void updateChartData();
+    // void updateChartData();
 
     void updateAxisRange();
 
@@ -68,8 +69,11 @@ private slots:
     int ServerReadData();
     void NewConnectionSlot();
 
+
 private:
     Ui::Widget *ui;
+
+
 
     //节点一
     QChart *chart=new QChart();
@@ -89,6 +93,9 @@ private:
     QTcpSocket *tcpClient= new QTcpSocket();
     QTcpSocket *currentClient= new QTcpSocket();
     QList<QTcpSocket*> WhattcpClient;
+
+    QTimer *timer;
+    QTimer *realTimeTimer;
 
     int timeCount;
 
