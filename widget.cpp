@@ -4,6 +4,7 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
+    , timer(new QTimer(this))
     , timeCount(0)
 
 {
@@ -19,32 +20,41 @@ Widget::Widget(QWidget *parent)
         ui->frame->setPalette(c);
         ui->frame2->setPalette(c);
         ui->frame3->setPalette(c);
+
+        ui->splitter->setStretchFactor(0,1);
+        ui->splitter->setStretchFactor(1,5);
     }
+
+    //信号与槽
+    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
+    connect(timer,SIGNAL(timeout()), this, SLOT(oneSecondAction()));
+
+    //timer
+    timer->start(1000);
+
 
 
 
     //节点一
     {
         //创建图标
-        // chart->setTitle("节点一");
-        // series->setName("温度");
-        // series_2->setName("湿度");
+        chart->setTitle("节点一");
+        series->setName("温度");
+        series_2->setName("湿度");
         // series->hide();
         // series_2->hide();
         chart->addSeries(series);
         chart->addSeries(series_2);
 
         //X轴（时间轴）//使用时间坐标轴不能使用 createDefaultAxes()
-        const QDateTime temp_StartTime(QDateTime::currentDateTime()); //前面是年月日，后面是小时、分钟、秒
-        const QDateTime temp_EndTime(QDate(2024, 4, 2), QTime(10, 2, 20));
-
         QDateTimeAxis *axisXDate = new QDateTimeAxis();//时间轴
         axisXDate->setTickCount(10);//分为 n-1 格
-        axisXDate->setFormat("hh:mm:ss");//设置时间显示格式
-        axisXDate->setTitleText("时间");//设置坐标轴名称
-        axisXDate->setRange(temp_StartTime,temp_StartTime.addSecs(20));//时间显示范围
+        axisXDate->setFormat("mm:ss");//设置时间显示格式
+        // axisXDate->setTitleText("时间");//设置坐标轴名称
+        axisXDate->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
         chart->addAxis(axisXDate,Qt::AlignBottom);//向图标添加坐标轴
         series->attachAxis(axisXDate);//将曲线 series 附在 axisXDate 上
+        series_2->attachAxis(axisXDate);
         // axisXDate->setGridLineVisible(true);
 
         //X轴
@@ -65,6 +75,7 @@ Widget::Widget(QWidget *parent)
         axisY->setMinorTickCount(5);
         chart->addAxis(axisY,Qt::AlignLeft);
         series->attachAxis(axisY);
+        series_2->attachAxis(axisY);
         axisY->applyNiceNumbers();
 
         //图标设置
@@ -153,8 +164,7 @@ Widget::Widget(QWidget *parent)
     // }
 
     // tcpClient->disconnectFromHost();
-    // if (tcpClient->state() == QAbstractSocket::UnconnectedState \
-    //     || tcpClient->waitForDisconnected(1000))  //已断开连接则进入if{}
+    // if (tcpClient->state() == QAbstractSocket::UnconnectedState || tcpClient->waitForDisconnected(1000))  //已断开连接则进入if{}
     // {
     //     ui->IPpushButton->setText("连接");
     //     // ui->pushButton4->setEnabled(false);
@@ -186,7 +196,6 @@ Widget::Widget(QWidget *parent)
         }
     }
 
-    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
 
 
 
@@ -198,6 +207,11 @@ QString Widget::updateRealTimeData()
 {
     QDateTime dateTime= QDateTime::currentDateTime();
     return dateTime.toString("hh:mm:ss:z");
+}
+QString Widget::updateRealTimeData(int i)
+{
+    QDateTime dateTime= QDateTime::currentDateTime();
+    return dateTime.toString("hh:mm:ss");
 }
 
 
@@ -243,14 +257,48 @@ int Widget::ServerReadData()
         if(IP_Port != IP_Port_Pre)
             ui->textBrowser->append(IP_Port);
 
-        ui->textBrowser->append("[ "+updateRealTimeData()+" ]"+buffer);
+        //处理接收到的数据
+        QString str=buffer;
+        qDebug()<<str;
+        str=str.simplified();
+        // QString strtemp=str[0];
+        QByteArray array = str.toLatin1();
+        str=str.remove(0,1);
+        qDebug()<<array.at(0);
+        qDebug()<<str.toFloat();
+        qDebug()<<str;
+        // updateSeries(str.remove(0,1).toFloat());
+
+
+
+
+        switch (array.at(0))
+        {
+        case 't':
+            updateSeries(str.toFloat(),2);
+            break;
+        case 'h':
+            updateSeries(str.toFloat(),1);
+            break;
+        case 'l':
+            updateSeries(str.toFloat(),3);
+            break;
+        case 'x':
+            updateSeries(str.toFloat(),4);
+            break;
+        default:
+            break;
+        }
+
+        ui->textBrowser->append("[ "+updateRealTimeData()+" ]"+str);
 
         //更新ip_port
         IP_Port_Pre = IP_Port;
-        QString str=buffer;
-        str=str.simplified();
-        updateSeries(str.toFloat());
-        return buffer.toInt();
+
+
+        // str=str.simplified();
+        // updateSeries(str.toFloat());
+        return str.toFloat();
     }
 }
 
@@ -258,21 +306,43 @@ void Widget::NewConnectionSlot()
 {
     currentClient = tcpServer->nextPendingConnection();
     WhattcpClient.append(currentClient);
-    // ui->textBrowser->append(tr("%1:%2").arg(currentClient->peerAddress().toString().split("::ffff:")[1])\
-    //                                .arg(currentClient->peerPort()));
+    // ui->textBrowser->append(tr("%1:%2").arg(currentClient->peerAddress().toString().split("::ffff:")[1]).arg(currentClient->peerPort()));
     connect(currentClient, SIGNAL(readyRead()), this, SLOT(ServerReadData()));
     // connect(currentClient, SIGNAL(disconnected()), this, SLOT(disconnectedSlot()));
 }
 
-void Widget::updateSeries(float point)
+void Widget::updateSeries(float point,unsigned char n)
 {
     timeCount++;
 
-    // 在温度曲线上增加一个点，模拟温度数据变化
     QPointF p1(QDateTime::currentMSecsSinceEpoch(),point);
-    series->append(p1);
+    switch (n) {
+    case 1:
+        series->append(p1);
+        break;
+    case 2:
+        series_2->append(p1);
+        break;
+    case 3:
+        series2->append(p1);
+        break;
+    case 4:
+        series3->append(p1);
+        break;
+    default:
+        break;
+    }
+
+    // 在温度曲线上增加一个点，模拟温度数据变化
+
+
     int count = series->points().size();
     chart->axisX()->setMax(QDateTime::currentDateTime());
+
+
+
+
+
     // 清除多余的点，只保留最新的30个数据点
     // if (series->count() > 30) {
     //     series->removePoints(0, 1);
@@ -308,6 +378,11 @@ void Widget::updateAxisRange()
 
     // 更新横轴范围
     chart->axisX()->setRange(minX, maxX);
+}
+
+void Widget::oneSecondAction()
+{
+    ui->statusBar->showMessage("当前系统时间："+updateRealTimeData(1));
 }
 
 //UI按钮功能区

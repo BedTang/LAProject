@@ -10,9 +10,11 @@
 #include <QDateTimeAxis>
 
 #include <QDateTime>
-#include <QTime>
+#include <QTimer>
 
 #include <QMessageBox>
+
+#include <QStatusBar>
 
 //QT TCP
 #include <QTcpServer>
@@ -38,8 +40,9 @@ public:
 
     //返回当前时间
     QString updateRealTimeData();
+    QString updateRealTimeData(int );
 
-    void updateSeries(float point);
+    void updateSeries(float point,unsigned char);
 
     // void updateChartData();
 
@@ -61,6 +64,7 @@ private slots:
     void on_IPpushButton2_clicked();
 
 
+    void oneSecondAction();
 
     //TCP客户端槽函数
     void ReadData();
@@ -73,7 +77,7 @@ private slots:
 private:
     Ui::Widget *ui;
 
-
+    QStatusBar *statusBar;
 
     //节点一
     QChart *chart=new QChart();
