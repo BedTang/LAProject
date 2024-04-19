@@ -1,5 +1,5 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef MAINFORM_H
+#define MAINFORM_H
 
 #include <QWidget>
 
@@ -26,17 +26,17 @@ QT_CHARTS_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class Widget;
+class MainForm;
 }
 QT_END_NAMESPACE
 
-class Widget : public QWidget
+class MainForm : public QWidget
 {
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = nullptr);
-    ~Widget();
+    MainForm(QWidget *parent = nullptr);
+    ~MainForm();
 
     //返回当前时间
     QString updateRealTimeData();
@@ -75,7 +75,7 @@ private slots:
 
 
 private:
-    Ui::Widget *ui;
+    Ui::MainForm *ui;
 
     QStatusBar *statusBar;
 
@@ -104,4 +104,4 @@ private:
     int timeCount;
 
 };
-#endif // WIDGET_H
+#endif // MAINFORM_H

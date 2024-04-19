@@ -1,9 +1,10 @@
-#include "widget.h"
-#include "ui_widget.h"
+#include "mainform.h"
+#include "ui_mainform.h"
+#include "settingform.h"
 
-Widget::Widget(QWidget *parent)
+MainForm::MainForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::Widget)
+    , ui(new Ui::MainForm)
     , timer(new QTimer(this))
     , timeCount(0)
 
@@ -203,26 +204,26 @@ Widget::Widget(QWidget *parent)
 }
 
 //返回当前时间
-QString Widget::updateRealTimeData()
+QString MainForm::updateRealTimeData()
 {
     QDateTime dateTime= QDateTime::currentDateTime();
     return dateTime.toString("hh:mm:ss:z");
 }
-QString Widget::updateRealTimeData(int i)
+QString MainForm::updateRealTimeData(int i)
 {
     QDateTime dateTime= QDateTime::currentDateTime();
     return dateTime.toString("hh:mm:ss");
 }
 
 
-Widget::~Widget()
+MainForm::~MainForm()
 {
     delete ui;
 }
 
 
 //TCP客户端槽函数，接收数据
-void Widget::ReadData()
+void MainForm::ReadData()
 {
     QByteArray buffer = tcpClient->readAll();
     if(!buffer.isEmpty())
@@ -232,7 +233,7 @@ void Widget::ReadData()
 }
 
 //TCP客户端槽函数,连接错误
-void Widget::ReadError(QAbstractSocket::SocketError)
+void MainForm::ReadError(QAbstractSocket::SocketError)
 {
     tcpClient->disconnectFromHost();
     ui->pushButton4->setText(tr("连接"));
@@ -241,7 +242,7 @@ void Widget::ReadError(QAbstractSocket::SocketError)
     msgBox.exec();
 }
 
-int Widget::ServerReadData()
+int MainForm::ServerReadData()
 {
     // 由于readyRead信号并未提供SocketDecriptor，所以需要遍历所有客户端
     for(int i=0; i<WhattcpClient.length(); i++)
@@ -302,7 +303,7 @@ int Widget::ServerReadData()
     }
 }
 
-void Widget::NewConnectionSlot()
+void MainForm::NewConnectionSlot()
 {
     currentClient = tcpServer->nextPendingConnection();
     WhattcpClient.append(currentClient);
@@ -311,7 +312,7 @@ void Widget::NewConnectionSlot()
     // connect(currentClient, SIGNAL(disconnected()), this, SLOT(disconnectedSlot()));
 }
 
-void Widget::updateSeries(float point,unsigned char n)
+void MainForm::updateSeries(float point,unsigned char n)
 {
     timeCount++;
 
@@ -357,7 +358,7 @@ void Widget::updateSeries(float point,unsigned char n)
     }*/
 }
 
-void Widget::updateAxisRange()
+void MainForm::updateAxisRange()
 {
     // 获取横轴范围
     qreal minX = std::numeric_limits<qreal>::max();
@@ -380,13 +381,13 @@ void Widget::updateAxisRange()
     chart->axisX()->setRange(minX, maxX);
 }
 
-void Widget::oneSecondAction()
+void MainForm::oneSecondAction()
 {
     ui->statusBar->showMessage("当前系统时间："+updateRealTimeData(1));
 }
 
 //UI按钮功能区
-void Widget::on_pushButton_clicked()
+void MainForm::on_pushButton_clicked()
 {
     if(ui->pushButton->text()=="启动服务器")
     {
@@ -430,25 +431,28 @@ void Widget::on_pushButton_clicked()
 }
 
 
-void Widget::on_pushButton2_clicked()
+void MainForm::on_pushButton2_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试2");
 }
 
 
-void Widget::on_pushButton3_clicked()
+void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
 }
 
 
-void Widget::on_pushButton4_clicked()
+void MainForm::on_pushButton4_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试4");
+    SettingForm *settingForm=new SettingForm;
+    settingForm->show();
+
 }
 
 
-void Widget::on_IPpushButton_clicked()
+void MainForm::on_IPpushButton_clicked()
 {
     // tcpClient->connectToHost(ui->IPlineEdit->text(), ui->PortlineEdit->text().toInt());
     // if (tcpClient->waitForConnected(1000))  // 连接成功则进入if{}
@@ -458,7 +462,7 @@ void Widget::on_IPpushButton_clicked()
     // }
 }
 
-void Widget::on_IPpushButton2_clicked()
+void MainForm::on_IPpushButton2_clicked()
 {
 
     // for(int i=0; i<WhattcpClient.length(); i++)//断开所有连接
