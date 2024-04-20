@@ -1,4 +1,4 @@
-QT       += core gui charts network
+QT       += core gui charts network serialport mqtt
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,14 +11,19 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainform.cpp \
+    mqtt.cpp \
+    serialassistantform.cpp \
     settingform.cpp
 
 HEADERS += \
     mainform.h \
+    mqtt.h \
+    serialassistantform.h \
     settingform.h
 
 FORMS += \
     mainform.ui \
+    serialassistantform.ui \
     settingform.ui
 
 # Default rules for deployment.

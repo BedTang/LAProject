@@ -440,6 +440,13 @@ void MainForm::on_pushButton2_clicked()
 void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
+    QStringList m_serialPortName;
+    qDebug()<<"1";
+    foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts())
+    {
+        m_serialPortName << info.portName();
+        qDebug()<<"serialPortName : "<<info.portName();
+    }
 }
 
 
