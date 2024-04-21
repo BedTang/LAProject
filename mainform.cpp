@@ -2,6 +2,9 @@
 #include "ui_mainform.h"
 #include "settingform.h"
 
+// #include "mqtt.h"
+
+
 MainForm::MainForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainForm)
@@ -25,6 +28,7 @@ MainForm::MainForm(QWidget *parent)
         ui->splitter->setStretchFactor(0,1);
         ui->splitter->setStretchFactor(1,5);
     }
+
 
     //信号与槽
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
@@ -84,58 +88,94 @@ MainForm::MainForm(QWidget *parent)
         chart->setAnimationOptions(QChart::SeriesAnimations);
 
 
+
+        // series->setPointLabelsVisible();
+        // series->setPointLabelsFormat("(@xPoint,@yPoint)");
+        // series->setPointLabelsClipping(false);
+        // series->setPointLabelsColor(Qt::blue);
+
+        // series_2->setPointLabelsVisible();
+        // series_2->setPointLabelsFormat("(@xPoint,@yPoint)");
+        // series_2->setPointLabelsClipping(false);
+        // series_2->setPointLabelsColor(Qt::blue);
+
+        // 设置三点属性
+        // series->setMarkerShape(QScatterSeries::MarkerShape::MarkerShapeCircle);
+        // series->setMarkerSize(15);
+
+
         //图标UI设置
         ui->graphicsView->setChart(chart);
         ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     }
 
     //节点二
-    {
-        QValueAxis *axisX2=new QValueAxis();
+
+        // QValueAxis *axisX2=new QValueAxis();
         QValueAxis *axisY2=new QValueAxis();
 
         chart2->setTitle("节点2");
         series2->setName("光强");
         chart2->addSeries(series2);
 
-        axisX2->setRange(0,60);
-        axisX2->setGridLineVisible(true);
-        axisX2->setTickCount(6);
-        axisX2->setMinorTickCount(10);
-        chart2->addAxis(axisX2,Qt::AlignBottom);
-        series2->attachAxis(axisX2);
+        // axisX2->setRange(0,60);
+        // axisX2->setGridLineVisible(true);
+        // axisX2->setTickCount(6);
+        // axisX2->setMinorTickCount(10);
+        // chart2->addAxis(axisX2,Qt::AlignBottom);
+        // series2->attachAxis(axisX2);
 
-        axisY2->setRange(0,60);
+        QDateTimeAxis *axisXDate2 = new QDateTimeAxis();//时间轴
+        axisXDate2->setTickCount(10);//分为 n-1 格
+        axisXDate2->setFormat("mm:ss");//设置时间显示格式
+        // axisXDate->setTitleText("时间");//设置坐标轴名称
+        axisXDate2->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
+        chart2->addAxis(axisXDate2,Qt::AlignBottom);//向图标添加坐标轴
+        series2->attachAxis(axisXDate2);//将曲线 series 附在 axisXDate 上
+
+        axisY2->setRange(0,4000);
         axisY2->setGridLineVisible(true);
         axisY2->setTickCount(6);
         axisY2->setMinorTickCount(5);
         chart2->addAxis(axisY2,Qt::AlignLeft);
         series2->attachAxis(axisY2);
 
+
+        // series2->setPointLabelsVisible();
+        // series2->setPointLabelsFormat("(@xPoint,@yPoint)");
+        // series2->setPointLabelsClipping(false);
+        // series2->setPointLabelsColor(Qt::blue);
+
         ui->graphicsView2->setChart(chart2);
         ui->graphicsView2->setRenderHint(QPainter::Antialiasing);
 
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 30; ++j) {
-                series2->append(i,j);
-            }
-        }
-    }
+
 
     //节点三
     {
-        QValueAxis *axisX3=new QValueAxis();
+        // QValueAxis *axisX3=new QValueAxis();
         QValueAxis *axisY3=new QValueAxis();
 
+        chart3->createDefaultAxes();
         chart3->setTitle("节点3");
         series3->setName("浓度");
+
+        // chart3->addSeries(scaseries3);
         chart3->addSeries(series3);
 
-        axisX3->setRange(0,60);
-        axisX3->setGridLineVisible(true);
-        axisX3->setTickCount(6);
-        axisX3->setMinorTickCount(5);
-        chart3->addAxis(axisX3,Qt::AlignBottom);
+        // axisX3->setRange(0,60);
+        // axisX3->setGridLineVisible(true);
+        // axisX3->setTickCount(6);
+        // axisX3->setMinorTickCount(5);
+        // chart3->addAxis(axisX3,Qt::AlignBottom);
+
+        QDateTimeAxis *axisXDate3 = new QDateTimeAxis();//时间轴
+        axisXDate3->setTickCount(10);//分为 n-1 格
+        axisXDate3->setFormat("mm:ss");//设置时间显示格式
+        // axisXDate->setTitleText("时间");//设置坐标轴名称
+        axisXDate3->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
+        chart3->addAxis(axisXDate3,Qt::AlignBottom);//向图标添加坐标轴
+        series3->attachAxis(axisXDate3);//将曲线 series 附在 axisXDate 上
 
         axisY3->setRange(0,60);
         axisY3->setGridLineVisible(true);
@@ -143,17 +183,29 @@ MainForm::MainForm(QWidget *parent)
         axisY3->setMinorTickCount(5);
         chart3->addAxis(axisY3,Qt::AlignLeft);
 
-        series3->attachAxis(axisX3);
+        // series3->attachAxis(axisX3);
         series3->attachAxis(axisY3);
 
+
+
+        scaseries3->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
+        scaseries3->setBorderColor(QColor(21, 100, 255)); //离散点边框颜色
+        scaseries3->setBrush(QBrush(QColor(5, 0, 0)));//离散点背景色
+        scaseries3->setMarkerSize(12); //离散点大小
+
+        scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
+        scaseries3->append(21,12);
+
+        // chart3->addSeries(scaseries3);
+        // chart3->setAxisX(axisXDate3,scaseries3);
+
+
         ui->graphicsView3->setChart(chart3);
+        // ui->graphicsView3->setChart(chart3_2);
+        // ui->graphicsView3->chart()->->addSeries(scaseries3);
         ui->graphicsView3->setRenderHint(QPainter::Antialiasing);
 
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 30; ++j) {
-                series3->append(i,j);
-            }
-        }
+
     }
 
     //初始化 TCP 客户端
@@ -172,9 +224,10 @@ MainForm::MainForm(QWidget *parent)
     // }
 
     //获取相应网卡信息
-    auto list = QNetworkInterface::allInterfaces();
-    foreach (QNetworkInterface interface,list)
+    // auto list = QNetworkInterface::allInterfaces();
+    foreach (QNetworkInterface interface,QNetworkInterface::allInterfaces())
     {
+        qDebug()<<interface.humanReadableName();
         // 1. 首先判断是不是以太网，过滤WiFi
         // if ( interface.hardwareAddress())
         //     continue;
@@ -187,20 +240,17 @@ MainForm::MainForm(QWidget *parent)
         if (interface.humanReadableName().contains("VMware") || interface.humanReadableName().contains("Virtual"))
             continue;
 
-        if (interface.humanReadableName().contains("WLAN")){
+        if (interface.humanReadableName().contains("网桥"))
+        {
             // 根据协议版本，来过滤掉ipv6地址
-            foreach (auto entry ,interface.addressEntries()) {
+            foreach (auto entry ,interface.addressEntries())
+            {
                 if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol)
                     ui->textBrowser->append("本机IP地址："+entry.ip().toString());
                 // return entry.ip();
             }
         }
     }
-
-
-
-
-
 }
 
 //返回当前时间
@@ -209,7 +259,7 @@ QString MainForm::updateRealTimeData()
     QDateTime dateTime= QDateTime::currentDateTime();
     return dateTime.toString("hh:mm:ss:z");
 }
-QString MainForm::updateRealTimeData(int i)
+QString MainForm::updateRealTimeData(int)
 {
     QDateTime dateTime= QDateTime::currentDateTime();
     return dateTime.toString("hh:mm:ss");
@@ -276,17 +326,37 @@ int MainForm::ServerReadData()
         switch (array.at(0))
         {
         case 't':
+        {
             updateSeries(str.toFloat(),2);
+            QColor c;
+            c.setGreen(255);
+            ui->frame->setPalette(c);
             break;
+        }
         case 'h':
+        {
             updateSeries(str.toFloat(),1);
+            QColor c;
+            c.setGreen(255);
+            ui->frame->setPalette(c);
             break;
+        }
         case 'l':
+        {
             updateSeries(str.toFloat(),3);
+            QColor c;
+            c.setGreen(255);
+            ui->frame2->setPalette(c);
             break;
+        }
         case 'x':
+        {
             updateSeries(str.toFloat(),4);
+            QColor c;
+            c.setGreen(255);
+            ui->frame3->setPalette(c);
             break;
+        }
         default:
             break;
         }
@@ -329,6 +399,7 @@ void MainForm::updateSeries(float point,unsigned char n)
         break;
     case 4:
         series3->append(p1);
+
         break;
     default:
         break;
@@ -337,8 +408,10 @@ void MainForm::updateSeries(float point,unsigned char n)
     // 在温度曲线上增加一个点，模拟温度数据变化
 
 
-    int count = series->points().size();
+    // int count = series->points().size();
     chart->axisX()->setMax(QDateTime::currentDateTime());
+    chart2->axisX()->setMax(QDateTime::currentDateTime());
+    chart3->axisX()->setMax(QDateTime::currentDateTime());
 
 
 
@@ -418,8 +491,8 @@ void MainForm::on_pushButton_clicked()
             if(WhattcpClient[i]->state() == QAbstractSocket::UnconnectedState)
             {
                 // 删除存储在combox中的客户端信息
-                // ui->cbxConnection->removeItem(ui->cbxConnection->findText(tr("%1:%2")\
-                //                                                               .arg(tcpClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                // ui->cbxConnection->removeItem(ui->cbxConnection->findText(tr("%1:%2")
+                //                                                               .arg(tcpClient[i]->peerAddress().toString().split("::ffff:")[1])
                 //                                                               .arg(tcpClient[i]->peerPort())));
                 // 删除存储在tcpClient列表中的客户端信息
                 WhattcpClient[i]->destroyed();
@@ -440,13 +513,7 @@ void MainForm::on_pushButton2_clicked()
 void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
-    QStringList m_serialPortName;
-    qDebug()<<"1";
-    foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts())
-    {
-        m_serialPortName << info.portName();
-        qDebug()<<"serialPortName : "<<info.portName();
-    }
+    MQTT a;
 }
 
 
@@ -490,8 +557,8 @@ void MainForm::on_IPpushButton2_clicked()
     //     if(WhattcpClient[i]->state() == QAbstractSocket::UnconnectedState)
     //     {
     //         // 删除存储在combox中的客户端信息
-    //         // ui->cbxConnection->removeItem(ui->cbxConnection->findText(tr("%1:%2")\
-    //         //                                                               .arg(tcpClient[i]->peerAddress().toString().split("::ffff:")[1])\
+    //         // ui->cbxConnection->removeItem(ui->cbxConnection->findText(tr("%1:%2")
+    //         //                                                               .arg(tcpClient[i]->peerAddress().toString().split("::ffff:")[1])
     //         //                                                               .arg(tcpClient[i]->peerPort())));
     //         // 删除存储在tcpClient列表中的客户端信息
     //         WhattcpClient[i]->destroyed();

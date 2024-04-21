@@ -3,6 +3,10 @@
 
 
 #include <QWidget>
+#include <QtCharts/QChartView>
+QT_CHARTS_USE_NAMESPACE
+#include "ui_mainform.h"
+
 
 #include <QtMqtt/qmqttclient.h>
 
@@ -15,7 +19,16 @@ public:
 
 
 private:
-    QMqttClient *mqttclient;
+    Ui::MainForm *ui;
+    QMqttClient *client;
+
+private slots:
+    void client_connected();
+    void client_subscribled(QString,quint8);
+    void client_receivemessage(QMqttMessage);
+    void client_unsubscrbled(QString);
+    void client_mqtterror(QMqttClient::ClientError);
+    void clietn_disconnected();
 
 };
 

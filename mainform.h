@@ -8,6 +8,8 @@
 #include <QtCharts/QLineSeries>
 #include <QValueAxis>
 #include <QDateTimeAxis>
+#include <QScatterSeries>
+
 
 #include <QDateTime>
 #include <QTimer>
@@ -24,6 +26,8 @@
 
 
 #include <QSerialPortInfo>
+
+#include "mqtt.h"
 
 
 QT_CHARTS_USE_NAMESPACE
@@ -44,7 +48,7 @@ public:
 
     //返回当前时间
     QString updateRealTimeData();
-    QString updateRealTimeData(int );
+    QString updateRealTimeData(int);
 
     void updateSeries(float point,unsigned char);
 
@@ -52,6 +56,42 @@ public:
 
     void updateAxisRange();
 
+
+protected:
+    Ui::MainForm *ui;
+
+private:
+    QStatusBar *statusBar;
+
+    //节点一
+    QChart *chart=new QChart();
+    QLineSeries *series=new QLineSeries;
+    QLineSeries *series_2=new QLineSeries;
+
+    //节点二
+    QChart *chart2=new QChart();
+    QLineSeries *series2=new QLineSeries;
+
+    //节点三
+
+    // QScatterSeries *scaseries3 = (QScatterSeries *)ui->graphicsView3->chart()->series().at(0);
+
+    QChart *chart3=new QChart();
+    QChart *chart3_2=new QChart();
+    QLineSeries *series3=new QLineSeries;
+    QScatterSeries *scaseries3 = new QScatterSeries();
+
+
+    //TCP
+    QTcpServer *tcpServer = new QTcpServer();
+    QTcpSocket *tcpClient= new QTcpSocket();
+    QTcpSocket *currentClient= new QTcpSocket();
+    QList<QTcpSocket*> WhattcpClient;
+
+    QTimer *timer;
+    QTimer *realTimeTimer;
+
+    int timeCount;
 
 
 private slots:
@@ -77,35 +117,6 @@ private slots:
     int ServerReadData();
     void NewConnectionSlot();
 
-
-private:
-    Ui::MainForm *ui;
-
-    QStatusBar *statusBar;
-
-    //节点一
-    QChart *chart=new QChart();
-    QLineSeries *series=new QLineSeries;
-    QLineSeries *series_2=new QLineSeries;
-
-    //节点二
-    QChart *chart2=new QChart();
-    QLineSeries *series2=new QLineSeries;
-
-    //节点三
-    QChart *chart3=new QChart();
-    QLineSeries *series3=new QLineSeries;
-
-    //TCP
-    QTcpServer *tcpServer = new QTcpServer();
-    QTcpSocket *tcpClient= new QTcpSocket();
-    QTcpSocket *currentClient= new QTcpSocket();
-    QList<QTcpSocket*> WhattcpClient;
-
-    QTimer *timer;
-    QTimer *realTimeTimer;
-
-    int timeCount;
 
 };
 #endif // MAINFORM_H
