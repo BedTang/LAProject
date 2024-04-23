@@ -13,9 +13,9 @@ MQTT::MQTT(QWidget *parent)
     qDebug()<<client->hostname();
     client->setPort(static_cast<quint16>(1883));
     qDebug()<<client->port();
-    client->setClientId("k14suPxlVyQ.Node1|securemode=2,signmethod=hmacsha256,timestamp=1713601321411|");
+    client->setClientId("Node1|securemode=2,signmethod=hmacsha1,timestamp=1713795492750|");
     client->setUsername("Node1&k14suPxlVyQ");
-    client->setPassword("3c161b60ad53115c620bafd81fb44b1631f83cf906e67b730c785fc9f962007a");
+    client->setPassword("9A6711EB8A8E9505ED2C72FDFBA4EEB8E6B19F78");
     client->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
     client->setKeepAlive(60);
     client->connectToHost();
@@ -36,13 +36,14 @@ MQTT::MQTT(QWidget *parent)
 
 MQTT::~MQTT()
 {
-
+    qDebug()<<"123";
 }
 
 void MQTT::client_connected()
 {
     qDebug()<<"这是来着MQTT类的测试消息!";
-    ui->textBrowser->append("这是来着MQTT类的测试消息!");
+    // ui->textBrowser->append("这是来着MQTT类的测试消息!");
+    qDebug()<<QMqttClient::ClientState();
 }
 
 void MQTT::client_subscribled(QString, quint8)
@@ -69,3 +70,9 @@ void MQTT::clietn_disconnected()
 {
 
 }
+
+void MQTT::on_pushButton4_clicked()
+{
+
+}
+

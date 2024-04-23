@@ -6,6 +6,8 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
+#include <QMessageBox>
+
 #include <QTimer>
 
 namespace Ui {
@@ -29,9 +31,9 @@ private:
 
     QTimer *timer;//定时器
 
-    QByteArray sendBuffer,ReceiveBuffer;//发送、接收缓冲区
+    // QByteArray sendBuffer,recvBuffer;//发送、接收缓冲区
 
-    long int sendByte,ReceiveByte;//发送、接收字符数
+    long int sendNum,receiveNum;//发送、接收字符数
 
 
 private slots:
@@ -40,8 +42,9 @@ private slots:
 
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
-    void on_serialOpenBT_clicked();
-    void on_scanSerialBT_clicked();
+    void on_serialSwitchBtn_clicked();
+    void on_scanSerialBtn_clicked();
+    void on_dataSendBtn_clicked();
 };
 
 #endif // SERIALASSISTANTFORM_H

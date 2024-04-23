@@ -513,7 +513,7 @@ void MainForm::on_pushButton2_clicked()
 void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
-    MQTT a;
+    MQTT *a=new MQTT();
 }
 
 
@@ -521,6 +521,7 @@ void MainForm::on_pushButton4_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试4");
     SettingForm *settingForm=new SettingForm;
+    settingForm->setAttribute(Qt::WA_DeleteOnClose);
     settingForm->show();
 
 }

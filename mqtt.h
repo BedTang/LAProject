@@ -30,6 +30,7 @@ private slots:
     void client_mqtterror(QMqttClient::ClientError);
     void clietn_disconnected();
 
+    void on_pushButton4_clicked();
 };
 
 #endif // MQTT_H

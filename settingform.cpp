@@ -8,6 +8,7 @@ SettingForm::SettingForm(QWidget *parent)
     , ui(new Ui::SettingForm)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_QuitOnClose,false);
 }
 
 SettingForm::~SettingForm()
