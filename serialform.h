@@ -1,5 +1,5 @@
-#ifndef SERIALASSISTANTFORM_H
-#define SERIALASSISTANTFORM_H
+#ifndef SERIALFORM_H
+#define SERIALFORM_H
 
 #include <QWidget>
 #include <QDebug>
@@ -11,21 +11,21 @@
 #include <QTimer>
 
 namespace Ui {
-class SerialAssistantForm;
+class SerialForm;
 }
 
-class SerialAssistantForm : public QWidget
+class SerialForm : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SerialAssistantForm(QWidget *parent = nullptr);
-    ~SerialAssistantForm();
+    explicit SerialForm(QWidget *parent = nullptr);
+    ~SerialForm();
     int Times,portTiem,lineEditData;
 
 
 private:
-    Ui::SerialAssistantForm *ui;
+    Ui::SerialForm *ui;
 
     QSerialPort *serial;//串口端口
 
@@ -47,4 +47,4 @@ private slots:
     void on_dataSendBtn_clicked();
 };
 
-#endif // SERIALASSISTANTFORM_H
+#endif // SERIALFORM_H

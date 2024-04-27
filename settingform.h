@@ -16,7 +16,9 @@ public:
     ~SettingForm();
 
 private slots:
-    void on_pushButton_2_clicked();
+    void on_MQTTFormBtn_clicked();
+
+    void on_SerialFormBtn_clicked();
 
 private:
     Ui::SettingForm *ui;

@@ -9,21 +9,24 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    TimeFunc.cpp \
     main.cpp \
     mainform.cpp \
-    mqtt.cpp \
-    serialassistantform.cpp \
+    mqttform.cpp \
+    serialform.cpp \
     settingform.cpp
 
 HEADERS += \
+    TimeFunc.h \
     mainform.h \
-    mqtt.h \
-    serialassistantform.h \
+    mqttform.h \
+    serialform.h \
     settingform.h
 
 FORMS += \
     mainform.ui \
-    serialassistantform.ui \
+    mqttform.ui \
+    serialform.ui \
     settingform.ui
 
 # Default rules for deployment.

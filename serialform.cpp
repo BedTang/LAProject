@@ -1,12 +1,14 @@
-#include "serialassistantform.h"
-#include "ui_serialassistantform.h"
+#include "serialform.h"
+#include "ui_serialform.h"
 
-SerialAssistantForm::SerialAssistantForm(QWidget *parent)
+SerialForm::SerialForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::SerialAssistantForm)
+    , ui(new Ui::SerialForm)
 {
-    ui->setupUi(this);
     setAttribute(Qt::WA_QuitOnClose,false);
+    ui->setupUi(this);
+    this->setWindowTitle("串口工具");
+
 
     serial=new QSerialPort;
 
@@ -22,19 +24,36 @@ SerialAssistantForm::SerialAssistantForm(QWidget *parent)
     // timer->start(1);
     connect(timer,SIGNAL(timeout()),
             this,SLOT(serialPort_readyRead()));
-
-
 }
 
-SerialAssistantForm::~SerialAssistantForm()
+
+SerialForm::~SerialForm()
 {
     delete ui;
 }
 
-void SerialAssistantForm::serialPort_readyRead()    //串口接收
+
+void SerialForm::on_dataSendBtn_clicked()
+{
+    QByteArray sendBuf;
+
+    if(ui->textSendRadioBtn->isChecked())
+    {
+        sendBuf=ui->sendEdit->toPlainText().toUtf8();
+    }
+    else
+    {
+        sendBuf=QByteArray::fromHex(ui->sendEdit->toPlainText().toUtf8().data());
+    }
+    serial->write(sendBuf);
+}
+
+
+void SerialForm::serialPort_readyRead()    //串口接收
 {
     QByteArray receiveBuf;
     receiveBuf=serial->readAll();
+    qDebug()<<receiveBuf;
 
     receiveNum+=receiveBuf.size();
 
@@ -58,25 +77,25 @@ void SerialAssistantForm::serialPort_readyRead()    //串口接收
 
 }
 
-void SerialAssistantForm::TimerEvent()
+void SerialForm::TimerEvent()
 {
 
 }
 
-void SerialAssistantForm::on_pushButton_clicked()
-{
-
-}
-
-
-void SerialAssistantForm::on_pushButton_2_clicked()
+void SerialForm::on_pushButton_clicked()
 {
 
 }
 
 
+void SerialForm::on_pushButton_2_clicked()
+{
 
-void SerialAssistantForm::on_serialSwitchBtn_clicked()  //开关串口
+}
+
+
+
+void SerialForm::on_serialSwitchBtn_clicked()  //开关串口
 {
     if(ui->serialSwitchBtn->text()=="打开串口")
     {
@@ -145,8 +164,10 @@ void SerialAssistantForm::on_serialSwitchBtn_clicked()  //开关串口
         //打开串口
         if(!serial->isOpen())
         {
-            QMessageBox::about(NULL,"提示","打开串口失败");
+            QMessageBox::about(NULL,"提示","打开串口失败");\
+
             qDebug()<<"11";
+            return;
         }
 
         //组合框失能
@@ -177,7 +198,7 @@ void SerialAssistantForm::on_serialSwitchBtn_clicked()  //开关串口
 }
 
 
-void SerialAssistantForm::on_scanSerialBtn_clicked()
+void SerialForm::on_scanSerialBtn_clicked()
 {
     ui->serialPortList->clear();
     QStringList m_serialPortName;
@@ -191,18 +212,4 @@ void SerialAssistantForm::on_scanSerialBtn_clicked()
 }
 
 
-void SerialAssistantForm::on_dataSendBtn_clicked()
-{
-    QByteArray sendBuf;
-
-    if(ui->textSendRadioBtn->isChecked())
-    {
-        sendBuf=ui->sendEdit->toPlainText().toUtf8().data();
-    }
-    else
-    {
-        sendBuf=QByteArray::fromHex(ui->sendEdit->toPlainText().toUtf8().data());
-    }
-    serial->write(sendBuf);
-}
 

@@ -27,7 +27,9 @@
 
 #include <QSerialPortInfo>
 
-#include "mqtt.h"
+#include "mqttform.h"
+
+#include "TimeFunc.h"
 
 
 QT_CHARTS_USE_NAMESPACE
@@ -47,8 +49,7 @@ public:
     ~MainForm();
 
     //返回当前时间
-    QString updateRealTimeData();
-    QString updateRealTimeData(int);
+
 
     void updateSeries(float point,unsigned char);
 

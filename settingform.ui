@@ -36,13 +36,13 @@
     <item>
      <widget class="QPushButton" name="pushButton">
       <property name="text">
-       <string>PushButton</string>
+       <string>确定</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="SerialFormBtn">
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -52,7 +52,20 @@
     </rect>
    </property>
    <property name="text">
-    <string> 串口调试助手</string>
+    <string> 串口工具</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MQTTFormBtn">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>310</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>MQTT工具</string>
    </property>
   </widget>
  </widget>

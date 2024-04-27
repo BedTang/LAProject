@@ -13,6 +13,7 @@ MainForm::MainForm(QWidget *parent)
 
 {
     ui->setupUi(this);
+    this->setWindowTitle("分布式工业节点与电机智能监测系统");
 
     //各项UI初始化
     {
@@ -251,18 +252,6 @@ MainForm::MainForm(QWidget *parent)
             }
         }
     }
-}
-
-//返回当前时间
-QString MainForm::updateRealTimeData()
-{
-    QDateTime dateTime= QDateTime::currentDateTime();
-    return dateTime.toString("hh:mm:ss:z");
-}
-QString MainForm::updateRealTimeData(int)
-{
-    QDateTime dateTime= QDateTime::currentDateTime();
-    return dateTime.toString("hh:mm:ss");
 }
 
 
@@ -513,7 +502,7 @@ void MainForm::on_pushButton2_clicked()
 void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
-    MQTT *a=new MQTT();
+    // MQTTForm *a=new MQTTForm();
 }
 
 
