@@ -3,7 +3,16 @@
 
 #include <QDateTime>
 
-QString updateRealTimeData();
-QString updateRealTimeData(int);
+static QString updateRealTimeData()
+{
+    QDateTime dateTime= QDateTime::currentDateTime();
+    return dateTime.toString("[ hh:mm:ss:z ]");
+}
+
+static QString updateRealTimeData(int)
+{
+    QDateTime dateTime= QDateTime::currentDateTime();
+    return dateTime.toString("[ hh:mm:ss ]");
+}
 
 #endif // TIMEFUNC_H

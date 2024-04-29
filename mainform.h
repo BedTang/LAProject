@@ -58,6 +58,9 @@ public:
     void updateAxisRange();
 
 
+
+
+
 protected:
     Ui::MainForm *ui;
 
@@ -120,4 +123,5 @@ private slots:
 
 
 };
+
 #endif // MAINFORM_H

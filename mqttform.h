@@ -1,3 +1,4 @@
+
 #ifndef MQTTFORM_H
 #define MQTTFORM_H
 
@@ -40,6 +41,7 @@ private slots:
     void on_ConnectBtn_clicked();
     void on_SubscribeBtn_clicked();
     void on_PublishBtn_clicked();
+    void on_UnSubscribeBtn_clicked();
 };
 
 #endif // MQTTFORM_H

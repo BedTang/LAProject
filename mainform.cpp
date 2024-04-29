@@ -350,7 +350,7 @@ int MainForm::ServerReadData()
             break;
         }
 
-        ui->textBrowser->append("[ "+updateRealTimeData()+" ]"+str);
+        ui->textBrowser->append(updateRealTimeData()+str);
 
         //更新ip_port
         IP_Port_Pre = IP_Port;
@@ -495,20 +495,20 @@ void MainForm::on_pushButton_clicked()
 
 void MainForm::on_pushButton2_clicked()
 {
-    ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试2");
+    ui->textBrowser->append(updateRealTimeData()+"测试2");
 }
 
 
 void MainForm::on_pushButton3_clicked()
 {
-    ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试3");
+    ui->textBrowser->append(updateRealTimeData()+"测试3");
     // MQTTForm *a=new MQTTForm();
 }
 
 
 void MainForm::on_pushButton4_clicked()
 {
-    ui->textBrowser->append("[ "+updateRealTimeData()+" ] "+"测试4");
+    ui->textBrowser->append(updateRealTimeData()+"测试4");
     SettingForm *settingForm=new SettingForm;
     settingForm->setAttribute(Qt::WA_DeleteOnClose);
     settingForm->show();
