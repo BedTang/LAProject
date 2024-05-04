@@ -4,7 +4,6 @@
 #include "qhostaddress.h"
 
 
-
 MQTTForm::MQTTForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MQTTForm)
@@ -27,12 +26,14 @@ MQTTForm::~MQTTForm()
     delete ui;
 }
 
+
 void MQTTForm::client_connected()   //连接成功
 {
     // qDebug()<<"这是来着MQTT类的测试消息!";
     ui->LogBrowser->append(updateRealTimeData()+"云平台连接成功！");
     // qDebug()<<client->is
 }
+
 
 void MQTTForm::client_subscribled(QString, quint8)  //订阅成功
 {
@@ -55,6 +56,7 @@ void MQTTForm::client_receivemessage(const QByteArray &message, const QMqttTopic
                             + message;
     ui->LogBrowser->append(content);
 }
+
 
 void MQTTForm::client_unsubscrbled(QString) //取消订阅
 {
@@ -110,7 +112,7 @@ void MQTTForm::on_PublishBtn_clicked()  //发布
 }
 
 
-void MQTTForm::on_UnSubscribeBtn_clicked()
+void MQTTForm::on_UnSubscribeBtn_clicked()  //取消订阅按钮
 {
     qDebug() << "取消订阅按钮";
     client->unsubscribe(ui->SubTopicLine->text());

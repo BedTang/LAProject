@@ -33,12 +33,11 @@ MainForm::MainForm(QWidget *parent)
 
     //信号与槽
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
-    connect(timer,SIGNAL(timeout()), this, SLOT(oneSecondAction()));
+    connect(timer,SIGNAL(timeout()), this, SLOT(timerOperation()));
+
 
     //timer
     timer->start(1000);
-
-
 
 
     //节点一
@@ -157,11 +156,11 @@ MainForm::MainForm(QWidget *parent)
         // QValueAxis *axisX3=new QValueAxis();
         QValueAxis *axisY3=new QValueAxis();
 
-        chart3->createDefaultAxes();
+
         chart3->setTitle("节点3");
         series3->setName("浓度");
 
-        // chart3->addSeries(scaseries3);
+        chart3->addSeries(scaseries3);
         chart3->addSeries(series3);
 
         // axisX3->setRange(0,60);
@@ -187,8 +186,6 @@ MainForm::MainForm(QWidget *parent)
         // series3->attachAxis(axisX3);
         series3->attachAxis(axisY3);
 
-
-
         scaseries3->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
         scaseries3->setBorderColor(QColor(21, 100, 255)); //离散点边框颜色
         scaseries3->setBrush(QBrush(QColor(5, 0, 0)));//离散点背景色
@@ -197,10 +194,10 @@ MainForm::MainForm(QWidget *parent)
         scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
         scaseries3->append(21,12);
 
-        // chart3->addSeries(scaseries3);
+        chart3->createDefaultAxes();
+        chart3->addSeries(scaseries3);
+        chart3->addSeries(series3);
         // chart3->setAxisX(axisXDate3,scaseries3);
-
-
         ui->graphicsView3->setChart(chart3);
         // ui->graphicsView3->setChart(chart3_2);
         // ui->graphicsView3->chart()->->addSeries(scaseries3);
@@ -241,7 +238,7 @@ MainForm::MainForm(QWidget *parent)
         if (interface.humanReadableName().contains("VMware") || interface.humanReadableName().contains("Virtual"))
             continue;
 
-        if (interface.humanReadableName().contains("网桥"))
+        if (interface.humanReadableName().contains("WLAN"))
         {
             // 根据协议版本，来过滤掉ipv6地址
             foreach (auto entry ,interface.addressEntries())
@@ -387,8 +384,10 @@ void MainForm::updateSeries(float point,unsigned char n)
         series2->append(p1);
         break;
     case 4:
+    {
         series3->append(p1);
-
+        scaseries3->append(p1);
+    }
         break;
     default:
         break;

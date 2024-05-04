@@ -3,6 +3,7 @@
 
 #include "serialform.h"
 #include "mqttform.h"
+#include "netform.h"
 
 SettingForm::SettingForm(QWidget *parent)
     : QWidget(parent)
@@ -30,5 +31,12 @@ void SettingForm::on_SerialFormBtn_clicked()
 {
     SerialForm *serialform=new SerialForm;
     serialform->show();
+}
+
+
+void SettingForm::on_NetForm_clicked()
+{
+    NetForm *netform=new NetForm;
+    netform->show();
 }
 
