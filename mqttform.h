@@ -33,9 +33,9 @@ private:
 
 private slots:
     void client_connected();
-    void client_subscribled(QString,quint8);
+
     void client_receivemessage(const QByteArray &, const QMqttTopicName &);
-    void client_unsubscrbled(QString);
+
     void client_mqtterror(QMqttClient::ClientError);
     void clietn_disconnected();
     void on_ConnectBtn_clicked();

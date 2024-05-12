@@ -24,6 +24,18 @@ SerialForm::SerialForm(QWidget *parent)
     // timer->start(1);
     connect(timer,SIGNAL(timeout()),
             this,SLOT(serialPort_readyRead()));
+
+    QButtonGroup* pButtonGroup = new QButtonGroup();
+    pButtonGroup->setExclusive(true);
+    pButtonGroup->addButton(ui->textReceiveRadioBtn,0);
+    pButtonGroup->addButton(ui->hexReceiveRadioBtn,1);
+    ui->textReceiveRadioBtn->setChecked(true);
+
+    QButtonGroup* pButtonGroup2 = new QButtonGroup();
+    pButtonGroup2->setExclusive(true);
+    pButtonGroup2->addButton(ui->textSendRadioBtn,0);
+    pButtonGroup2->addButton(ui->hexSendRadioBtn,1);
+
 }
 
 

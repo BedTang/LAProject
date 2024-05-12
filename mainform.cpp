@@ -30,6 +30,7 @@ MainForm::MainForm(QWidget *parent)
         ui->splitter->setStretchFactor(1,5);
     }
 
+    //数据库初始化
 
     //信号与槽
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
@@ -39,6 +40,16 @@ MainForm::MainForm(QWidget *parent)
     //timer
     timer->start(1000);
 
+    //数据库
+    SqliteOperator sqldb;
+    while(char tmep=sqldb.openDb())
+    {
+        switch (tmep) {
+        case 0:break;
+        case 1:return;
+        case 2:exit(1);break;
+        }
+    }
 
     //节点一
     {
@@ -110,7 +121,7 @@ MainForm::MainForm(QWidget *parent)
     }
 
     //节点二
-
+    {
         // QValueAxis *axisX2=new QValueAxis();
         QValueAxis *axisY2=new QValueAxis();
 
@@ -148,8 +159,7 @@ MainForm::MainForm(QWidget *parent)
 
         ui->graphicsView2->setChart(chart2);
         ui->graphicsView2->setRenderHint(QPainter::Antialiasing);
-
-
+}
 
     //节点三
     {
@@ -258,6 +268,112 @@ MainForm::~MainForm()
 }
 
 
+//数据库
+// char MainForm::openDb()
+// {
+//     DB=QSqlDatabase::addDatabase("QSQLITE");
+//     DB.setDatabaseName("./TestDB.db");
+//     if(!DB.open())
+//     {
+//         qDebug()<<DB.lastError();
+//         QMessageBox msgBox;
+//         msgBox.setIcon(QMessageBox::Critical);
+//         msgBox.setWindowTitle(tr("Error initializing database"));
+//         msgBox.setText(tr("Can't open the database!"));
+//         QPushButton *retry = msgBox.addButton(tr("Retry"), QMessageBox::AcceptRole);
+//         QPushButton *ignore = msgBox.addButton(tr("Ignore"), QMessageBox::AcceptRole);
+//         QPushButton *exit = msgBox.addButton(tr("Exit"), QMessageBox::AcceptRole);
+//         msgBox.exec();
+//         if(msgBox.clickedButton() == retry)
+//         {
+//             MainForm::openDb();
+//         }
+//         if(msgBox.clickedButton() == ignore)
+//         {
+//             return 1;
+//         }
+//         if(msgBox.clickedButton() == exit)
+//         {
+//             return 2;
+//         }
+//     }
+// }
+
+// void MainForm::addDb()//增
+// {
+//     queryString = QString("");
+//     QSqlQuery query;//执行SQL语句
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Insert data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Insert data failed!");
+//     }
+// }
+
+// void MainForm::deleteDb()//删
+// {
+//     //执行删除需要判断限制条件
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Delete data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Delete data failed!");
+//     }
+// }
+
+// void MainForm::updateDb()//改
+// {
+//     //注意限制条件
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Updata data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Updata data failed!");
+//     }
+// }
+
+// void MainForm::selectDb()//查
+// {
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Select data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Select data failed!");
+//     }
+// }
+
+// void MainForm::fastAddDb()//对大量数据快速增加
+// {
+
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Select data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Select data failed!");
+//     }
+// }
+
+
+
 //TCP客户端槽函数，接收数据
 void MainForm::ReadData()
 {
@@ -267,6 +383,7 @@ void MainForm::ReadData()
         ui->textBrowser->append(buffer);
     }
 }
+
 
 //TCP客户端槽函数,连接错误
 void MainForm::ReadError(QAbstractSocket::SocketError)
@@ -452,7 +569,7 @@ void MainForm::on_pushButton_clicked()
 {
     if(ui->pushButton->text()=="启动服务器")
     {
-        tcpServer->listen(QHostAddress::Any, ui->PortlineEdit2->text().toInt());
+        tcpServer->listen(QHostAddress::Any, mainPort);
         qDebug()<<tcpServer->serverPort();
         ui->textBrowser->append("当前服务器端口:" + QString::number(tcpServer->serverPort()));
         ui->pushButton->setText("关闭服务器");

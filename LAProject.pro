@@ -1,4 +1,4 @@
-QT       += core gui charts network serialport mqtt
+QT       += core gui charts network serialport mqtt sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,22 +12,21 @@ SOURCES += \
     main.cpp \
     mainform.cpp \
     mqttform.cpp \
-    netform.cpp \
     serialform.cpp \
-    settingform.cpp
+    settingform.cpp \
+    sqliteoperator.cpp
 
 HEADERS += \
     mainform.h \
     mqttform.h \
-    netform.h \
     serialform.h \
     settingform.h \
+    sqliteoperator.h \
     timefunc.h
 
 FORMS += \
     mainform.ui \
     mqttform.ui \
-    netform.ui \
     serialform.ui \
     settingform.ui
 

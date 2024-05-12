@@ -20,7 +20,8 @@ private slots:
 
     void on_SerialFormBtn_clicked();
 
-    void on_NetForm_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::SettingForm *ui;

@@ -13,9 +13,7 @@ MQTTForm::MQTTForm(QWidget *parent)
     this->setWindowTitle("MQTT工具");
     client=new QMqttClient(this);
     connect(client,SIGNAL(connected()),this,SLOT(client_connected()));
-    connect(client,SIGNAL(subscribed(QString,quint8)),this,SLOT(client_subscribled(QString,quint8)));
     connect(client,SIGNAL(messageReceived(QByteArray,QMqttTopicName)),this,SLOT(client_receivemessage(QByteArray,QMqttTopicName)));
-    connect(client,SIGNAL(unsubscribed(QString)),this,SLOT(client_unsubscrbled(QString)));
     connect(client,SIGNAL(error(QMQTT::ClientError)),this,SLOT(client_mqtterror(QMQTT::ClientError)));
     connect(client,SIGNAL(disconnected()),this,SLOT(client_disconnected()));
 
@@ -35,34 +33,16 @@ void MQTTForm::client_connected()   //连接成功
 }
 
 
-void MQTTForm::client_subscribled(QString, quint8)  //订阅成功
-{
-    const QString content = QDateTime::currentDateTime().toString()
-                            + QLatin1String(" Received Topic: ")
-                            + topic.name()
-                            + QLatin1String(" Message: ")
-                            + message
-                            + QLatin1Char('\n');
-    ui->LogBrowser->insertPlainText(content);
-}
-
-
 void MQTTForm::client_receivemessage(const QByteArray &message, const QMqttTopicName &topic)    //消息接收
 {
     const QString content = updateRealTimeData()
-                            + QLatin1String("1231212Topic:")
+                            + " 主题Topic : "
                             + topic.name().toUtf8()
-                            + QLatin1String("消息：")
+                            + "\n消息 : "
                             + message;
     ui->LogBrowser->append(content);
 }
 
-
-void MQTTForm::client_unsubscrbled(QString) //取消订阅
-{
-
-
-}
 
 void MQTTForm::client_mqtterror(QMqttClient::ClientError)   //Error
 {
@@ -101,6 +81,11 @@ void MQTTForm::on_SubscribeBtn_clicked()    //订阅
         QMessageBox::critical(this,tr("Error"),tr("订阅失败！请查看是否连接？"));
         return;
     }
+    const QString content = "\n"
+                            + updateRealTimeData()
+                            + " 订阅的主题 : "
+                            + ui->SubTopicLine->text();
+    ui->LogBrowser->insertPlainText(content);
 }
 
 
@@ -116,5 +101,10 @@ void MQTTForm::on_UnSubscribeBtn_clicked()  //取消订阅按钮
 {
     qDebug() << "取消订阅按钮";
     client->unsubscribe(ui->SubTopicLine->text());
+    const QString content = "\n"
+                            + updateRealTimeData()
+                            + " 取消订阅的主题 : "
+                            + ui->SubTopicLine->text();
+    ui->LogBrowser->insertPlainText(content);
 }
 

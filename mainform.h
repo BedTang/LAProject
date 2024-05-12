@@ -24,12 +24,16 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 
+//Qt SQL
+
 
 #include <QSerialPortInfo>
 
 #include "mqttform.h"
 
 #include "TimeFunc.h"
+
+#include "sqliteoperator.h"
 
 
 QT_CHARTS_USE_NAMESPACE
@@ -56,10 +60,6 @@ public:
     // void updateChartData();
 
     void updateAxisRange();
-
-
-
-
 
 protected:
     Ui::MainForm *ui;
@@ -98,6 +98,16 @@ private:
     int timeCount;
 
 
+    //数据库
+    // QString queryString;
+    // char openDb();
+    // void addDb();
+    // void deleteDb();
+    // void updateDb();
+    // void selectDb();
+    // void fastAddDb();
+    // QSqlDatabase DB;
+
 private slots:
     void on_pushButton_clicked();
 
@@ -123,5 +133,7 @@ private slots:
 
 
 };
+
+    static int mainPort=8080;
 
 #endif // MAINFORM_H

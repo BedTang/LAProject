@@ -63,6 +63,9 @@
        </property>
        <item row="4" column="0">
         <widget class="QLineEdit" name="PortlineEdit2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -133,7 +136,7 @@
                  <bool>true</bool>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::Box</enum>
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
@@ -391,7 +394,7 @@
             </font>
            </property>
            <property name="text">
-            <string>测试3</string>
+            <string>清空数据</string>
            </property>
           </widget>
          </item>
@@ -427,7 +430,7 @@
             </font>
            </property>
            <property name="text">
-            <string>测试2</string>
+            <string>保存</string>
            </property>
           </widget>
          </item>
@@ -450,11 +453,11 @@
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>常用传感节点</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <property name="leftMargin">
@@ -483,7 +486,7 @@
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>电机传感节点</string>
        </attribute>
       </widget>
      </widget>

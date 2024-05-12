@@ -3,7 +3,7 @@
 
 #include "serialform.h"
 #include "mqttform.h"
-#include "netform.h"
+#include "mainform.h"
 
 SettingForm::SettingForm(QWidget *parent)
     : QWidget(parent)
@@ -12,6 +12,7 @@ SettingForm::SettingForm(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("设置");
     setAttribute(Qt::WA_QuitOnClose,false);
+    ui->lineEdit->setText(QString::number(mainPort));
 }
 
 SettingForm::~SettingForm()
@@ -33,10 +34,8 @@ void SettingForm::on_SerialFormBtn_clicked()
     serialform->show();
 }
 
-
-void SettingForm::on_NetForm_clicked()
+void SettingForm::on_pushButton_clicked()
 {
-    NetForm *netform=new NetForm;
-    netform->show();
+    mainPort=ui->lineEdit->text().toInt();
 }
 

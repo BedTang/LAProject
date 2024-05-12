@@ -10,6 +10,8 @@
 
 #include <QTimer>
 
+#include <QButtonGroup>
+
 namespace Ui {
 class SerialForm;
 }
