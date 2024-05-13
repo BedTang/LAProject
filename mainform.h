@@ -84,7 +84,10 @@ private:
     QChart *chart3_2=new QChart();
     QLineSeries *series3=new QLineSeries;
     QScatterSeries *scaseries3 = new QScatterSeries();
-
+    QScatterSeries *scaseries3_1 = new QScatterSeries();
+    QDateTimeAxis *axisXDate3 = new QDateTimeAxis();
+    QValueAxis *axisY3=new QValueAxis();
+    QLabel *m_valueLabel;
 
     //TCP
     QTcpServer *tcpServer = new QTcpServer();
@@ -121,6 +124,7 @@ private slots:
 
     void on_IPpushButton2_clicked();
 
+    void pointHoverd(const QPointF &point, bool state);
 
     void oneSecondAction();
 

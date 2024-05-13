@@ -34,7 +34,7 @@ MainForm::MainForm(QWidget *parent)
 
     //信号与槽
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
-    connect(timer,SIGNAL(timeout()), this, SLOT(timerOperation()));
+    connect(timer,SIGNAL(timeout()), this, SLOT(oneSecondAction()));
 
 
     //timer
@@ -51,171 +51,178 @@ MainForm::MainForm(QWidget *parent)
         }
     }
 
-    //节点一
-    {
-        //创建图标
-        chart->setTitle("节点一");
-        series->setName("温度");
-        series_2->setName("湿度");
-        // series->hide();
-        // series_2->hide();
-        chart->addSeries(series);
-        chart->addSeries(series_2);
+//     //节点一
+//     {
+//         //创建图标
+//         chart->setTitle("节点一");
+//         series->setName("温度");
+//         series_2->setName("湿度");
+//         // series->hide();
+//         // series_2->hide();
+//         chart->addSeries(series);
+//         chart->addSeries(series_2);
 
-        //X轴（时间轴）//使用时间坐标轴不能使用 createDefaultAxes()
-        QDateTimeAxis *axisXDate = new QDateTimeAxis();//时间轴
-        axisXDate->setTickCount(10);//分为 n-1 格
-        axisXDate->setFormat("mm:ss");//设置时间显示格式
-        // axisXDate->setTitleText("时间");//设置坐标轴名称
-        axisXDate->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
-        chart->addAxis(axisXDate,Qt::AlignBottom);//向图标添加坐标轴
-        series->attachAxis(axisXDate);//将曲线 series 附在 axisXDate 上
-        series_2->attachAxis(axisXDate);
-        // axisXDate->setGridLineVisible(true);
+//         //X轴（时间轴）//使用时间坐标轴不能使用 createDefaultAxes()
+//         QDateTimeAxis *axisXDate = new QDateTimeAxis();//时间轴
+//         axisXDate->setTickCount(10);//分为 n-1 格
+//         axisXDate->setFormat("mm:ss");//设置时间显示格式
+//         // axisXDate->setTitleText("时间");//设置坐标轴名称
+//         axisXDate->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
+//         chart->addAxis(axisXDate,Qt::AlignBottom);//向图标添加坐标轴
+//         series->attachAxis(axisXDate);//将曲线 series 附在 axisXDate 上
+//         series_2->attachAxis(axisXDate);
+//         // axisXDate->setGridLineVisible(true);
 
-        //X轴
-        // QValueAxis *axisX=new QValueAxis();
-        // axisX->setRange(0,30);
-        // axisX->setTitleText("Time (s)");
-        // axisX->setGridLineVisible(true);
-        // axisX->setTickCount(15);
-        // axisX->setMinorTickCount(15);
-        // chart->addAxis(axisX,Qt::AlignBottom);
-        // series->attachAxis(axisX);
+//         //X轴
+//         // QValueAxis *axisX=new QValueAxis();
+//         // axisX->setRange(0,30);
+//         // axisX->setTitleText("Time (s)");
+//         // axisX->setGridLineVisible(true);
+//         // axisX->setTickCount(15);
+//         // axisX->setMinorTickCount(15);
+//         // chart->addAxis(axisX,Qt::AlignBottom);
+//         // series->attachAxis(axisX);
 
-        //Y轴
-        QValueAxis *axisY=new QValueAxis();
-        axisY->setRange(0,100);
-        axisY->setGridLineVisible(true);
-        axisY->setTickCount(6);
-        axisY->setMinorTickCount(5);
-        chart->addAxis(axisY,Qt::AlignLeft);
-        series->attachAxis(axisY);
-        series_2->attachAxis(axisY);
-        axisY->applyNiceNumbers();
+//         //Y轴
+//         QValueAxis *axisY=new QValueAxis();
+//         axisY->setRange(0,100);
+//         axisY->setGridLineVisible(true);
+//         axisY->setTickCount(6);
+//         axisY->setMinorTickCount(5);
+//         chart->addAxis(axisY,Qt::AlignLeft);
+//         series->attachAxis(axisY);
+//         series_2->attachAxis(axisY);
+//         axisY->applyNiceNumbers();
 
-        //图标设置
-        // chart->createDefaultAxes();
-        chart->setAnimationOptions(QChart::SeriesAnimations);
-
-
-
-        // series->setPointLabelsVisible();
-        // series->setPointLabelsFormat("(@xPoint,@yPoint)");
-        // series->setPointLabelsClipping(false);
-        // series->setPointLabelsColor(Qt::blue);
-
-        // series_2->setPointLabelsVisible();
-        // series_2->setPointLabelsFormat("(@xPoint,@yPoint)");
-        // series_2->setPointLabelsClipping(false);
-        // series_2->setPointLabelsColor(Qt::blue);
-
-        // 设置三点属性
-        // series->setMarkerShape(QScatterSeries::MarkerShape::MarkerShapeCircle);
-        // series->setMarkerSize(15);
+//         //图标设置
+//         // chart->createDefaultAxes();
+//         chart->setAnimationOptions(QChart::SeriesAnimations);
 
 
-        //图标UI设置
-        ui->graphicsView->setChart(chart);
-        ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    }
 
-    //节点二
-    {
-        // QValueAxis *axisX2=new QValueAxis();
-        QValueAxis *axisY2=new QValueAxis();
+//         // series->setPointLabelsVisible();
+//         // series->setPointLabelsFormat("(@xPoint,@yPoint)");
+//         // series->setPointLabelsClipping(false);
+//         // series->setPointLabelsColor(Qt::blue);
 
-        chart2->setTitle("节点2");
-        series2->setName("光强");
-        chart2->addSeries(series2);
+//         // series_2->setPointLabelsVisible();
+//         // series_2->setPointLabelsFormat("(@xPoint,@yPoint)");
+//         // series_2->setPointLabelsClipping(false);
+//         // series_2->setPointLabelsColor(Qt::blue);
 
-        // axisX2->setRange(0,60);
-        // axisX2->setGridLineVisible(true);
-        // axisX2->setTickCount(6);
-        // axisX2->setMinorTickCount(10);
-        // chart2->addAxis(axisX2,Qt::AlignBottom);
-        // series2->attachAxis(axisX2);
-
-        QDateTimeAxis *axisXDate2 = new QDateTimeAxis();//时间轴
-        axisXDate2->setTickCount(10);//分为 n-1 格
-        axisXDate2->setFormat("mm:ss");//设置时间显示格式
-        // axisXDate->setTitleText("时间");//设置坐标轴名称
-        axisXDate2->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
-        chart2->addAxis(axisXDate2,Qt::AlignBottom);//向图标添加坐标轴
-        series2->attachAxis(axisXDate2);//将曲线 series 附在 axisXDate 上
-
-        axisY2->setRange(0,4000);
-        axisY2->setGridLineVisible(true);
-        axisY2->setTickCount(6);
-        axisY2->setMinorTickCount(5);
-        chart2->addAxis(axisY2,Qt::AlignLeft);
-        series2->attachAxis(axisY2);
+//         // 设置三点属性
+//         // series->setMarkerShape(QScatterSeries::MarkerShape::MarkerShapeCircle);
+//         // series->setMarkerSize(15);
 
 
-        // series2->setPointLabelsVisible();
-        // series2->setPointLabelsFormat("(@xPoint,@yPoint)");
-        // series2->setPointLabelsClipping(false);
-        // series2->setPointLabelsColor(Qt::blue);
+//         //图标UI设置
+//         ui->graphicsView->setChart(chart);
+//         ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+//     }
 
-        ui->graphicsView2->setChart(chart2);
-        ui->graphicsView2->setRenderHint(QPainter::Antialiasing);
-}
+//     //节点二
+//     {
+//         // QValueAxis *axisX2=new QValueAxis();
+//         QValueAxis *axisY2=new QValueAxis();
+
+//         chart2->setTitle("节点2");
+//         series2->setName("光强");
+//         chart2->addSeries(series2);
+
+//         // axisX2->setRange(0,60);
+//         // axisX2->setGridLineVisible(true);
+//         // axisX2->setTickCount(6);
+//         // axisX2->setMinorTickCount(10);
+//         // chart2->addAxis(axisX2,Qt::AlignBottom);
+//         // series2->attachAxis(axisX2);
+
+//         QDateTimeAxis *axisXDate2 = new QDateTimeAxis();//时间轴
+//         axisXDate2->setTickCount(10);//分为 n-1 格
+//         axisXDate2->setFormat("mm:ss");//设置时间显示格式
+//         // axisXDate->setTitleText("时间");//设置坐标轴名称
+//         axisXDate2->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
+//         chart2->addAxis(axisXDate2,Qt::AlignBottom);//向图标添加坐标轴
+//         series2->attachAxis(axisXDate2);//将曲线 series 附在 axisXDate 上
+
+//         axisY2->setRange(0,4000);
+//         axisY2->setGridLineVisible(true);
+//         axisY2->setTickCount(6);
+//         axisY2->setMinorTickCount(5);
+//         chart2->addAxis(axisY2,Qt::AlignLeft);
+//         series2->attachAxis(axisY2);
+
+
+//         // series2->setPointLabelsVisible();
+//         // series2->setPointLabelsFormat("(@xPoint,@yPoint)");
+//         // series2->setPointLabelsClipping(false);
+//         // series2->setPointLabelsColor(Qt::blue);
+
+//         ui->graphicsView2->setChart(chart2);
+//         ui->graphicsView2->setRenderHint(QPainter::Antialiasing);
+// }
 
     //节点三
     {
-        // QValueAxis *axisX3=new QValueAxis();
-        QValueAxis *axisY3=new QValueAxis();
+        chart3->addAxis(axisXDate3,Qt::AlignBottom);//向图标添加坐标轴
+        chart3->addAxis(axisY3,Qt::AlignLeft);
+        chart3->addSeries(series3);// 折线图
+        // chart3->createDefaultAxes();
+        chart3->addSeries(scaseries3); // 散点图
+        chart3->addSeries(scaseries3_1); // 散点图
 
-
-        chart3->setTitle("节点3");
-        series3->setName("浓度");
-
-        chart3->addSeries(scaseries3);
-        chart3->addSeries(series3);
-
-        // axisX3->setRange(0,60);
-        // axisX3->setGridLineVisible(true);
-        // axisX3->setTickCount(6);
-        // axisX3->setMinorTickCount(5);
-        // chart3->addAxis(axisX3,Qt::AlignBottom);
-
-        QDateTimeAxis *axisXDate3 = new QDateTimeAxis();//时间轴
+        // 时间轴
         axisXDate3->setTickCount(10);//分为 n-1 格
         axisXDate3->setFormat("mm:ss");//设置时间显示格式
-        // axisXDate->setTitleText("时间");//设置坐标轴名称
+        axisXDate3->setTitleText("时间");//设置坐标轴名称
         axisXDate3->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
-        chart3->addAxis(axisXDate3,Qt::AlignBottom);//向图标添加坐标轴
-        series3->attachAxis(axisXDate3);//将曲线 series 附在 axisXDate 上
 
+        // Y轴
         axisY3->setRange(0,60);
         axisY3->setGridLineVisible(true);
         axisY3->setTickCount(6);
         axisY3->setMinorTickCount(5);
-        chart3->addAxis(axisY3,Qt::AlignLeft);
 
-        // series3->attachAxis(axisX3);
+        // 折线图
+        series3->setName("浓度");
+        series3->attachAxis(axisXDate3);//将曲线 series 附在 axisXDate 上
         series3->attachAxis(axisY3);
 
+        // 散点图 边框
         scaseries3->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
         scaseries3->setBorderColor(QColor(21, 100, 255)); //离散点边框颜色
-        scaseries3->setBrush(QBrush(QColor(5, 0, 0)));//离散点背景色
+        scaseries3->setBrush(QBrush(QColor(21, 100, 255)));//离散点背景色
         scaseries3->setMarkerSize(12); //离散点大小
 
-        scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
-        scaseries3->append(21,12);
+        // 散点图 中心
+        scaseries3_1->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
+        scaseries3_1->setBorderColor(Qt::white);//边框颜色
+        scaseries3_1->setBrush(QBrush(Qt::white));//背景颜色
+        scaseries3_1->setMarkerSize(6);//点大小
 
-        chart3->createDefaultAxes();
-        chart3->addSeries(scaseries3);
-        chart3->addSeries(series3);
+
+        scaseries3->attachAxis(axisXDate3);
+        scaseries3_1->attachAxis(axisXDate3);
+        scaseries3->attachAxis(axisY3);
+        scaseries3_1->attachAxis(axisY3);
+
+        chart3->setTitle("节点3");
+
         // chart3->setAxisX(axisXDate3,scaseries3);
         ui->graphicsView3->setChart(chart3);
         // ui->graphicsView3->setChart(chart3_2);
         // ui->graphicsView3->chart()->->addSeries(scaseries3);
         ui->graphicsView3->setRenderHint(QPainter::Antialiasing);
+        connect(scaseries3_1, &QScatterSeries::hovered, this, &MainForm::pointHoverd);//用于鼠标移动到点上显示数值
 
-
+        m_valueLabel = new QLabel(this);
+        m_valueLabel->setStyleSheet(QString("QLabel{color:#1564FF; font-family:\"Microsoft Yahei\"; font-size:12px; font-weight:bold;"
+                                            " background-color:rgba(21, 100, 255, 51); border-radius:4px; text-align:center;}"));
+        m_valueLabel->setFixedSize(44, 24);
+        m_valueLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        m_valueLabel->hide();
     }
 
+    {
     //初始化 TCP 客户端
     // {
     //     tcpClient = new QTcpSocket(this);   //实例化tcpClient
@@ -259,6 +266,7 @@ MainForm::MainForm(QWidget *parent)
             }
         }
     }
+    }
 }
 
 
@@ -266,112 +274,6 @@ MainForm::~MainForm()
 {
     delete ui;
 }
-
-
-//数据库
-// char MainForm::openDb()
-// {
-//     DB=QSqlDatabase::addDatabase("QSQLITE");
-//     DB.setDatabaseName("./TestDB.db");
-//     if(!DB.open())
-//     {
-//         qDebug()<<DB.lastError();
-//         QMessageBox msgBox;
-//         msgBox.setIcon(QMessageBox::Critical);
-//         msgBox.setWindowTitle(tr("Error initializing database"));
-//         msgBox.setText(tr("Can't open the database!"));
-//         QPushButton *retry = msgBox.addButton(tr("Retry"), QMessageBox::AcceptRole);
-//         QPushButton *ignore = msgBox.addButton(tr("Ignore"), QMessageBox::AcceptRole);
-//         QPushButton *exit = msgBox.addButton(tr("Exit"), QMessageBox::AcceptRole);
-//         msgBox.exec();
-//         if(msgBox.clickedButton() == retry)
-//         {
-//             MainForm::openDb();
-//         }
-//         if(msgBox.clickedButton() == ignore)
-//         {
-//             return 1;
-//         }
-//         if(msgBox.clickedButton() == exit)
-//         {
-//             return 2;
-//         }
-//     }
-// }
-
-// void MainForm::addDb()//增
-// {
-//     queryString = QString("");
-//     QSqlQuery query;//执行SQL语句
-//     if(query.exec(queryString))
-//     {
-//         qDebug()<<tr("Insert data successfully!");
-//     }
-//     else
-//     {
-//         qDebug()<<tr("Insert data failed!");
-//     }
-// }
-
-// void MainForm::deleteDb()//删
-// {
-//     //执行删除需要判断限制条件
-//     queryString = QString("");
-//     QSqlQuery query;
-//     if(query.exec(queryString))
-//     {
-//         qDebug()<<tr("Delete data successfully!");
-//     }
-//     else
-//     {
-//         qDebug()<<tr("Delete data failed!");
-//     }
-// }
-
-// void MainForm::updateDb()//改
-// {
-//     //注意限制条件
-//     queryString = QString("");
-//     QSqlQuery query;
-//     if(query.exec(queryString))
-//     {
-//         qDebug()<<tr("Updata data successfully!");
-//     }
-//     else
-//     {
-//         qDebug()<<tr("Updata data failed!");
-//     }
-// }
-
-// void MainForm::selectDb()//查
-// {
-//     queryString = QString("");
-//     QSqlQuery query;
-//     if(query.exec(queryString))
-//     {
-//         qDebug()<<tr("Select data successfully!");
-//     }
-//     else
-//     {
-//         qDebug()<<tr("Select data failed!");
-//     }
-// }
-
-// void MainForm::fastAddDb()//对大量数据快速增加
-// {
-
-//     queryString = QString("");
-//     QSqlQuery query;
-//     if(query.exec(queryString))
-//     {
-//         qDebug()<<tr("Select data successfully!");
-//     }
-//     else
-//     {
-//         qDebug()<<tr("Select data failed!");
-//     }
-// }
-
 
 
 //TCP客户端槽函数，接收数据
@@ -504,6 +406,7 @@ void MainForm::updateSeries(float point,unsigned char n)
     {
         series3->append(p1);
         scaseries3->append(p1);
+        scaseries3_1->append(p1);
     }
         break;
     default:
@@ -562,7 +465,26 @@ void MainForm::updateAxisRange()
 void MainForm::oneSecondAction()
 {
     ui->statusBar->showMessage("当前系统时间："+updateRealTimeData(1));
+    chart3->axisX()->setMax(QDateTime::currentDateTime());
+    scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
+    scaseries3_1->append(QDateTime::currentMSecsSinceEpoch(),12);
 }
+
+void MainForm::pointHoverd(const QPointF &point, bool state)
+{
+
+    if (state) {
+        m_valueLabel->setText(QString::asprintf("%1.0f", point.y()));
+
+        QPoint curPos = mapFromGlobal(QCursor::pos());
+        m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2, curPos.y() - m_valueLabel->height() * 1.5);//移动数值
+
+        m_valueLabel->show();//显示出来
+    }
+    else
+        m_valueLabel->hide();//进行隐藏
+}
+
 
 //UI按钮功能区
 void MainForm::on_pushButton_clicked()
@@ -673,3 +595,112 @@ void MainForm::on_IPpushButton2_clicked()
     // }
 
 }
+
+
+
+
+//数据库
+// char MainForm::openDb()
+// {
+//     DB=QSqlDatabase::addDatabase("QSQLITE");
+//     DB.setDatabaseName("./TestDB.db");
+//     if(!DB.open())
+//     {
+//         qDebug()<<DB.lastError();
+//         QMessageBox msgBox;
+//         msgBox.setIcon(QMessageBox::Critical);
+//         msgBox.setWindowTitle(tr("Error initializing database"));
+//         msgBox.setText(tr("Can't open the database!"));
+//         QPushButton *retry = msgBox.addButton(tr("Retry"), QMessageBox::AcceptRole);
+//         QPushButton *ignore = msgBox.addButton(tr("Ignore"), QMessageBox::AcceptRole);
+//         QPushButton *exit = msgBox.addButton(tr("Exit"), QMessageBox::AcceptRole);
+//         msgBox.exec();
+//         if(msgBox.clickedButton() == retry)
+//         {
+//             MainForm::openDb();
+//         }
+//         if(msgBox.clickedButton() == ignore)
+//         {
+//             return 1;
+//         }
+//         if(msgBox.clickedButton() == exit)
+//         {
+//             return 2;
+//         }
+//     }
+// }
+
+// void MainForm::addDb()//增
+// {
+//     queryString = QString("");
+//     QSqlQuery query;//执行SQL语句
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Insert data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Insert data failed!");
+//     }
+// }
+
+// void MainForm::deleteDb()//删
+// {
+//     //执行删除需要判断限制条件
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Delete data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Delete data failed!");
+//     }
+// }
+
+// void MainForm::updateDb()//改
+// {
+//     //注意限制条件
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Updata data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Updata data failed!");
+//     }
+// }
+
+// void MainForm::selectDb()//查
+// {
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Select data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Select data failed!");
+//     }
+// }
+
+// void MainForm::fastAddDb()//对大量数据快速增加
+// {
+
+//     queryString = QString("");
+//     QSqlQuery query;
+//     if(query.exec(queryString))
+//     {
+//         qDebug()<<tr("Select data successfully!");
+//     }
+//     else
+//     {
+//         qDebug()<<tr("Select data failed!");
+//     }
+// }
+
+
