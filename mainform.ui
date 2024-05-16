@@ -64,14 +64,36 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="5" column="0">
-        <widget class="QLineEdit" name="PortlineEdit2">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="IPpushButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.073);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.183);
+    border-radius: 5px;
+    /* font: 14px 'Segoe UI', 'Microsoft YaHei'; */
+    padding: 5px 12px 6px 12px;
+    outline: none;
+}</string>
+         </property>
+         <property name="text">
+          <string>测试5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QTextBrowser" name="textBrowser">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>30</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -132,9 +154,30 @@ PlainTextEdit:disabled {
 }
 </string>
          </property>
-         <property name="text">
-          <string>8080</string>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>设备列表</string>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QTableView" name="tableView"/>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="0" column="0">
@@ -555,7 +598,7 @@ PillToolButton:disabled:checked {
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
+       <item row="3" column="0">
         <widget class="QPushButton" name="IPpushButton2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -580,338 +623,14 @@ PillToolButton:disabled:checked {
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QWidget" name="widget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="PortlineEdit2">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>节点1（温湿度）</string>
-            </property>
-            <widget class="QWidget" name="layoutWidget_2">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>20</y>
-               <width>121</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <item>
-               <widget class="QLabel" name="gBlabel">
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>在线状态：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QLabel" name="gBlabel3">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>70</y>
-               <width>71</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QLabel {
-    color: black;
-    color: --ThemeColorPrimary;
-    border: none;
-    background-color: transparent;
-    text-align: left;
-    padding: 0;
-    margin: 0;
-}
-
-HyperlinkLabel {
-    color: --ThemeColorPrimary;
-    border: none;
-    background-color: transparent;
-    text-align: left;
-    padding: 0;
-    margin: 0;
-}
-
-HyperlinkLabel[underline=true] {
-    text-decoration: underline;
-}
-
-HyperlinkLabel[underline=false] {
-    text-decoration: none;
-}
-
-HyperlinkLabel:hover {
-    color: --ThemeColorDark1;
-}
-
-HyperlinkLabel:pressed {
-    color: --ThemeColorLight1;
-}</string>
-             </property>
-             <property name="text">
-              <string>传感器数据：</string>
-             </property>
-            </widget>
-            <widget class="QWidget" name="layoutWidget_3">
-             <property name="geometry">
-              <rect>
-               <x>170</x>
-               <y>20</y>
-               <width>141</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_1">
-              <item>
-               <widget class="QLabel" name="gBlabel2">
-                <property name="text">
-                 <string>电池电量：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gBlabel2_2">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gBlabel2_3">
-                <property name="text">
-                 <string>%</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox2">
-            <property name="title">
-             <string>节点2（光照强度）</string>
-            </property>
-            <widget class="QWidget" name="layoutWidget_4">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>20</y>
-               <width>121</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout2">
-              <item>
-               <widget class="QLabel" name="gB2label">
-                <property name="text">
-                 <string>在线状态：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame2">
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="layoutWidget_5">
-             <property name="geometry">
-              <rect>
-               <x>170</x>
-               <y>20</y>
-               <width>141</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout2_2">
-              <item>
-               <widget class="QLabel" name="gB2label2">
-                <property name="text">
-                 <string>电池电量：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gB2label2_2">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gB2label2_3">
-                <property name="text">
-                 <string>%</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QLabel" name="gB2label3">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>70</y>
-               <width>71</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>传感器数据：</string>
-             </property>
-            </widget>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QGroupBox" name="groupBox3">
-            <property name="title">
-             <string>节点3（气体浓度）</string>
-            </property>
-            <widget class="QWidget" name="layoutWidget_6">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>20</y>
-               <width>121</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_31">
-              <item>
-               <widget class="QLabel" name="gB3label">
-                <property name="text">
-                 <string>在线状态：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame3">
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="layoutWidget_7">
-             <property name="geometry">
-              <rect>
-               <x>170</x>
-               <y>20</y>
-               <width>141</width>
-               <height>31</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_61">
-              <item>
-               <widget class="QLabel" name="gB3label2">
-                <property name="text">
-                 <string>电池电量：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gB3label2_2">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="gB3label2_3">
-                <property name="text">
-                 <string>%</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QLabel" name="gB2label3_2">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>70</y>
-               <width>71</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>传感器数据：</string>
-             </property>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="IPpushButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton{
-    color: black;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.073);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.183);
-    border-radius: 5px;
-    /* font: 14px 'Segoe UI', 'Microsoft YaHei'; */
-    padding: 5px 12px 6px 12px;
-    outline: none;
-}</string>
-         </property>
-         <property name="text">
-          <string>测试5</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QTextBrowser" name="textBrowser">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>30</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -972,33 +691,52 @@ PlainTextEdit:disabled {
 }
 </string>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QListView" name="listView">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+         <property name="text">
+          <string>8080</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="devicesTabWidget">
       <property name="styleSheet">
        <string notr="true">QTabWidget {
     border: none;
     background-color: transparent;
+}
+QTabWidget::tab{
+    color: white;
+    background: #5c8dff;
+    border: 1px solid #73b7ff;
+    min-width: 40ex;
+    min-height: 6ex;
+}
+QTabWidget::tab:selected{
+    background: #505cff;
+    margin-top: 2ex;
+}
+QTabWidget::close-button{
+    border-image: url(:/image/close.png);
+}
+QTabWidget::close-button:hover{
+    background: red;
 }</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>常用传感节点</string>
+        <string>主页</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <property name="leftMargin">
@@ -1018,45 +756,15 @@ PlainTextEdit:disabled {
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QChartView" name="graphicsView">
-           <property name="styleSheet">
-            <string notr="true">QChartView {
-    background: transparent;
-    outline: none;
-    border: none;
-    /* font: 13px 'Segoe UI', 'Microsoft YaHei'; */
-    selection-background-color: transparent;
-    alternate-background-color: transparent;
-}</string>
-           </property>
-          </widget>
-          <widget class="QChartView" name="graphicsView2"/>
-          <widget class="QChartView" name="graphicsView3">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-          </widget>
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>电机传感节点</string>
-       </attribute>
       </widget>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QChartView</class>
-   <extends>QGraphicsView</extends>
-   <header>qchartview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

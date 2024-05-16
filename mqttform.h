@@ -21,7 +21,7 @@ class MQTTForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MQTTForm(QWidget *parent = nullptr);
+    MQTTForm(QWidget *parent = nullptr);
     ~MQTTForm();
 
 

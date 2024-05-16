@@ -21,7 +21,7 @@ class SerialForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit SerialForm(QWidget *parent = nullptr);
+    SerialForm(QWidget *parent = nullptr);
     ~SerialForm();
     int Times,portTiem,lineEditData;
 

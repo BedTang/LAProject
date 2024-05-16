@@ -17,18 +17,26 @@ MainForm::MainForm(QWidget *parent)
 
     //各项UI初始化
     {
-        ui->frame->setAutoFillBackground(true);
-        ui->frame2->setAutoFillBackground(true);
-        ui->frame3->setAutoFillBackground(true);
+        // ui->frame->setAutoFillBackground(true);
+        // ui->frame2->setAutoFillBackground(true);
+        // ui->frame3->setAutoFillBackground(true);
         QColor c;
         c.setRed(255);
-        ui->frame->setPalette(c);
-        ui->frame2->setPalette(c);
-        ui->frame3->setPalette(c);
+        // ui->frame->setPalette(c);
+        // ui->frame2->setPalette(c);
+        // ui->frame3->setPalette(c);
 
         ui->splitter->setStretchFactor(0,1);
         ui->splitter->setStretchFactor(1,5);
+
+        // ui->devicesTabWidget->setTabsClosable(true);
+        ui->devicesTabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, nullptr);
     }
+
+    tableView = new class tableView(this, ui->tableView);
+    ui->tableView->setModel(tableView->addTable());
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     //数据库初始化
 
@@ -161,68 +169,67 @@ MainForm::MainForm(QWidget *parent)
 //         ui->graphicsView2->setRenderHint(QPainter::Antialiasing);
 // }
 
-    //节点三
-    {
-        chart3->addAxis(axisXDate3,Qt::AlignBottom);//向图标添加坐标轴
-        chart3->addAxis(axisY3,Qt::AlignLeft);
-        chart3->addSeries(series3);// 折线图
-        // chart3->createDefaultAxes();
-        chart3->addSeries(scaseries3); // 散点图
-        chart3->addSeries(scaseries3_1); // 散点图
-
-        // 时间轴
-        axisXDate3->setTickCount(10);//分为 n-1 格
-        axisXDate3->setFormat("mm:ss");//设置时间显示格式
-        axisXDate3->setTitleText("时间");//设置坐标轴名称
-        axisXDate3->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
-
-        // Y轴
-        axisY3->setRange(0,60);
-        axisY3->setGridLineVisible(true);
-        axisY3->setTickCount(6);
-        axisY3->setMinorTickCount(5);
-
-        // 折线图
-        series3->setName("浓度");
-        series3->attachAxis(axisXDate3);//将曲线 series 附在 axisXDate 上
-        series3->attachAxis(axisY3);
-
-        // 散点图 边框
-        scaseries3->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
-        scaseries3->setBorderColor(QColor(21, 100, 255)); //离散点边框颜色
-        scaseries3->setBrush(QBrush(QColor(21, 100, 255)));//离散点背景色
-        scaseries3->setMarkerSize(12); //离散点大小
-
-        // 散点图 中心
-        scaseries3_1->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
-        scaseries3_1->setBorderColor(Qt::white);//边框颜色
-        scaseries3_1->setBrush(QBrush(Qt::white));//背景颜色
-        scaseries3_1->setMarkerSize(6);//点大小
+    // //节点三
 
 
-        scaseries3->attachAxis(axisXDate3);
-        scaseries3_1->attachAxis(axisXDate3);
-        scaseries3->attachAxis(axisY3);
-        scaseries3_1->attachAxis(axisY3);
+    // {
+    //     chart3->addAxis(axisXDate3,Qt::AlignBottom);//向图标添加坐标轴
+    //     chart3->addAxis(axisY3,Qt::AlignLeft);
+    //     chart3->addSeries(series3);// 折线图
+    //     chart3->addSeries(scaseries3); // 散点图
+    //     chart3->addSeries(scaseries3_1); // 散点图
 
-        chart3->setTitle("节点3");
+    //     // 时间轴
+    //     axisXDate3->setTickCount(10);//分为 n-1 格
+    //     axisXDate3->setFormat("mm:ss");//设置时间显示格式
+    //     axisXDate3->setTitleText("时间");//设置坐标轴名称
+    //     axisXDate3->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(20));//时间显示范围
 
-        // chart3->setAxisX(axisXDate3,scaseries3);
-        ui->graphicsView3->setChart(chart3);
-        // ui->graphicsView3->setChart(chart3_2);
-        // ui->graphicsView3->chart()->->addSeries(scaseries3);
-        ui->graphicsView3->setRenderHint(QPainter::Antialiasing);
-        connect(scaseries3_1, &QScatterSeries::hovered, this, &MainForm::pointHoverd);//用于鼠标移动到点上显示数值
+    //     // Y轴
+    //     axisY3->setRange(0,60);
+    //     axisY3->setGridLineVisible(true);
+    //     axisY3->setTickCount(6);
+    //     axisY3->setMinorTickCount(5);
 
-        m_valueLabel = new QLabel(this);
-        m_valueLabel->setStyleSheet(QString("QLabel{color:#1564FF; font-family:\"Microsoft Yahei\"; font-size:12px; font-weight:bold;"
-                                            " background-color:rgba(21, 100, 255, 51); border-radius:4px; text-align:center;}"));
-        m_valueLabel->setFixedSize(44, 24);
-        m_valueLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        m_valueLabel->hide();
-    }
+    //     // 折线图
+    //     series3->setName("浓度");
+    //     series3->attachAxis(axisXDate3);//将曲线 series 附在 axisXDate 上
+    //     series3->attachAxis(axisY3);
 
-    {
+    //     // 散点图 边框
+
+    //     scaseries3->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
+    //     scaseries3->setBorderColor(QColor(21, 100, 255)); //离散点边框颜色
+    //     scaseries3->setBrush(QBrush(QColor(21, 100, 255)));//离散点背景色
+    //     scaseries3->setMarkerSize(12); //离散点大小
+
+    //     // 散点图 中心
+    //     scaseries3_1->setMarkerShape(QScatterSeries::MarkerShapeCircle);//圆形的点
+    //     scaseries3_1->setBorderColor(Qt::white);//边框颜色
+    //     scaseries3_1->setBrush(QBrush(Qt::white));//背景颜色
+    //     scaseries3_1->setMarkerSize(6);//点大小
+
+
+    //     scaseries3->attachAxis(axisXDate3);
+    //     scaseries3_1->attachAxis(axisXDate3);
+    //     scaseries3->attachAxis(axisY3);
+    //     scaseries3_1->attachAxis(axisY3);
+
+    //     // chart3->setTitle("节点3");
+
+    //     ui->graphicsView3->setChart(chart3);
+    //     // ui->graphicsView3->setChart(chart3_2);
+    //     // ui->graphicsView3->chart()->->addSeries(scaseries3);
+    //     ui->graphicsView3->setRenderHint(QPainter::Antialiasing);
+    //     connect(scaseries3_1, &QScatterSeries::hovered, this, &MainForm::pointHoverd);//用于鼠标移动到点上显示数值
+
+    //     m_valueLabel = new QLabel(this);
+    //     m_valueLabel->setStyleSheet(QString("QLabel{color:#1564FF; font-family:\"Microsoft Yahei\"; font-size:12px; font-weight:bold;"
+    //                                         " background-color:rgba(21, 100, 255, 51); border-radius:4px; text-align:center;}"));
+    //     m_valueLabel->setFixedSize(44, 24);
+    //     m_valueLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    //     m_valueLabel->hide();
+
     //初始化 TCP 客户端
     // {
     //     tcpClient = new QTcpSocket(this);   //实例化tcpClient
@@ -265,7 +272,6 @@ MainForm::MainForm(QWidget *parent)
                 // return entry.ip();
             }
         }
-    }
     }
 }
 
@@ -335,7 +341,7 @@ int MainForm::ServerReadData()
             updateSeries(str.toFloat(),2);
             QColor c;
             c.setGreen(255);
-            ui->frame->setPalette(c);
+            // ui->frame->setPalette(c);
             break;
         }
         case 'h':
@@ -343,7 +349,7 @@ int MainForm::ServerReadData()
             updateSeries(str.toFloat(),1);
             QColor c;
             c.setGreen(255);
-            ui->frame->setPalette(c);
+            // ui->frame->setPalette(c);
             break;
         }
         case 'l':
@@ -351,7 +357,7 @@ int MainForm::ServerReadData()
             updateSeries(str.toFloat(),3);
             QColor c;
             c.setGreen(255);
-            ui->frame2->setPalette(c);
+            // ui->frame2->setPalette(c);
             break;
         }
         case 'x':
@@ -359,7 +365,7 @@ int MainForm::ServerReadData()
             updateSeries(str.toFloat(),4);
             QColor c;
             c.setGreen(255);
-            ui->frame3->setPalette(c);
+            // ui->frame3->setPalette(c);
             break;
         }
         default:
@@ -387,39 +393,45 @@ void MainForm::NewConnectionSlot()
     // connect(currentClient, SIGNAL(disconnected()), this, SLOT(disconnectedSlot()));
 }
 
+void MainForm::addTab()
+{
+    chartView = new class chartView(this, this);
+    ui->devicesTabWidget->addTab(chartView->addChart(),"1");
+}
+
 void MainForm::updateSeries(float point,unsigned char n)
 {
     timeCount++;
 
     QPointF p1(QDateTime::currentMSecsSinceEpoch(),point);
-    switch (n) {
-    case 1:
-        series->append(p1);
-        break;
-    case 2:
-        series_2->append(p1);
-        break;
-    case 3:
-        series2->append(p1);
-        break;
-    case 4:
-    {
-        series3->append(p1);
-        scaseries3->append(p1);
-        scaseries3_1->append(p1);
-    }
-        break;
-    default:
-        break;
-    }
+    // switch (n) {
+    // case 1:
+    //     series->append(p1);
+    //     break;
+    // case 2:
+    //     series_2->append(p1);
+    //     break;
+    // case 3:
+    //     series2->append(p1);
+    //     break;
+    // case 4:
+    // {
+    //     series3->append(p1);
+    //     scaseries3->append(p1);
+    //     scaseries3_1->append(p1);
+    // }
+    //     break;
+    // default:
+    //     break;
+    // }
 
     // 在温度曲线上增加一个点，模拟温度数据变化
 
 
     // int count = series->points().size();
-    chart->axisX()->setMax(QDateTime::currentDateTime());
-    chart2->axisX()->setMax(QDateTime::currentDateTime());
-    chart3->axisX()->setMax(QDateTime::currentDateTime());
+    // chart->axisX()->setMax(QDateTime::currentDateTime());
+    // chart2->axisX()->setMax(QDateTime::currentDateTime());
+    // chart3->axisX()->setMax(QDateTime::currentDateTime());
 
 
 
@@ -441,48 +453,49 @@ void MainForm::updateSeries(float point,unsigned char n)
 
 void MainForm::updateAxisRange()
 {
-    // 获取横轴范围
-    qreal minX = std::numeric_limits<qreal>::max();
-    qreal maxX = std::numeric_limits<qreal>::min();
-    foreach (QAbstractSeries *series, chart->series()) {
-        QXYSeries *xySeries = static_cast<QXYSeries*>(series);
-        QPointF p1 = xySeries->at(0);
-        QPointF p2 = xySeries->at(xySeries->count() - 1);
-        qDebug()<<p1.x();
-        qDebug()<<p1.x();
-        if (p1.x() < minX) {
-            minX = p1.x();
-        }
-        if (p2.x() > maxX) {
-            maxX = p2.x();
-        }
-    }
+    // // 获取横轴范围
+    // qreal minX = std::numeric_limits<qreal>::max();
+    // qreal maxX = std::numeric_limits<qreal>::min();
+    // foreach (QAbstractSeries *series, chart->series()) {
+    //     QXYSeries *xySeries = static_cast<QXYSeries*>(series);
+    //     QPointF p1 = xySeries->at(0);
+    //     QPointF p2 = xySeries->at(xySeries->count() - 1);
+    //     qDebug()<<p1.x();
+    //     qDebug()<<p1.x();
+    //     if (p1.x() < minX) {
+    //         minX = p1.x();
+    //     }
+    //     if (p2.x() > maxX) {
+    //         maxX = p2.x();
+    //     }
+    // }
 
     // 更新横轴范围
-    chart->axisX()->setRange(minX, maxX);
+    // chart->axisX()->setRange(minX, maxX);
 }
 
 void MainForm::oneSecondAction()
 {
     ui->statusBar->showMessage("当前系统时间："+updateRealTimeData(1));
-    chart3->axisX()->setMax(QDateTime::currentDateTime());
-    scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
-    scaseries3_1->append(QDateTime::currentMSecsSinceEpoch(),12);
+    // chart3->axisX()->setMax(QDateTime::currentDateTime());
+    // scaseries3->append(QDateTime::currentMSecsSinceEpoch(),12);
+    // scaseries3_1->append(QDateTime::currentMSecsSinceEpoch(),12);
 }
 
 void MainForm::pointHoverd(const QPointF &point, bool state)
 {
 
-    if (state) {
-        m_valueLabel->setText(QString::asprintf("%1.0f", point.y()));
+    // if (state) {
+    //     m_valueLabel->setText(QString::asprintf("%1.0f", point.y()));
 
-        QPoint curPos = mapFromGlobal(QCursor::pos());
-        m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2, curPos.y() - m_valueLabel->height() * 1.5);//移动数值
-
-        m_valueLabel->show();//显示出来
-    }
-    else
-        m_valueLabel->hide();//进行隐藏
+    //     QPoint curPos = mapFromGlobal(QCursor::pos());
+    //     m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2, curPos.y() - m_valueLabel->height() * 1.5);//移动数值
+    //     qDebug()<<curPos.x()<<curPos.y();
+    //     qDebug()<<m_valueLabel->pos();
+    //     m_valueLabel->show();//显示出来
+    // }
+    // else
+    //     m_valueLabel->hide();//进行隐藏
 }
 
 
@@ -541,6 +554,7 @@ void MainForm::on_pushButton3_clicked()
 {
     ui->textBrowser->append(updateRealTimeData()+"测试3");
     // MQTTForm *a=new MQTTForm();
+    addTab();
 }
 
 
@@ -703,4 +717,12 @@ void MainForm::on_IPpushButton2_clicked()
 //     }
 // }
 
+
+
+void MainForm::on_devicesTabWidget_tabCloseRequested(int index)
+{
+    chartView = qobject_cast<class chartView *>(sender());
+    ui->devicesTabWidget->removeTab(index);
+    delete chartView;
+}
 

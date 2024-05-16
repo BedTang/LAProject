@@ -35,6 +35,10 @@
 
 #include "sqliteoperator.h"
 
+#include <QLabel>
+
+#include "dataviewoperator.h"
+
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -67,28 +71,6 @@ protected:
 private:
     QStatusBar *statusBar;
 
-    //节点一
-    QChart *chart=new QChart();
-    QLineSeries *series=new QLineSeries;
-    QLineSeries *series_2=new QLineSeries;
-
-    //节点二
-    QChart *chart2=new QChart();
-    QLineSeries *series2=new QLineSeries;
-
-    //节点三
-
-    // QScatterSeries *scaseries3 = (QScatterSeries *)ui->graphicsView3->chart()->series().at(0);
-
-    QChart *chart3=new QChart();
-    QChart *chart3_2=new QChart();
-    QLineSeries *series3=new QLineSeries;
-    QScatterSeries *scaseries3 = new QScatterSeries();
-    QScatterSeries *scaseries3_1 = new QScatterSeries();
-    QDateTimeAxis *axisXDate3 = new QDateTimeAxis();
-    QValueAxis *axisY3=new QValueAxis();
-    QLabel *m_valueLabel;
-
     //TCP
     QTcpServer *tcpServer = new QTcpServer();
     QTcpSocket *tcpClient= new QTcpSocket();
@@ -100,6 +82,11 @@ private:
 
     int timeCount;
 
+    chartView *chartView;
+
+    tableView *tableView;
+
+
 
     //数据库
     // QString queryString;
@@ -110,6 +97,9 @@ private:
     // void selectDb();
     // void fastAddDb();
     // QSqlDatabase DB;
+
+public slots:
+    void pointHoverd(const QPointF &point, bool state);
 
 private slots:
     void on_pushButton_clicked();
@@ -124,7 +114,7 @@ private slots:
 
     void on_IPpushButton2_clicked();
 
-    void pointHoverd(const QPointF &point, bool state);
+    // void pointHoverd(const QPointF &point, bool state);
 
     void oneSecondAction();
 
@@ -135,7 +125,10 @@ private slots:
     int ServerReadData();
     void NewConnectionSlot();
 
+    void addTab();
 
+
+    void on_devicesTabWidget_tabCloseRequested(int index);
 };
 
     static int mainPort=8080;

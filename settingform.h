@@ -12,7 +12,7 @@ class SettingForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit SettingForm(QWidget *parent = nullptr);
+    SettingForm(QWidget *parent = nullptr);
     ~SettingForm();
 
 private slots:
