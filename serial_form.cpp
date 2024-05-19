@@ -1,5 +1,5 @@
-#include "serialform.h"
-#include "ui_serialform.h"
+#include "serial_form.h"
+#include "ui_serial_form.h"
 
 SerialForm::SerialForm(QWidget *parent)
     : QWidget(parent)

@@ -1,5 +1,5 @@
-#include "mqttform.h"
-#include "ui_mqttform.h"
+#include "mqtt_form.h"
+#include "ui_mqtt_form.h"
 
 #include "qhostaddress.h"
 

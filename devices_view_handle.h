@@ -1,5 +1,5 @@
-#ifndef DATAVIEWOPERATOR_H
-#define DATAVIEWOPERATOR_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 #include <QWidget>
 // Charts相关类
@@ -13,6 +13,9 @@
 // Table相关类
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QHeaderView>
+
+#include <QFont>
 
 #include <QDateTime>
 
@@ -24,22 +27,26 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-class chartView : public QWidget
+class chartViewClass : public QWidget
 {
     Q_OBJECT
 public:
-    chartView(QWidget *parent = nullptr, QWidget *table = nullptr);
-    ~chartView();
+    chartViewClass(QWidget *parent = nullptr);
+    ~chartViewClass();
     QChartView* addChart();
 
     QChartView* deleteChart();
     QScatterSeries *scatter;
     QScatterSeries *scatter_2;
 
+    static int dataViewCount;
+
 
 private:
-    QChartView *m_chartView = new QChartView;
 
+    void initChart();
+
+    QChartView *chartView = new QChartView;
 
     QTimer *timer;
 
@@ -51,12 +58,12 @@ private:
     QStandardItemModel *tableModel;
 
 
-    QLabel *m_valueLabel;
+    QLabel *valueLabel;
     QPoint curPos;
 
 
 
-    // QGraphicsView *chartView;
+    // QGraphicsView *chartViewClass;
 public slots:
     void pointHoverd(const QPointF &point, bool state);
 
@@ -65,20 +72,24 @@ private slots:
     void timeOut();
 };
 
-class tableView : public QWidget
+class tableViewClass : public QWidget
 {
     Q_OBJECT
 public:
-    tableView(QWidget *parent = nullptr, QWidget *table = nullptr);
+    tableViewClass(QWidget *parent = nullptr, QTableView *table = nullptr);
     QStandardItemModel* addTable();
+
+    void addData();
+    void deleteView(int index);
 
 
 private:
-
+    void initTable(QTableView *table);
     QStandardItemModel *tableModel;
+    QTableView *table;
 
 private slots:
 
 };
 
-#endif // DATAVIEWOPERATOR_H
+#endif // INTERFACE_H

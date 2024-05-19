@@ -1,6 +1,6 @@
-#include "sqliteoperator.h"
+#include "sqlite_handle.h"
 
-SqliteOperator::SqliteOperator()
+DatabaseHandle::DatabaseHandle()
 {
     if(QSqlDatabase::contains("qt_sql_default_connection"))
     {
@@ -16,7 +16,7 @@ SqliteOperator::SqliteOperator()
 }
 
 // 打开数据库
-bool SqliteOperator::openDb()
+bool DatabaseHandle::openDb()
 {
     if(!database.open())
     {
@@ -45,7 +45,7 @@ bool SqliteOperator::openDb()
 }
 
 // 创建数据表
-void SqliteOperator::createTable()
+void DatabaseHandle::createTable()
 {
     // 执行sql语句的对象
     QSqlQuery sqlQuery;
@@ -64,7 +64,7 @@ void SqliteOperator::createTable()
 }
 
 // 判断数据包是否存在
-bool SqliteOperator::isTableExist(QString& tableName)
+bool DatabaseHandle::isTableExist(QString& tableName)
 {
     QSqlDatabase database = QSqlDatabase::database();
     if(database.tables().contains(tableName))
@@ -78,7 +78,7 @@ bool SqliteOperator::isTableExist(QString& tableName)
 }
 
 // 查询数据表
-void SqliteOperator::quertTable()
+void DatabaseHandle::quertTable()
 {
     QSqlQuery sqlQuery;
 
@@ -99,7 +99,7 @@ void SqliteOperator::quertTable()
 }
 
 // 插入单条数据
-void SqliteOperator::signleDataInsert(w2dba &singleData)
+void DatabaseHandle::signleDataInsert(w2dba &singleData)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("");
@@ -115,7 +115,7 @@ void SqliteOperator::signleDataInsert(w2dba &singleData)
 }
 
 // 插入多条数据
-void SqliteOperator::moreInsertData(QList<w2dba>& moredb)
+void DatabaseHandle::moreInsertData(QList<w2dba>& moredb)
 {
     // 进行多个数据的插入时，可以利用绑定进行批处理
     QSqlQuery sqlQuery;
@@ -138,7 +138,7 @@ void SqliteOperator::moreInsertData(QList<w2dba>& moredb)
 }
 
 // 修改数据
-void SqliteOperator::modifyData(int id, QString name, int age)
+void DatabaseHandle::modifyData(int id, QString name, int age)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("UPDATE student SET name=?,age=? WHERE id=?");
@@ -156,7 +156,7 @@ void SqliteOperator::modifyData(int id, QString name, int age)
 }
 
 // 删除数据
-void SqliteOperator::deleteData(int id)
+void DatabaseHandle::deleteData(int id)
 {
     QSqlQuery sqlQuery;
 
@@ -172,7 +172,7 @@ void SqliteOperator::deleteData(int id)
 }
 
 // 删除数据表
-void SqliteOperator::deleteTable(QString& tableName)
+void DatabaseHandle::deleteTable(QString& tableName)
 {
     QSqlQuery sqlQuery;
 
@@ -188,7 +188,7 @@ void SqliteOperator::deleteTable(QString& tableName)
 }
 
 // 关闭数据库
-void SqliteOperator::closeDb(void)
+void DatabaseHandle::closeDb(void)
 {
     database.close();
 }

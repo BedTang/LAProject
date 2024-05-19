@@ -1,5 +1,5 @@
-#ifndef SERIALFORM_H
-#define SERIALFORM_H
+#ifndef SERIAL_FORM_H
+#define SERIAL_FORM_H
 
 #include <QWidget>
 #include <QDebug>
@@ -49,4 +49,4 @@ private slots:
     void on_dataSendBtn_clicked();
 };
 
-#endif // SERIALFORM_H
+#endif // SERIAL_FORM_H

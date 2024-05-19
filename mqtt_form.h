@@ -1,6 +1,6 @@
 
-#ifndef MQTTFORM_H
-#define MQTTFORM_H
+#ifndef MQTT_FORM_H
+#define MQTT_FORM_H
 
 
 #include <QWidget>
@@ -11,7 +11,8 @@
 #include <qmqttmessage.h>
 #include <qmqtttopicname.h>
 
-#include "TimeFunc.h"
+
+extern QString updateRealTimeData();
 
 namespace Ui {
 class MQTTForm;
@@ -44,4 +45,4 @@ private slots:
     void on_UnSubscribeBtn_clicked();
 };
 
-#endif // MQTTFORM_H
+#endif // MQTT_FORM_H

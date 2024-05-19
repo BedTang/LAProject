@@ -1,5 +1,5 @@
-#ifndef SQLITEOPERATOR_H
-#define SQLITEOPERATOR_H
+#ifndef SQLITE_HANDLE_H
+#define SQLITE_HANDLE_H
 
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -19,10 +19,10 @@ typedef struct
 }w2dba;
 
 
-class SqliteOperator:QObject
+class DatabaseHandle:QObject
 {
 public:
-    SqliteOperator();
+    DatabaseHandle();
     void closeDb(void);
     void deleteData(int id);
     void deleteTable(QString& tableName);
@@ -45,4 +45,4 @@ private:
 
 };
 
-#endif // SQLITEOPERATOR_H
+#endif // SQLITE_HANDLE_H

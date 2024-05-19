@@ -1,9 +1,9 @@
-#ifndef MAINFORM_H
-#define MAINFORM_H
+#ifndef MAIN_FORM_H
+#define MAIN_FORM_H
 
 #include <QWidget>
 
-//Charts类
+// Charts
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QValueAxis>
@@ -11,34 +11,28 @@
 #include <QScatterSeries>
 
 
-#include <QDateTime>
 #include <QTimer>
-
-#include <QMessageBox>
 
 #include <QStatusBar>
 
-//QT TCP
+// TCP
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QNetworkInterface>
 
-//Qt SQL
-
-
+// 串口
 #include <QSerialPortInfo>
 
-#include "mqttform.h"
+// #include "mqtt_form.h"
 
-#include "TimeFunc.h"
+#include "sqlite_handle.h"
 
-#include "sqliteoperator.h"
+#include "setting_form.h"
 
-#include <QLabel>
-
-#include "dataviewoperator.h"
-
+// 设备处理
+#include "devices_view_handle.h"
+#include "devices_data_handle.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -57,52 +51,47 @@ public:
     ~MainForm();
 
     //返回当前时间
-
-
     void updateSeries(float point,unsigned char);
 
     // void updateChartData();
 
     void updateAxisRange();
 
+    QList<int> device_list;
+
 protected:
-    Ui::MainForm *ui;
+
 
 private:
     QStatusBar *statusBar;
+    Ui::MainForm *ui;
 
-    //TCP
+    // TCP
     QTcpServer *tcpServer = new QTcpServer();
     QTcpSocket *tcpClient= new QTcpSocket();
     QTcpSocket *currentClient= new QTcpSocket();
     QList<QTcpSocket*> WhattcpClient;
 
+    // 数据库
+    DatabaseHandle *db;
+
+    // 定时器
     QTimer *timer;
     QTimer *realTimeTimer;
-
     int timeCount;
 
-    chartView *chartView;
+    // 设备显示
+    chartViewClass *chartView;
+    tableViewClass *tableView;
 
-    tableView *tableView;
+    // 设置界面
+    SettingForm *settingForm;
 
-
-
-    //数据库
-    // QString queryString;
-    // char openDb();
-    // void addDb();
-    // void deleteDb();
-    // void updateDb();
-    // void selectDb();
-    // void fastAddDb();
-    // QSqlDatabase DB;
-
-public slots:
-    void pointHoverd(const QPointF &point, bool state);
+    // Json解析
+    jsonHandle *json;
 
 private slots:
-    void on_pushButton_clicked();
+    void on_startServer_clicked();
 
     void on_pushButton2_clicked();
 
@@ -110,27 +99,16 @@ private slots:
 
     void on_pushButton4_clicked();
 
-    void on_IPpushButton_clicked();
-
-    void on_IPpushButton2_clicked();
-
-    // void pointHoverd(const QPointF &point, bool state);
-
     void oneSecondAction();
 
-    //TCP客户端槽函数
-    void ReadData();
-    void ReadError(QAbstractSocket::SocketError);
-
-    int ServerReadData();
+    QString ServerReadData();
     void NewConnectionSlot();
 
-    void addTab();
+    void addView();
 
-
-    void on_devicesTabWidget_tabCloseRequested(int index);
+    void on_devicesTab_tabCloseRequested(int index);
 };
 
-    static int mainPort=8080;
+static int tcpServerPort=8888;
 
-#endif // MAINFORM_H
+#endif // MAIN_FORM_H

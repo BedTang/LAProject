@@ -1,18 +1,15 @@
-#include "settingform.h"
-#include "ui_settingform.h"
+#include "setting_form.h"
+#include "ui_setting_form.h"
 
-#include "serialform.h"
-#include "mqttform.h"
-#include "mainform.h"
-
-SettingForm::SettingForm(QWidget *parent)
+SettingForm::SettingForm(QWidget *parent, int port)
     : QWidget(parent)
     , ui(new Ui::SettingForm)
+    , port(port)
 {
     ui->setupUi(this);
     this->setWindowTitle("设置");
     setAttribute(Qt::WA_QuitOnClose,false);
-    ui->lineEdit->setText(QString::number(mainPort));
+    ui->lineEdit->setText(QString::number(port));
 }
 
 SettingForm::~SettingForm()
@@ -36,6 +33,6 @@ void SettingForm::on_SerialFormBtn_clicked()
 
 void SettingForm::on_pushButton_clicked()
 {
-    mainPort=ui->lineEdit->text().toInt();
+    port=ui->lineEdit->text().toInt();
 }
 
