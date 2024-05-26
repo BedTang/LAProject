@@ -3,36 +3,24 @@
 
 #include <QWidget>
 
-// Charts
-#include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
-#include <QValueAxis>
-#include <QDateTimeAxis>
-#include <QScatterSeries>
-
-
 #include <QTimer>
 
 #include <QStatusBar>
 
-// TCP
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QHostAddress>
-#include <QNetworkInterface>
-
 // 串口
-#include <QSerialPortInfo>
-
-// #include "mqtt_form.h"
+// #include <QSerialPortInfo>
 
 #include "sqlite_handle.h"
 
 #include "setting_form.h"
 
 // 设备处理
-#include "devices_view_handle.h"
-#include "devices_data_handle.h"
+#include "devices_chart_handler.h"
+#include "devices_data_handler.h"
+#include "devices_table_handler.h"
+
+// TCP
+#include "tcp_handle.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -50,65 +38,58 @@ public:
     MainForm(QWidget *parent = nullptr);
     ~MainForm();
 
-    //返回当前时间
-    void updateSeries(float point,unsigned char);
-
-    // void updateChartData();
-
-    void updateAxisRange();
-
-    QList<int> device_list;
-
-protected:
-
+    QList<int> device_list_;
+    QList<QHostAddress> online_device_list_;
 
 private:
-    QStatusBar *statusBar;
-    Ui::MainForm *ui;
+    QStatusBar *status_bar_;
+    Ui::MainForm *ui_;
 
     // TCP
-    QTcpServer *tcpServer = new QTcpServer();
-    QTcpSocket *tcpClient= new QTcpSocket();
-    QTcpSocket *currentClient= new QTcpSocket();
-    QList<QTcpSocket*> WhattcpClient;
+    tcpHandle *tcp_;
 
     // 数据库
-    DatabaseHandle *db;
+    DatabaseHandle *database_;
 
     // 定时器
-    QTimer *timer;
-    QTimer *realTimeTimer;
-    int timeCount;
+    QTimer *timer_;
+    QTimer *real_time_timer_;
+    int time_count_;
 
     // 设备显示
-    chartViewClass *chartView;
-    tableViewClass *tableView;
+    ChartView *chart_view_;
+    TableView *table_view_;
 
     // 设置界面
-    SettingForm *settingForm;
+    SettingForm *setting_form_;
+
+    QMap<int ,ChartView*> chart_view_object_map;
 
     // Json解析
-    jsonHandle *json;
+    jsonHandle *json_;
+
+    bool server_status_ = false;
+
+    std::tuple<int ,int ,int ,int ,int ,int> data_list;
+
+public slots:
+    void AddDeviceView(QString ip);
+    void AddDevice(QHostAddress);
 
 private slots:
-    void on_startServer_clicked();
-
-    void on_pushButton2_clicked();
-
-    void on_pushButton3_clicked();
-
-    void on_pushButton4_clicked();
-
     void oneSecondAction();
+    void devices_tab_close_requested(int index);
+    void start_server_clicked();
+    void save_button_clicked();
+    void setting_button_clicked();
+    void test_button_clicked();
+    void TableClicked(const QModelIndex &);
 
-    QString ServerReadData();
-    void NewConnectionSlot();
-
-    void addView();
-
-    void on_devicesTab_tabCloseRequested(int index);
+signals:
+    void SendDataToChart(int ,int ,int ,int);
 };
 
-static int tcpServerPort=8888;
+static bool send_data_to_chart_status;
+static int tcpServerPort=8080;
 
 #endif // MAIN_FORM_H

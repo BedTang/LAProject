@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSplitter" name="splitter">
+    <widget class="QSplitter" name="splitter_">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -80,7 +80,7 @@
            <number>0</number>
           </property>
           <item row="0" column="0">
-           <widget class="QTableView" name="devicesView">
+           <widget class="QTableView" name="devices_table_view_">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -134,7 +134,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QTabWidget" name="devicesTab">
+     <widget class="QTabWidget" name="devices_tab">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -226,7 +226,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="startServer">
+               <widget class="QPushButton" name="start_server">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -247,7 +247,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton2">
+               <widget class="QPushButton" name="save_button">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -268,7 +268,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton3">
+               <widget class="QPushButton" name="test_button">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -289,7 +289,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton4">
+               <widget class="QPushButton" name="setting_button">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -306,13 +306,6 @@
                 </property>
                 <property name="text">
                  <string>设置</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton">
-                <property name="text">
-                 <string>PushButton</string>
                 </property>
                </widget>
               </item>

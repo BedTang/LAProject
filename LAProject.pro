@@ -9,23 +9,29 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    devices_data_handle.cpp \
-    devices_view_handle.cpp \
+    clock_control.cpp \
+    devices_chart_handler.cpp \
+    devices_data_handler.cpp \
+    devices_table_handler.cpp \
     main.cpp \
     main_form.cpp \
     mqtt_form.cpp \
     serial_form.cpp \
     setting_form.cpp \
-    sqlite_handle.cpp
+    sqlite_handle.cpp \
+    tcp_handle.cpp
 
 HEADERS += \
-    devices_data_handle.h \
-    devices_view_handle.h \
+    clock_control.h \
+    devices_chart_handler.h \
+    devices_data_handler.h \
+    devices_table_handler.h \
     main_form.h \
     mqtt_form.h \
     serial_form.h \
     setting_form.h \
-    sqlite_handle.h
+    sqlite_handle.h \
+    tcp_handle.h
 
 FORMS += \
     main_form.ui \
