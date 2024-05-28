@@ -16,6 +16,7 @@
 
 #include <QLabel>
 
+#include <QPushButton>
 
 #include <QTimer>// 测试用
 #include <QRandomGenerator>
@@ -39,20 +40,26 @@ public:
 private:
     void initChart();
 
-    QChartView *chartView = new QChartView;
+    QChartView *chart_view_ = new QChartView;
 
     QTimer *timer;
 
-    QChart *chart;
-    QDateTimeAxis *axisX;
-    QValueAxis *axisY;
-    QLineSeries *line;
-    QLineSeries *line2;
-    QLineSeries *line3;
-    QLineSeries *line4;
+    QChart *chart_;
+    QDateTimeAxis *axisX_;
+    QValueAxis *axisY_;
+    QLineSeries *temperature_line_;
+    QLineSeries *humidity_line_;
+    QLineSeries *smoke_density_line_;
+    QLineSeries *light_intensity_line_;
+
+    QPushButton *chart_switch_button_;
 
     QLabel *valueLabel;
     QPoint curPos;
+
+    virtual void resizeEvent(QResizeEvent *event) override;
+
+    bool Event(QEvent *event);
 
     // QGraphicsView *ChartView;
 public slots:

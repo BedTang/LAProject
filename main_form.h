@@ -10,7 +10,7 @@
 // 串口
 // #include <QSerialPortInfo>
 
-#include "sqlite_handle.h"
+#include "sqlite_handler.h"
 
 #include "setting_form.h"
 
@@ -49,7 +49,7 @@ private:
     tcpHandle *tcp_;
 
     // 数据库
-    DatabaseHandle *database_;
+    SqlDataHandler *database_;
 
     // 定时器
     QTimer *timer_;

@@ -1,15 +1,13 @@
 #ifndef CLOCK_CONTROL_H
 #define CLOCK_CONTROL_H
 
-#include <QWidget>
 
-class ClockControl : public QWidget
+#include <QDateTime>
+
+inline QString NowTimeString()
 {
-    Q_OBJECT
-public:
-    explicit ClockControl(QWidget *parent = nullptr);
-
-signals:
-};
+    QDateTime dateTime= QDateTime::currentDateTime();
+    return dateTime.toString("[ hh:mm:ss ]");
+}
 
 #endif // CLOCK_CONTROL_H

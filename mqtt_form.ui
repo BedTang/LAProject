@@ -19,10 +19,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="4,3">
        <item>
-        <widget class="QTextBrowser" name="LogBrowser"/>
+        <widget class="QTextBrowser" name="log_browser_"/>
        </item>
        <item>
-        <widget class="QListView" name="listView"/>
+        <widget class="QListView" name="mqtt_clinet_list_"/>
        </item>
       </layout>
      </item>
@@ -35,7 +35,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLabel" name="ServerIP">
+              <widget class="QLabel" name="server_host_label_">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -48,14 +48,14 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="ServerIPLine">
+              <widget class="QLineEdit" name="server_host_line_">
                <property name="text">
-                <string>iot-06z00hbczg65rf0.mqtt.iothub.aliyuncs.com</string>
+                <string>mqtts.heclouds.com</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="ServerPortLine">
+              <widget class="QLineEdit" name="server_port_line_">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -72,7 +72,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QLabel" name="ClientID">
+              <widget class="QLabel" name="client_id_label_">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -85,9 +85,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="ClientIDLine">
+              <widget class="QLineEdit" name="client_id_line_">
                <property name="text">
-                <string>Test|securemode=2,signmethod=hmacsha1,timestamp=1714204000504|</string>
+                <string>Node1</string>
                </property>
               </widget>
              </item>
@@ -96,7 +96,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QLabel" name="User">
+              <widget class="QLabel" name="client_user_label_">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -109,9 +109,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="UserLine">
+              <widget class="QLineEdit" name="client_user_line_">
                <property name="text">
-                <string>Node1&amp;k14suPxlVyQ</string>
+                <string>zdgol22rNA</string>
                </property>
               </widget>
              </item>
@@ -120,7 +120,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QLabel" name="Password">
+              <widget class="QLabel" name="client_password_label_">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -133,9 +133,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="PasswordLine">
+              <widget class="QLineEdit" name="client_password_line_">
                <property name="text">
-                <string>0EF2B097FC2D6856A171BED08C6EB4B1CBFF4A45</string>
+                <string>version=2018-10-31&amp;res=products%2Fzdgol22rNA%2Fdevices%2FNode1&amp;et=1748431311&amp;method=md5&amp;sign=VhXJ4v9mlpTdyd29xppI8Q%3D%3D</string>
                </property>
               </widget>
              </item>
@@ -146,14 +146,14 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QPushButton" name="ConnectBtn">
+            <widget class="QPushButton" name="connect_button_">
              <property name="text">
               <string>连接</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="ping_button_">
              <property name="text">
               <string>Ping</string>
              </property>
@@ -170,17 +170,17 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="1" column="3">
-              <widget class="QSpinBox" name="QosBox"/>
+              <widget class="QSpinBox" name="qos_box_"/>
              </item>
              <item row="1" column="4">
-              <widget class="QPushButton" name="PublishBtn">
+              <widget class="QPushButton" name="publish_button_">
                <property name="text">
                 <string>发布</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QLabel" name="Topic">
+              <widget class="QLabel" name="subscribe_topic_label_">
                <property name="minimumSize">
                 <size>
                  <width>45</width>
@@ -193,10 +193,10 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="SubTopicLine"/>
+              <widget class="QLineEdit" name="subscribe_topic_line_"/>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="Message">
+              <widget class="QLabel" name="publish_topic_label_">
                <property name="minimumSize">
                 <size>
                  <width>45</width>
@@ -209,21 +209,21 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="MesTopicLine">
+              <widget class="QLineEdit" name="publish_topic_line_">
                <property name="text">
                 <string>/sys/k14suPxlVyQ/Node1/thing/service/property/set</string>
                </property>
               </widget>
              </item>
              <item row="0" column="4">
-              <widget class="QPushButton" name="UnSubscribeBtn">
+              <widget class="QPushButton" name="unsubscribe_topic_button_">
                <property name="text">
                 <string>取消订阅</string>
                </property>
               </widget>
              </item>
              <item row="0" column="3">
-              <widget class="QPushButton" name="SubscribeBtn">
+              <widget class="QPushButton" name="subscribe_topic_button_">
                <property name="text">
                 <string>订阅</string>
                </property>
@@ -234,7 +234,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QTextEdit" name="MessageEdit"/>
+          <widget class="QTextEdit" name="message_text_"/>
          </item>
         </layout>
        </item>

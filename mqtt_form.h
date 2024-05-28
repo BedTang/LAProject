@@ -4,12 +4,16 @@
 
 
 #include <QWidget>
-#include <QMessageBox>
-#include <string.h>
 
 #include <QtMqtt/qmqttclient.h>
 #include <qmqttmessage.h>
 #include <qmqtttopicname.h>
+
+#include <QNetworkRequest>
+#include <QMessageBox>
+#include <QProcess>
+
+#include "clock_control.h"
 
 
 extern QString updateRealTimeData();
@@ -27,10 +31,14 @@ public:
 
 
 private:
-    Ui::MQTTForm *ui;
-    QMqttClient *client;
-    QMqttTopicName topic;
-    QByteArray message;
+    Ui::MQTTForm *ui_;
+    QMqttClient *mqtt_client_;
+    QMqttTopicName topic_;
+    QByteArray message_;
+
+    void InitMqttServer();
+
+    void IsServerOnline();
 
 private slots:
     void client_connected();
@@ -39,10 +47,12 @@ private slots:
 
     void client_mqtterror(QMqttClient::ClientError);
     void clietn_disconnected();
-    void on_ConnectBtn_clicked();
-    void on_SubscribeBtn_clicked();
-    void on_PublishBtn_clicked();
-    void on_UnSubscribeBtn_clicked();
+
+    void PingButtonSlot();
+    void ConnectButtonSlot();
+    void SubscribeButtonSlot();
+    void PublishButtonSlot();
+    void UnsubscribeButtonSlot();
 };
 
 #endif // MQTT_FORM_H

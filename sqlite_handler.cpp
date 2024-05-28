@@ -1,26 +1,26 @@
-#include "sqlite_handle.h"
+#include "sqlite_handler.h"
 
-DatabaseHandle::DatabaseHandle()
+SqlDataHandler::SqlDataHandler()
 {
     if(QSqlDatabase::contains("qt_sql_default_connection"))
     {
-        database = QSqlDatabase::database("qt_sql_default_connection");
+        database_ = QSqlDatabase::database("qt_sql_default_connection");
     }
     else
     {
         //建立连接
-        database = QSqlDatabase::addDatabase("QSQLITE");
+        database_ = QSqlDatabase::addDatabase("QSQLITE");// 数据库名称
         //设置文件名
-        database.setDatabaseName("Test.db");
+        database_.setDatabaseName("LAProject.db");
     }
 }
 
 // 打开数据库
-bool DatabaseHandle::openDb()
+bool SqlDataHandler::OpenDatabase()
 {
-    if(!database.open())
+    if(!database_.open())
     {
-        qDebug()<<database.lastError();
+        qDebug()<<database_.lastError();
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.setWindowTitle(tr("Error initializing database"));
@@ -31,7 +31,7 @@ bool DatabaseHandle::openDb()
         msgBox.exec();
         if(msgBox.clickedButton() == retry)
         {
-            openDb();
+            OpenDatabase();
         }
         if(msgBox.clickedButton() == ignore)
         {
@@ -42,10 +42,13 @@ bool DatabaseHandle::openDb()
             return 2;
         }
     }
+
+    QSqlQuery db_query(database_);
+
 }
 
 // 创建数据表
-void DatabaseHandle::createTable()
+void SqlDataHandler::createTable()
 {
     // 执行sql语句的对象
     QSqlQuery sqlQuery;
@@ -64,7 +67,7 @@ void DatabaseHandle::createTable()
 }
 
 // 判断数据包是否存在
-bool DatabaseHandle::isTableExist(QString& tableName)
+bool SqlDataHandler::isTableExist(QString& tableName)
 {
     QSqlDatabase database = QSqlDatabase::database();
     if(database.tables().contains(tableName))
@@ -78,7 +81,7 @@ bool DatabaseHandle::isTableExist(QString& tableName)
 }
 
 // 查询数据表
-void DatabaseHandle::quertTable()
+void SqlDataHandler::quertTable()
 {
     QSqlQuery sqlQuery;
 
@@ -99,7 +102,7 @@ void DatabaseHandle::quertTable()
 }
 
 // 插入单条数据
-void DatabaseHandle::signleDataInsert(w2dba &singleData)
+void SqlDataHandler::signleDataInsert(w2dba &singleData)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("");
@@ -115,7 +118,7 @@ void DatabaseHandle::signleDataInsert(w2dba &singleData)
 }
 
 // 插入多条数据
-void DatabaseHandle::moreInsertData(QList<w2dba>& moredb)
+void SqlDataHandler::moreInsertData(QList<w2dba>& moredb)
 {
     // 进行多个数据的插入时，可以利用绑定进行批处理
     QSqlQuery sqlQuery;
@@ -138,7 +141,7 @@ void DatabaseHandle::moreInsertData(QList<w2dba>& moredb)
 }
 
 // 修改数据
-void DatabaseHandle::modifyData(int id, QString name, int age)
+void SqlDataHandler::modifyData(int id, QString name, int age)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("UPDATE student SET name=?,age=? WHERE id=?");
@@ -156,7 +159,7 @@ void DatabaseHandle::modifyData(int id, QString name, int age)
 }
 
 // 删除数据
-void DatabaseHandle::deleteData(int id)
+void SqlDataHandler::deleteData(int id)
 {
     QSqlQuery sqlQuery;
 
@@ -172,7 +175,7 @@ void DatabaseHandle::deleteData(int id)
 }
 
 // 删除数据表
-void DatabaseHandle::deleteTable(QString& tableName)
+void SqlDataHandler::deleteTable(QString& tableName)
 {
     QSqlQuery sqlQuery;
 
@@ -188,7 +191,7 @@ void DatabaseHandle::deleteTable(QString& tableName)
 }
 
 // 关闭数据库
-void DatabaseHandle::closeDb(void)
+void SqlDataHandler::CloseDatabase(void)
 {
-    database.close();
+    database_.close();
 }

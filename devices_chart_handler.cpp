@@ -14,14 +14,16 @@ ChartView::ChartView(QWidget *parent)
     , timer(new QTimer(this))
     , valueLabel(new QLabel(parent))
 {
-    chart = new QChart();
-    axisX = new QDateTimeAxis(this);
-    axisY= new QValueAxis(this);
+    chart_ = new QChart();
+    axisX_ = new QDateTimeAxis(this);
+    axisY_= new QValueAxis(this);
 
-    line = new QLineSeries(this);
-    line2 = new QLineSeries(this);
-    line3 = new QLineSeries(this);
-    line4 = new QLineSeries(this);
+    temperature_line_ = new QLineSeries(this);
+    humidity_line_ = new QLineSeries(this);
+    smoke_density_line_ = new QLineSeries(this);
+    light_intensity_line_ = new QLineSeries(this);
+
+    chart_switch_button_ = new QPushButton(chart_view_);
 
     initChart();
 
@@ -30,7 +32,6 @@ ChartView::ChartView(QWidget *parent)
     qDebug()<<"类创建";
 
     timer->start(1000);
-
 }
 
 ChartView::~ChartView()
@@ -40,7 +41,7 @@ ChartView::~ChartView()
 
 QChartView* ChartView::AddChart()
 {
-    return chartView;
+    return chart_view_;
 }
 
 QChartView* ChartView::DeleteChart()
@@ -50,53 +51,60 @@ QChartView* ChartView::DeleteChart()
 
 void ChartView::initChart()
 {
+
+    qDebug()<<chart_view_->pos();
+    qDebug()<<chart_view_->width()<<chart_view_->height();
+    qDebug()<<chart_switch_button_->width()<<chart_switch_button_->height();
+    chart_switch_button_->move(chart_view_->width() - chart_switch_button_->width() /2 ,100);
+    qDebug()<<chart_switch_button_->pos();
     // 向图标添加坐标轴和数据系列
 
-    chart->addAxis(axisX, Qt::AlignBottom);
-    chart->addAxis(axisY, Qt::AlignLeft);
-    chart->addSeries(line);
-    chart->addSeries(line2);
-    chart->addSeries(line3);
-    chart->addSeries(line4);
+    chart_->addAxis(axisX_, Qt::AlignBottom);
+    chart_->addAxis(axisY_, Qt::AlignLeft);
+    chart_->addSeries(temperature_line_);
+    chart_->addSeries(humidity_line_);
+    chart_->addSeries(smoke_density_line_);
+    chart_->addSeries(light_intensity_line_);
 
     // 设置X轴
-    axisX->setTickCount(10);// 刻度线
-    axisX->setFormat(tr("hh:mm:ss"));// 格式
-    axisX->setTitleText(tr("时间"));// 名称
-    axisX->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
+    axisX_->setTickCount(10);// 刻度线
+    axisX_->setFormat(tr("hh:mm:ss"));// 格式
+    axisX_->setTitleText(tr("时间"));// 名称
+    axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY->setRange(0,300);
-    axisY->setGridLineVisible(true);
-    axisY->setTickCount(6);
-    axisY->setMinorTickCount(5);
+    axisY_->setRange(0,300);
+    axisY_->setGridLineVisible(true);
+    axisY_->setTickCount(6);
+    axisY_->setMinorTickCount(5);
+
 
     // 温度
-    line->setName(tr("温度"));
-    line->attachAxis(axisX);// 将line附在 axisXDate 上
-    line->attachAxis(axisY);
-    line->setPointsVisible(true);
+    temperature_line_->setName(tr("温度"));
+    temperature_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
+    temperature_line_->attachAxis(axisY_);
+    temperature_line_->setPointsVisible(true);
 
     // 湿度
-    line2->setName(tr("湿度"));
-    line2->attachAxis(axisX);// 将line附在 axisXDate 上
-    line2->attachAxis(axisY);
-    line2->setPointsVisible(true);
+    humidity_line_->setName(tr("湿度"));
+    humidity_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
+    humidity_line_->attachAxis(axisY_);
+    humidity_line_->setPointsVisible(true);
 
     // 烟雾浓度
-    line3->setName(tr("烟雾浓度"));
-    line3->attachAxis(axisX);// 将line附在 axisXDate 上
-    line3->attachAxis(axisY);
-    line3->setPointsVisible(true);
+    smoke_density_line_->setName(tr("烟雾浓度"));
+    smoke_density_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
+    smoke_density_line_->attachAxis(axisY_);
+    smoke_density_line_->setPointsVisible(true);
 
     // 光照强度
-    line4->setName(tr("光照强度"));
-    line4->attachAxis(axisX);// 将line附在 axisXDate 上
-    line4->attachAxis(axisY);
-    line4->setPointsVisible(true);
+    light_intensity_line_->setName(tr("光照强度"));
+    light_intensity_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
+    light_intensity_line_->attachAxis(axisY_);
+    light_intensity_line_->setPointsVisible(true);
 
-    chartView->setChart(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+    chart_view_->setChart(chart_);
+    chart_view_->setRenderHint(QPainter::Antialiasing);
 
     // 数据点显示
     valueLabel->setStyleSheet(QString("QLabel{color:#1564FF;"
@@ -109,10 +117,28 @@ void ChartView::initChart()
     valueLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     valueLabel->hide();
 
-    connect(line, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    connect(line2, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    connect(line3, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    connect(line4, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(temperature_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(humidity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(smoke_density_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(light_intensity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+}
+
+void ChartView::resizeEvent(QResizeEvent *event)
+{
+    //chart_switch_button_->move(chart_switch_button_->width()/2,chart_switch_button_->height()-100);
+    qDebug()<<chart_switch_button_->width()<<chart_switch_button_->height();
+    QWidget::resizeEvent(event);
+}
+
+bool ChartView::Event(QEvent *event)
+{
+    if(event->type() == QEvent::Resize)
+    {
+        QResizeEvent *rec_event = static_cast<QResizeEvent*>(event);
+        qDebug()<<"old:"<<rec_event->oldSize().width()<<rec_event->oldSize().height();
+
+        return ChartView::Event(event);
+    }
 }
 
 void ChartView::PointHoverd(const QPointF &point, bool state)
@@ -133,14 +159,16 @@ void ChartView::PointHoverd(const QPointF &point, bool state)
 void ChartView::ReceiveDataToUpdate(int temperature, int humidity, int smoke, int light)
 {
     qDebug()<<"增添数据点";
-    line->append(QDateTime::currentMSecsSinceEpoch(),temperature);
-    line2->append(QDateTime::currentMSecsSinceEpoch(),humidity);
-    line3->append(QDateTime::currentMSecsSinceEpoch(),smoke);
-    line4->append(QDateTime::currentMSecsSinceEpoch(),light);
+    temperature_line_->append(QDateTime::currentMSecsSinceEpoch(),temperature);
+    humidity_line_->append(QDateTime::currentMSecsSinceEpoch(),humidity);
+    smoke_density_line_->append(QDateTime::currentMSecsSinceEpoch(),smoke);
+    light_intensity_line_->append(QDateTime::currentMSecsSinceEpoch(),light);
 }
 
 void ChartView::TimeOut()
 {
-    chart->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
+    // qreal y_range = line->;
+    // qDebug()<< y_range;
+    chart_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
 }
 

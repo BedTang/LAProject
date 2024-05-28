@@ -18,7 +18,7 @@ SOURCES += \
     mqtt_form.cpp \
     serial_form.cpp \
     setting_form.cpp \
-    sqlite_handle.cpp \
+    sqlite_handler.cpp \
     tcp_handle.cpp
 
 HEADERS += \
@@ -30,7 +30,7 @@ HEADERS += \
     mqtt_form.h \
     serial_form.h \
     setting_form.h \
-    sqlite_handle.h \
+    sqlite_handler.h \
     tcp_handle.h
 
 FORMS += \

@@ -34,7 +34,7 @@ MainForm::MainForm(QWidget *parent)
     table_view_ = new TableView(this, ui_->devices_table_view_);
 
     //数据库初始化
-    database_ = new DatabaseHandle();
+    // database_ = new SqlDataHandler();
 
     // 定时器
     timer_->start(1000);
@@ -43,16 +43,16 @@ MainForm::MainForm(QWidget *parent)
     json_ = new jsonHandle();
 
     // 数据库
-    DatabaseHandle sqldb;
+    SqlDataHandler sqldb;
 
-    while(char tmep=sqldb.openDb())
-    {
-        switch (tmep) {
-        case 0:break;
-        case 1:return;
-        case 2:exit(1);break;
-        }
-    }
+    // while(char tmep=sqldb.OpenDatabase())
+    // {
+    //     switch (tmep) {
+    //     case 0:break;
+    //     case 1:return;
+    //     case 2:exit(1);break;
+    //     }
+    // }
 
     // 信号与槽
     connect(timer_,SIGNAL(timeout()), this, SLOT(oneSecondAction()));
@@ -68,6 +68,8 @@ MainForm::MainForm(QWidget *parent)
     connect(ui_->devices_table_view_, &QTableView::clicked, this, &MainForm::TableClicked);
 
     // connect(tcp_ ,&tcpHandle::RequestDataHandle ,json_ ,&jsonHandle::ReciveDataHandler);
+
+
 
 }
 
@@ -135,6 +137,7 @@ void MainForm::devices_tab_close_requested(int index)
 
 void MainForm::start_server_clicked()
 {
+
     if(ui_->start_server->text()==tr("启动服务器"))
     {
         tcp_->server_listening(server_status_ ,tcpServerPort);
