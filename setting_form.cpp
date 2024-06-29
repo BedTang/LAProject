@@ -10,6 +10,7 @@ SettingForm::SettingForm(QWidget *parent, int port)
     this->setWindowTitle("设置");
     setAttribute(Qt::WA_QuitOnClose,false);
     ui->lineEdit->setText(QString::number(port));
+    mqttform = new MqttForm();
 }
 
 SettingForm::~SettingForm()
@@ -17,10 +18,14 @@ SettingForm::~SettingForm()
     delete ui;
 }
 
+MqttForm *SettingForm::GetMqttPoint()
+{
+    return mqttform;
+}
+
 
 void SettingForm::on_MQTTFormBtn_clicked()
 {
-    MQTTForm *mqttform=new MQTTForm;
     mqttform->show();
 }
 

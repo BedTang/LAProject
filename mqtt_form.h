@@ -1,11 +1,9 @@
-
 #ifndef MQTT_FORM_H
 #define MQTT_FORM_H
 
-
 #include <QWidget>
 
-#include <QtMqtt/qmqttclient.h>
+#include <qmqttclient.h>
 #include <qmqttmessage.h>
 #include <qmqtttopicname.h>
 
@@ -13,37 +11,44 @@
 #include <QMessageBox>
 #include <QProcess>
 
-#include "clock_control.h"
-
-
-extern QString updateRealTimeData();
+#include "devices_data_handler.h"
 
 namespace Ui {
-class MQTTForm;
+class MqttForm;
 }
 
-class MQTTForm : public QWidget
+class MqttForm : public QWidget
 {
     Q_OBJECT
 public:
-    MQTTForm(QWidget *parent = nullptr);
-    ~MQTTForm();
+    MqttForm(QWidget *parent = nullptr);
+    ~MqttForm();
 
+    void SetJsonMessage(QString);
 
 private:
-    Ui::MQTTForm *ui_;
+    Ui::MqttForm *ui_;
     QMqttClient *mqtt_client_;
     QMqttTopicName topic_;
     QByteArray message_;
+
+    JsonHandler *jsoner;
+
+    QList<int> data_list_in_mqtt;
+
+    QString json_message;
+
+    void GetDevcieData(QList<int>);
+    QList<int> ReturnDeviceData();
 
     void InitMqttServer();
 
     void IsServerOnline();
 
+    void PublishMessage();
+
 private slots:
     void client_connected();
-
-    void client_receivemessage(const QByteArray &, const QMqttTopicName &);
 
     void client_mqtterror(QMqttClient::ClientError);
     void clietn_disconnected();
@@ -53,6 +58,8 @@ private slots:
     void SubscribeButtonSlot();
     void PublishButtonSlot();
     void UnsubscribeButtonSlot();
+    void ReceiveClientMessages(const QByteArray &, const QMqttTopicName &);
+    void on_pushButton_clicked();
 };
 
 #endif // MQTT_FORM_H

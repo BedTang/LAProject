@@ -1,18 +1,17 @@
 #include "tcp_handle.h"
 #include "main_form.h"
 
-extern QString updateRealTimeData();
+extern QString GetCurrentStringTime();
+extern void DebugOut(QString);
 
-
-tcpHandle::tcpHandle(QWidget *parent, Ui::MainForm *ui_)
+TcpHandle::TcpHandle(QWidget *parent, Ui::MainForm *ui_)
     : QWidget(parent)
     ,ui_(ui_)
 {
-    connect(tcp_server_, SIGNAL(newConnection()), this, SLOT(newConnectionSlot()));
-
+    connect(tcp_server_, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
 }
 
-void tcpHandle::retrieveNativeIp()
+void TcpHandle::RetrieveNativeIp()
 {
     foreach (QNetworkInterface interface,QNetworkInterface::allInterfaces())
     {
@@ -29,67 +28,70 @@ void tcpHandle::retrieveNativeIp()
         if (interface.humanReadableName().contains("VMware") || interface.humanReadableName().contains("Virtual"))
             continue;
 
-        if (interface.humanReadableName().contains("WLAN"))
+        if (interface.humanReadableName().contains("WLAN") || interface.humanReadableName().contains("eth0") || interface.humanReadableName().contains("eth1"))
         {
             // 滤掉ipv6地址
             foreach (auto entry ,interface.addressEntries())
             {
-                if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol)
+                if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol)   
+                {
                     ui_->logBrowser->append("本机IP地址："+entry.ip().toString());
+                    // ui_->host_ip_box->addItem(entry.ip().toString());
+                }
             }
         }
     }
 }
 
-void tcpHandle::serverReadData()
+void TcpHandle::ReadServerData()
 {
-    qDebug()<<"serverReadData()<<serverReadData";
-
-    // 由于readyRead信号并未提供SocketDecriptor，所以需要遍历所有客户端
+    DebugOut("serverReadData()<<serverReadData");
+    // 遍历所有客户端
     for(int i=0; i<tcp_client_list_.length(); i++)
     {
+        // 对缓冲区消息判定
         QByteArray buffer = tcp_client_list_[i]->readAll();
-
         if(buffer.isEmpty())
         {
             continue;
         }
 
-        static QString IP_Port, IP_Port_Pre;
-        IP_Port = tr("[%1:%2]:").arg(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1])\
+        // 缓存消息地址
+        static QString ip_port, ip_port_pre;
+        ip_port = tr("[%1:%2]:").arg(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1])\
                       .arg(tcp_client_list_[i]->peerPort());
 
-        // 若此次消息的地址与上次不同，则需显示此次消息的客户端地址
-        if(IP_Port != IP_Port_Pre)
-            ui_->logBrowser->append(IP_Port);
+        // 若地址与上次消息地址不同，则需显示此次消息的客户端地址
+        if(ip_port != ip_port_pre)
+            ui_->logBrowser->append(ip_port);
 
-        //处理接收到的数据
-        current_client_msg_=buffer;
-        current_client_msg_=current_client_msg_.simplified();
-        // qDebug()<<std::get<0>(json->dataHandle(device_list, str)); //device_list,
-        ui_->logBrowser->append(updateRealTimeData()+current_client_msg_);
+        // 处理接收到的数据
+        current_client_msg_= buffer;
+        current_client_msg_= current_client_msg_.simplified();
+        ui_->logBrowser->append(GetCurrentStringTime()+current_client_msg_);
 
-        // qDebug()<<QHostAddress(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]);
+        DebugOut("ReadServerData()<<Request to add a device.");
         emit RequestAddDevice(QHostAddress(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]));
-        qDebug()<<"请求添加设备";
-        // emit RequestDataHandle(current_client_msg_);
 
-        //更新ip_port
-        IP_Port_Pre = IP_Port;
+        // 更新ip_port
+        ip_port_pre = ip_port;
     }
 }
 
-void tcpHandle::disconnectedSlot()
+void TcpHandle::DisconnectedSlot()
 {
 
 }
 
-void tcpHandle::server_listening(bool &status ,int port)
+void TcpHandle::ServerListening(bool &status ,int port) // TCP服务器监听（参照）
 {
     if(status == false)
     {
         tcp_server_->listen(QHostAddress::Any, port);
-        qDebug()<<tr("监听端口：")<<tcp_server_->serverPort();
+        // qDebug()<<tr("服务器地址：")<<tcp_server_->serverAddress();
+        // ui_->logBrowser->append(tr("服务器地址：")+tcp_server_->serverAddress().toString());
+
+        DebugOut(QString("监听端口：%0").arg(tcp_server_->serverPort()));
         status = true;
         return;
     }
@@ -126,27 +128,27 @@ void tcpHandle::server_listening(bool &status ,int port)
     }
 }
 
-int tcpHandle::GetPort()
+int TcpHandle::GetPort()
 {
     return tcp_server_->serverPort();
 }
 
-QHostAddress tcpHandle::GetIp()
+QHostAddress TcpHandle::GetIp()
 {
     // return tcp_client_list_;
+    return QHostAddress();
 }
 
-QString tcpHandle::GetMessage()
+QString TcpHandle::GetMessage()
 {
     return current_client_msg_;
 }
 
-void tcpHandle::newConnectionSlot()
+void TcpHandle::NewConnectionSlot()
 {
     current_client_ = tcp_server_->nextPendingConnection();
     tcp_client_list_.append(current_client_);
     // ui->textBrowser->append(tr("%1:%2").arg(currentClient->peerAddress().toString().split("::ffff:")[1]).arg(currentClient->peerPort()));
-    connect(current_client_, SIGNAL(readyRead()), this, SLOT(serverReadData()));
-    qDebug()<<"serverReadData connect 触发后";
-    connect(current_client_, SIGNAL(disconnected()), this, SLOT(disconnectedSlot()));
+    connect(current_client_, SIGNAL(readyRead()), this, SLOT(ReadServerData()));
+    connect(current_client_, SIGNAL(disconnected()), this, SLOT(DisconnectedSlot()));
 }

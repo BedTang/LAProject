@@ -2,16 +2,13 @@
 #define MAIN_FORM_H
 
 #include <QWidget>
-
 #include <QTimer>
-
 #include <QStatusBar>
 
-// 串口
-// #include <QSerialPortInfo>
-
+// 数据库处理
 #include "sqlite_handler.h"
 
+// 设置界面
 #include "setting_form.h"
 
 // 设备处理
@@ -19,7 +16,7 @@
 #include "devices_data_handler.h"
 #include "devices_table_handler.h"
 
-// TCP
+// TCP处理
 #include "tcp_handle.h"
 
 QT_CHARTS_USE_NAMESPACE
@@ -45,51 +42,44 @@ private:
     QStatusBar *status_bar_;
     Ui::MainForm *ui_;
 
-    // TCP
-    tcpHandle *tcp_;
+    TcpHandle *tcp_;
 
-    // 数据库
     SqlDataHandler *database_;
 
-    // 定时器
     QTimer *timer_;
     QTimer *real_time_timer_;
+    QTimer *online_check_timer_;
     int time_count_;
 
-    // 设备显示
     ChartView *chart_view_;
     TableView *table_view_;
 
-    // 设置界面
     SettingForm *setting_form_;
 
-    QMap<int ,ChartView*> chart_view_object_map;
+    QMap<int ,ChartView*> chart_view_object_map_;
 
-    // Json解析
-    jsonHandle *json_;
+    JsonHandler *json_;
 
     bool server_status_ = false;
 
-    std::tuple<int ,int ,int ,int ,int ,int> data_list;
+    QList<int> data_list_;
+
+    static int tcp_server_port_;
 
 public slots:
-    void AddDeviceView(QString ip);
+    void AddNewDeviceToTab(QString ip);
     void AddDevice(QHostAddress);
 
 private slots:
-    void oneSecondAction();
-    void devices_tab_close_requested(int index);
-    void start_server_clicked();
-    void save_button_clicked();
-    void setting_button_clicked();
-    void test_button_clicked();
+    void TimeMessage();
+    void DeviceTabCloseTabBtnClicked(int index);
+    void StartServerBtnClicked();
+    void SaveBtnClicked();
+    void SettingBtnClicked();
+    void CleanDataBtnClicked();
     void TableClicked(const QModelIndex &);
 
 signals:
-    void SendDataToChart(int ,int ,int ,int);
+    void SendDataToChart(QList<int>);
 };
-
-static bool send_data_to_chart_status;
-static int tcpServerPort=8080;
-
 #endif // MAIN_FORM_H

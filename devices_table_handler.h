@@ -21,12 +21,16 @@ public:
     void addData(int device_id ,QString ip);
     void deleteView(int index);
     void DeleteModelData();
+    QStandardItemModel* GetModelObject();
+    void UpdateTableContent(int);
+    void ModifyOnlineStatus(bool ,int);
 
 private:
     void initTable(QTableView*);
 
     QStandardItemModel *table_model_;
     QTableView *table_;
+
 
 private slots:
 };

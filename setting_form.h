@@ -18,6 +18,8 @@ public:
     SettingForm(QWidget *parent = nullptr,int port = 8888);
     ~SettingForm();
 
+    MqttForm* GetMqttPoint();
+
 private slots:
     void on_MQTTFormBtn_clicked();
 
@@ -28,6 +30,8 @@ private slots:
 
 private:
     Ui::SettingForm *ui;
+
+    MqttForm *mqttform;
 
     int port;
 };

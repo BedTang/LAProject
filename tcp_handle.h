@@ -10,16 +10,14 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 
-
-
-class tcpHandle : public QWidget
+class TcpHandle : public QWidget
 {
     Q_OBJECT
 public:
-    tcpHandle(QWidget *parent = nullptr ,Ui::MainForm *ui_ = nullptr);
-    void retrieveNativeIp();
+    TcpHandle(QWidget *parent = nullptr ,Ui::MainForm *ui_ = nullptr);
+    void RetrieveNativeIp();
     // QString serverReadData();
-    void server_listening(bool &status ,int port);
+    void ServerListening(bool &status ,int port);
     int GetPort();
     QHostAddress GetIp();
     QString GetMessage();
@@ -29,6 +27,7 @@ private:
     QTcpServer *tcp_server_ = new QTcpServer();
     QTcpSocket *tcp_client_= new QTcpSocket();
     QTcpSocket *current_client_= new QTcpSocket();
+
     QList<QTcpSocket*> tcp_client_list_;
 
     QString current_client_msg_;
@@ -36,15 +35,12 @@ private:
     Ui::MainForm *ui_;
 
 private slots:
-    void newConnectionSlot();
-    void serverReadData();
-
-    void disconnectedSlot();
+    void NewConnectionSlot();
+    void DisconnectedSlot();
+    void ReadServerData();
 
 signals:
     void RequestAddDevice(QHostAddress);
     void RequestDataHandle(QString);
-
 };
-
 #endif // TCP_HANDLE_H

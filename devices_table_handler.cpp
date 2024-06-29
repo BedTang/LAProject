@@ -2,12 +2,6 @@
 
 extern QString updateRealTimeData();
 
-// QString updateRealTimeData()
-// {
-//     QDateTime dateTime= QDateTime::currentDateTime();
-//     return dateTime.toString("hh:mm:ss:z");
-// }
-
 TableView::TableView(QWidget *parent, QTableView *table)
     : QWidget(parent)
     ,table_(table)
@@ -16,7 +10,7 @@ TableView::TableView(QWidget *parent, QTableView *table)
 
     initTable(table);
 
-    qDebug()<<tr("tableViewClass()<<class tableview created successfully!");
+    // qDebug()<<tr("TableView()<<Class tableview created successfully!");
 }
 
 QStandardItemModel* TableView::GetTableModel()
@@ -48,6 +42,11 @@ void TableView::DeleteModelData()
     table_model_->clear();
 }
 
+QStandardItemModel* TableView::GetModelObject()
+{
+    return table_model_;
+}
+
 void TableView::initTable(QTableView *table)
 {
     QStringList header;
@@ -68,4 +67,42 @@ void TableView::initTable(QTableView *table)
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);// 禁止修改
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
     table->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+}
+
+void TableView::UpdateTableContent(int device_id)
+{
+    qDebug()<<123;
+    for (int i = 0; i < table_model_->rowCount(); ++i) {
+        QModelIndex index;
+        index = table_model_->index(i,0);
+        qDebug()<<tr(QString(table_model_->data(index).toString()).toUtf8());
+        if(table_model_->data(index).toInt() == device_id)
+        {
+            qDebug()<<"OK";
+            index = table_model_->index(i ,4);
+            // table_model_->data(index).toString() = updateRealTimeData();
+            table_model_->setData(index ,updateRealTimeData());
+        }
+    }
+}
+
+void TableView::ModifyOnlineStatus(bool online_flag, int device_id)
+{
+    for (int i = 0; i < table_model_->rowCount(); ++i) {
+        QModelIndex index;
+        index = table_model_->index(i,0);
+        if(table_model_->data(index).toInt() == device_id)
+        {
+            qDebug()<<online_flag;
+            index = table_model_->index(i ,2);
+            if(online_flag == true)
+            {
+                table_model_->setData(index ,tr("在线"));
+            }
+            else if(online_flag == false)
+            {
+                table_model_->setData(index ,tr("离线"));
+            }
+        }
+    }
 }

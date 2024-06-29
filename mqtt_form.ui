@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MQTTForm</class>
- <widget class="QWidget" name="MQTTForm">
+ <class>MqttForm</class>
+ <widget class="QWidget" name="MqttForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,12 +17,12 @@
    <item row="0" column="0" colspan="2">
     <layout class="QVBoxLayout" name="verticalLayout_5" stretch="2,0">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="4,3">
+      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="4,0">
        <item>
         <widget class="QTextBrowser" name="log_browser_"/>
        </item>
        <item>
-        <widget class="QListView" name="mqtt_clinet_list_"/>
+        <widget class="QListWidget" name="mqtt_clinet_list_"/>
        </item>
       </layout>
      </item>
@@ -153,6 +153,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>测试</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="ping_button_">
              <property name="text">
               <string>Ping</string>
@@ -211,7 +218,7 @@
              <item row="1" column="1">
               <widget class="QLineEdit" name="publish_topic_line_">
                <property name="text">
-                <string>/sys/k14suPxlVyQ/Node1/thing/service/property/set</string>
+                <string>$sys/zdgol22rNA/Node1/thing/property/post</string>
                </property>
               </widget>
              </item>

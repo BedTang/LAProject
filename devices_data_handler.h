@@ -7,23 +7,21 @@
 #include <QJsonParseError>
 #include <QJsonDocument>
 
-class jsonHandle : public QWidget
+#include <QDateTime>
+
+class JsonHandler : public QWidget
 {
     Q_OBJECT
 public:
-    jsonHandle();
-    ~jsonHandle();
-    // int datahandleJson(QList<int>, QString str = NULL);
-    // std::tuple<int, int, int, int, int ,int> DataHandler(QList<int>&, QString str = NULL);
+    QString PackageDeviceDataToJson(QList<int>);
 
 private:
 
 public slots:
-    std::tuple<int, int, int, int, int ,int> ReciveDataHandler(QList<int>&, QString str = NULL);
+    QList<int> ReciveDataHandler(QList<int>&, QString str = NULL);
 
 signals:
-    void updatedata(int temperature ,int humidity ,int smoke ,int light);
-
+    void UpdateData(int temperature ,int humidity ,int smoke ,int light);
 
 };
 
