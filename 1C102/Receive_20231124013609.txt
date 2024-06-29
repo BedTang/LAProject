@@ -1,0 +1,389 @@
+AT+CWMODE=1
+cmd:AT+CWMODE=1
+等待倒?剖?
+check UART0_RX_BUF:
+
+OK
+
+ack:OK
+res:0
+AT+RST
+AT+CWJAP=X10,12345678
+cmd:AT+CWJAP="X10","12345678"
+等待倒?剖?
+check UART0_RX_BUF:
+|你{踕??d ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒?剖?
+check UART0_RX_BUF:
+|你{踕??d ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+IFI CONNECTED
+ ;$莾{$勥銊c?刢剟$鹸??$那熴?#$?c{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$?c{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒?剖?
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c??鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计时
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$?儃$勥銊c?刢剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
+等待倒计??
+check UART0_RX_BUF:
+OK
+OT IP
+D
+ ;$莾{$勥銊c鋭c剟$鹸??$那熴?$刢{d{d?
+ready
+ Ltd.
+
+ready
+
