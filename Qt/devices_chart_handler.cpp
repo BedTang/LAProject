@@ -1,13 +1,6 @@
 #include "devices_chart_handler.h"
-#include <QDebug>
 
-extern QString updateRealTimeData();
-
-QString updateRealTimeData()
-{
-    QDateTime dateTime= QDateTime::currentDateTime();
-    return dateTime.toString("hh:mm:ss:z");
-}
+extern void DebugOut(QString);
 
 ChartView::ChartView(QWidget *parent ,TableView *table_object ,int device_id)
     : QWidget(parent)
@@ -23,23 +16,18 @@ ChartView::ChartView(QWidget *parent ,TableView *table_object ,int device_id)
 
     stacked_widget_ = new QStackedWidget(parent);
     stacked_widget_->setContentsMargins(0,0,0,0);
-
     chart_part_ = new QChart();
     chart_part_->setMargins(QMargins(0 ,0 ,0 ,0));
     chart_part_->layout()->setContentsMargins(0 ,0 ,0 ,0);
-
     chart_part1_ = new QChart();
     chart_part1_->setMargins(QMargins(0 ,0 ,0 ,0));
     chart_part1_->layout()->setContentsMargins(0 ,0 ,0 ,0);
-
     chart_part2_ = new QChart();
     chart_part2_->setMargins(QMargins(0 ,0 ,0 ,0));
     chart_part2_->layout()->setContentsMargins(0 ,0 ,0 ,0);
-
     chart_part3_ = new QChart();
     chart_part3_->setMargins(QMargins(0 ,0 ,0 ,0));
     chart_part3_->layout()->setContentsMargins(0 ,0 ,0 ,0);
-
     chart_part4_ = new QChart();
     chart_part4_->setMargins(QMargins(0 ,0 ,0 ,0));
     chart_part4_->layout()->setContentsMargins(0 ,0 ,0 ,0);
@@ -98,7 +86,7 @@ ChartView::ChartView(QWidget *parent ,TableView *table_object ,int device_id)
 
 ChartView::~ChartView()
 {
-    qDebug()<<tr("销毁chartView");
+    DebugOut("Destroy ChartView()");
 }
 
 QChartView* ChartView::DeleteChart()
@@ -108,21 +96,17 @@ QChartView* ChartView::DeleteChart()
 
 inline void ChartView::InitStackedWidget()
 {
-    qDebug()<<"InitStackedWidget()";
+    DebugOut("ChartView::InitStackedWidget()<<");
     InitChartPart();
     InitChartPart1();
     InitChartPart2();
     InitChartPart3();
     InitChartPart4();
-
-
     stacked_widget_->addWidget(widget_part_list.at(0));
     stacked_widget_->addWidget(widget_part_list.at(1));
     stacked_widget_->addWidget(widget_part_list.at(2));
     stacked_widget_->addWidget(widget_part_list.at(3));
     stacked_widget_->addWidget(widget_part_list.at(4));
-
-    qDebug()<<stacked_widget_->count();
 }
 
 void ChartView::InitChartPart()
@@ -163,7 +147,6 @@ void ChartView::InitChartPart()
     temperature_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
     temperature_line_->attachAxis(axisY_);
     temperature_line_->setPointsVisible(true);
-
 
     // 湿度
     humidity_line_->setName(tr("湿度"));
@@ -252,7 +235,6 @@ void ChartView::InitChartPart1()
     current_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
     current_line_->attachAxis(axisY_);
     current_line_->setPointsVisible(true);
-
 
     // 散点图（边框）
     chart_part1_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
@@ -541,7 +523,6 @@ void ChartView::InitChartPart4()
 
 void ChartView::OnlineCheckSlot()
 {
-    // qDebug()<<"OnlineCheckSlot";
     if(online_flag_ == true)
     {
         internal_table_model_->ModifyOnlineStatus(online_flag_ ,device_id_);
@@ -569,18 +550,17 @@ void ChartView::PointHoverd(const QPointF &point, bool state)
     if (state)
     {
         point_value_label_->setText(QString::asprintf(time.toString("hh:mm:ss").toUtf8()+"\n%1.0f", point.y()));
-
         QPoint curPos = mapFromGlobal(QCursor::pos());
         point_value_label_->move(curPos.x() - point_value_label_->width() / 2, curPos.y() - point_value_label_->height() * 1.5);//移动数值
-        point_value_label_->show();//显示出来
+        point_value_label_->show();
     }
     else
-        point_value_label_->hide();//进行隐藏
+        point_value_label_->hide();
 }
 
 void ChartView::ReceiveDataToUpdate(QList<int> data_list)
 {
-    qDebug()<<"增添数据点";
+    DebugOut("ChartView::ReceiveDataToUpdate()<<Add Data Point");
     temperature_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(1));
     humidity_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(2));
     smoke_density_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(3));
@@ -608,8 +588,6 @@ void ChartView::ReceiveDataToUpdate(QList<int> data_list)
     chart_part2_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(7));
     chart_part2_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(8));
 
-
-
     y_speed_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(9));
     y_acceleration_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(10));
     y_displacement_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(11));
@@ -619,7 +597,6 @@ void ChartView::ReceiveDataToUpdate(QList<int> data_list)
     chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(9));
     chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(10));
     chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(11));
-
 
     z_speed_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(12));
     z_acceleration_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(13));
@@ -647,12 +624,9 @@ void ChartView::SwitchPreviousChartSlot()
 
 void ChartView::TimeOut()
 {
-    // qreal y_range = line->;
-    // qDebug()<< y_range;
     chart_part_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
     chart_part1_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
     chart_part2_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
     chart_part3_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
     chart_part4_->axes(Qt::Horizontal).at(0)->setRange(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
 }
-

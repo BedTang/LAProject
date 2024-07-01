@@ -1,16 +1,14 @@
 #include "devices_table_handler.h"
 
-extern QString updateRealTimeData();
+extern QString GetCurrentStringTime();
+extern void DebugOut(QString);
 
 TableView::TableView(QWidget *parent, QTableView *table)
     : QWidget(parent)
     ,table_(table)
 {
     table_model_ = new QStandardItemModel(table);
-
     initTable(table);
-
-    // qDebug()<<tr("TableView()<<Class tableview created successfully!");
 }
 
 QStandardItemModel* TableView::GetTableModel()
@@ -24,10 +22,9 @@ void TableView::addData(int device_id ,QString ip)
     // QStandardItem *item = new QStandardItem();
     add_items << new QStandardItem(QString("%0").arg(device_id))
               << new QStandardItem(QString("%0").arg(ip))
-              // << new QStandardItem("deviceType")
               << new QStandardItem("在线")
-              << new QStandardItem(updateRealTimeData())
-              << new QStandardItem(updateRealTimeData());
+              << new QStandardItem(GetCurrentStringTime())
+              << new QStandardItem(GetCurrentStringTime());
     table_model_->appendRow(add_items);
     table_->resizeColumnsToContents();
 }
@@ -52,7 +49,6 @@ void TableView::initTable(QTableView *table)
     QStringList header;
     header<<tr("名称")
            <<tr("地址")
-           // <<tr("类型")
            <<tr("状态")
            <<tr("上线时间")
            <<tr("最后在线时间");
@@ -71,7 +67,7 @@ void TableView::initTable(QTableView *table)
 
 void TableView::UpdateTableContent(int device_id)
 {
-    qDebug()<<123;
+    DebugOut("TableView::UpdateTableContent()<<");
     for (int i = 0; i < table_model_->rowCount(); ++i) {
         QModelIndex index;
         index = table_model_->index(i,0);
@@ -81,7 +77,7 @@ void TableView::UpdateTableContent(int device_id)
             qDebug()<<"OK";
             index = table_model_->index(i ,4);
             // table_model_->data(index).toString() = updateRealTimeData();
-            table_model_->setData(index ,updateRealTimeData());
+            table_model_->setData(index ,GetCurrentStringTime());
         }
     }
 }

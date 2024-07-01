@@ -45,7 +45,7 @@ void TcpHandle::RetrieveNativeIp()
 
 void TcpHandle::ReadServerData()
 {
-    DebugOut("serverReadData()<<serverReadData");
+    DebugOut("TcpHandle::ReadServerData()<<");
     // 遍历所有客户端
     for(int i=0; i<tcp_client_list_.length(); i++)
     {
@@ -68,10 +68,11 @@ void TcpHandle::ReadServerData()
         // 处理接收到的数据
         current_client_msg_= buffer;
         current_client_msg_= current_client_msg_.simplified();
-        ui_->logBrowser->append(GetCurrentStringTime()+current_client_msg_);
+        ui_->logBrowser->append(current_client_msg_);
 
         DebugOut("ReadServerData()<<Request to add a device.");
-        emit RequestAddDevice(QHostAddress(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]));
+        DebugOut("ReadServerData()<<Current ip address:"+tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]);
+        emit RequestAddDevice(QHostAddress(tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1])); // Slots -> MainForm::AddDevice()
 
         // 更新ip_port
         ip_port_pre = ip_port;

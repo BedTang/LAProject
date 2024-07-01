@@ -25,7 +25,7 @@ MainForm::MainForm(QWidget *parent)
 {
     // UI初始化
     ui_->setupUi(this);
-    this->setWindowTitle("分布式工业节点与电机智能监测系统");
+    this->setWindowTitle(tr("分布式工业节点与电机智能监测系统"));
 
     ui_->devices_tab->tabBar()->setTabButton(0 ,QTabBar::RightSide ,nullptr);
     ui_->devices_tab->setContentsMargins(0,0,0,0);
@@ -54,7 +54,6 @@ MainForm::MainForm(QWidget *parent)
     //     case 2:exit(1);break;
     //     }
     // }
-
 
     // 定时器
     online_check_timer_ = new QTimer(this);
@@ -85,14 +84,16 @@ MainForm::~MainForm()
 
 void MainForm::AddNewDeviceToTab(QString ip) // 创建新的设备标签
 {
-    DebugOut("AddNewDeviceToTab()<<");
+    DebugOut("MainForm::AddNewDeviceToTab()<<");
 
     if(data_list_.at(0) == '\0')
     {
+        DebugOut("AddNewDeviceToTab()<<if(data_list_.at(0) == '\0')");
         return;
     }
     if(device_list_.contains(data_list_.at(0)))
     {
+        DebugOut("AddNewDeviceToTab()<<if(device_list_.contains(data_list_.at(0)))");
         ui_->devices_tab->addTab(chart_view_->GetStackedWidgetObject(),tr("设备ID：%0").arg(data_list_.at(0)));
         table_view_->addData(data_list_.at(0) ,ip);
     }
@@ -100,14 +101,11 @@ void MainForm::AddNewDeviceToTab(QString ip) // 创建新的设备标签
 
 void MainForm::AddDevice(QHostAddress current_ip) // 添加设备
 {
-    DebugOut("AddDevice()<<");
-
+    DebugOut("MainForm::AddDevice()<<");
     data_list_ = json_->ReciveDataHandler(device_list_ ,tcp_->GetMessage());
-
+    DebugOut(QString(data_list_.at(0)));
     QString mqtt_json = json_->PackageDeviceDataToJson(data_list_);
-
     setting_form_->GetMqttPoint()->SetJsonMessage(mqtt_json);
-
     if(!online_device_list_.contains(current_ip))
     {
         online_device_list_.append(current_ip);
@@ -116,11 +114,8 @@ void MainForm::AddDevice(QHostAddress current_ip) // 添加设备
     }
 
     connect(this ,&MainForm::SendDataToChart, chart_view_object_map_.value(data_list_.at(0)) ,&ChartView::ReceiveDataToUpdate);
-
     emit SendDataToChart(data_list_);
-
     table_view_->UpdateTableContent(data_list_.at(0));
-
     disconnect(this ,&MainForm::SendDataToChart, chart_view_object_map_.value(data_list_.at(0)) ,&ChartView::ReceiveDataToUpdate);
 }
 
@@ -158,7 +153,7 @@ void MainForm::StartServerBtnClicked() // TCP服务器控制
 
 void MainForm::SaveBtnClicked() // 数据保存
 {
-    DebugOut("保存按钮");
+    DebugOut("SaveBtnClicked()<<");
 }
 
 void MainForm::SettingBtnClicked() // 显示设置界面

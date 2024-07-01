@@ -4,6 +4,7 @@ extern void DebugOut(QString);
 
 QString JsonHandler::PackageDeviceDataToJson(QList<int> data_list)
 {
+    DebugOut("JsonHandler::PackageDeviceDataToJson()<<");
     QJsonObject root_json;
     QJsonObject params_json;
 
@@ -82,19 +83,20 @@ QString JsonHandler::PackageDeviceDataToJson(QList<int> data_list)
     QJsonDocument json;
     json.setObject(root_json);
     QByteArray string = json.toJson(QJsonDocument::Compact);
-    qDebug()<<"Parse Json Data to String:"+string;
-    qDebug();
+    DebugOut("PackageDeviceDataToJson()<<Parse Json Data to String:"+string);
     return string;
 }
 
 QList<int> JsonHandler::ReciveDataHandler(QList<int> &list, QString str)
 {
+    DebugOut("JsonHandler::ReciveDataHandler()<<");
+    DebugOut("JsonHandler::ReciveDataHandler()<<"+str);
     QJsonParseError jsonError_;
 
     QJsonDocument doc_ = QJsonDocument::fromJson(str.toUtf8(), &jsonError_);
     if (jsonError_.error != QJsonParseError::NoError && !doc_.isNull())
     {
-        qDebug() << tr("Json格式错误！") << jsonError_.error;
+        DebugOut(tr("Json格式错误！")+jsonError_.error);
         exit(0);
     }
 
@@ -140,7 +142,7 @@ QList<int> JsonHandler::ReciveDataHandler(QList<int> &list, QString str)
     if(!list.contains(device_id_value_.toInt()))
     {
         list.append(device_id_value_.toInt());
-        qDebug()<< tr("dataHandle()<<添加设备ID：%0").arg(device_id_value_.toInt());
+        DebugOut(tr("ReciveDataHandler()<<Add device ID:%0").arg(device_id_value_.toInt()));
         return return_data_list;
     }
     return_data_list[0]='\0';

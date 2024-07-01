@@ -48,7 +48,7 @@ private:
     void PublishMessage();
 
 private slots:
-    void client_connected();
+    void MqttClientConnected();
 
     void client_mqtterror(QMqttClient::ClientError);
     void clietn_disconnected();

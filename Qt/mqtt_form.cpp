@@ -2,6 +2,7 @@
 #include "ui_mqtt_form.h"
 
 extern QString GetCurrentStringTime();
+extern void DebugOut(QString);
 
 MqttForm::MqttForm(QWidget *parent)
     : QWidget(parent)
@@ -20,7 +21,7 @@ MqttForm::MqttForm(QWidget *parent)
     connect(ui_->publish_button_ ,&QPushButton::clicked ,this ,&MqttForm::PublishButtonSlot);
     connect(ui_->unsubscribe_topic_button_ ,&QPushButton::clicked ,this ,&MqttForm::UnsubscribeButtonSlot);
     connect(mqtt_client_ ,&QMqttClient::messageReceived ,this ,&MqttForm::ReceiveClientMessages);
-    connect(mqtt_client_ ,&QMqttClient::connected ,this ,&MqttForm::client_connected);
+    connect(mqtt_client_ ,&QMqttClient::connected ,this ,&MqttForm::MqttClientConnected);
     connect(mqtt_client_ ,&QMqttClient::disconnected ,this ,&MqttForm::clietn_disconnected);
     connect(mqtt_client_ ,&QMqttClient::errorChanged ,this ,&MqttForm::client_mqtterror);
 
@@ -34,7 +35,7 @@ MqttForm::~MqttForm()
 
 void MqttForm::SetJsonMessage(QString message)
 {
-    qDebug()<<"SetJsonMessage()";
+    DebugOut("MqttForm::SetJsonMessage()<<");
     json_message = message;
     PublishMessage();
 }
@@ -68,7 +69,7 @@ void MqttForm::IsServerOnline()
 
 void MqttForm::PublishMessage()
 {
-    qDebug()<<"PublishMessage()";
+    DebugOut("MqttForm::PublishMessage()<<");
     mqtt_client_->setHostname(ui_->server_host_line_->text());
     mqtt_client_->setPort((ui_->server_port_line_->text().toInt()));
     mqtt_client_->setClientId(ui_->client_id_line_->text());
@@ -81,9 +82,9 @@ void MqttForm::PublishMessage()
     mqtt_client_->publish(topic_ ,json_message.toUtf8());
 }
 
-void MqttForm::client_connected()   //连接成功
+void MqttForm::MqttClientConnected()   //连接成功
 {
-    qDebug()<<"MQTT连接成功!";
+    DebugOut("MqttForm::MqttClientConnected()<<MQTT connection successful!");
     ui_->log_browser_->append(GetCurrentStringTime()+"云平台连接成功！");
     ui_->mqtt_clinet_list_->addItem(ui_->client_id_line_->text());
 }
