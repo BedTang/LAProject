@@ -141,11 +141,11 @@ void SqlDataHandler::MoreInsertData(int device_id ,QList<int> data_list)
     QString str =QString("device_%0").arg(device_id);
     if(IsTableExist(str) == false)
     {
-        QuerySql(QString("create table device_%0 (id int,temperature int,humidity int,smoke_density int,light_intensity int,battery_level int,x_speed int,x_acceleration int,x_displacement int,y_speed int,y_acceleration int,y_displacement int,z_speed int,z_acceleration int,z_displacement int,current int);").arg(device_id));
+        QuerySql(QString("create table device_%0 (id int,temperature int,humidity int,smoke_density int,light_intensity int,battery_level int,x_speed int,x_acceleration int,x_displacement int,y_speed int,y_acceleration int,y_displacement int,z_speed int,z_acceleration int,z_displacement int,current int,timestamp int);").arg(device_id));
     }
     // 进行多个数据的插入时，可以利用绑定进行批处理
     QSqlQuery query;
-    query.prepare(QString("insert into device_%0 values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").arg(device_id));
+    query.prepare(QString("insert into device_%0 values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%d %H:%M:%f'))").arg(device_id));
 
     query.addBindValue(data_list.at(0));
     query.addBindValue(data_list.at(1));
