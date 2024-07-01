@@ -127,7 +127,6 @@ void MqttForm::PingButtonSlot()
     cmd.waitForFinished(1000);
 
     QString ping_result = QString::fromLocal8Bit(cmd.readAll());
-    qDebug()<<ping_result;
     if (ping_result.indexOf("TTL") == -1)
     {
         ui_->log_browser_->append(tr("服务器：%0，连接失败。") .arg(ui_->server_host_line_->text()));
@@ -151,7 +150,6 @@ void MqttForm::ConnectButtonSlot()  //连接
 
 void MqttForm::SubscribeButtonSlot()    //订阅
 {
-    qDebug()<<"订阅按钮";
     auto subscriton=mqtt_client_->subscribe(ui_->subscribe_topic_line_->text(),0);
     if(!subscriton)
     {
@@ -166,7 +164,6 @@ void MqttForm::SubscribeButtonSlot()    //订阅
 
 void MqttForm::PublishButtonSlot()  //发布消息
 {
-    qDebug()<<tr("PublishButtonSlot()");
     topic_=*new QMqttTopicName(ui_->publish_topic_line_->text());
     mqtt_client_->publish(topic_ ,ui_->message_text_->toPlainText().toUtf8());
 
@@ -174,7 +171,6 @@ void MqttForm::PublishButtonSlot()  //发布消息
 
 void MqttForm::UnsubscribeButtonSlot()  //取消订阅按钮
 {
-    qDebug()<<tr("UnsubscribeButtonSlot()");
     mqtt_client_->unsubscribe(ui_->subscribe_topic_line_->text());
     const QString content = GetCurrentStringTime()
                             + " 取消订阅的主题 : "

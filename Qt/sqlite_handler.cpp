@@ -1,4 +1,7 @@
 #include "sqlite_handler.h"
+#include "qdebug.h"
+
+extern void DebugOut(QString);
 
 SqlDataHandler::SqlDataHandler()
 {
@@ -20,7 +23,7 @@ bool SqlDataHandler::OpenDatabase()
 {
     if(!database_.open())
     {
-        qDebug()<<database_.lastError();
+        DebugOut(database_.lastError().text());
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.setWindowTitle(tr("Error initializing database"));
@@ -42,32 +45,23 @@ bool SqlDataHandler::OpenDatabase()
             return 2;
         }
     }
-
     QSqlQuery db_query(database_);
-
 }
 
-// 创建数据表
-void SqlDataHandler::createTable()
+// 检查默认数据表
+void SqlDataHandler::CheckDefaultTable()
 {
-    // 执行sql语句的对象
-    QSqlQuery sqlQuery;
-    // 执行sql语句的字符串
-    QString createSql = QString("CREATE TABLE {xxx} (\
-                                ");
-    sqlQuery.prepare(createSql);
-    if(!sqlQuery.exec())
+    QString table = "setting";
+    if(IsTableExist(table) == false)
     {
-        qDebug()<<tr("ERROR: Fail to create table.") << sqlQuery.lastError();
+    QuerySql("create table setting (tcp_server_port_ int);");
+    QuerySql("insert into setting (tcp_server_port_) values(8080)");
     }
-    else
-    {
-        qDebug()<<tr("Create table successfully!");
-    }
+    DebugOut("Default table create successed");
 }
 
-// 判断数据包是否存在
-bool SqlDataHandler::isTableExist(QString& tableName)
+// 判断数据表是否存在
+bool SqlDataHandler::IsTableExist(QString& tableName)
 {
     QSqlDatabase database = QSqlDatabase::database();
     if(database.tables().contains(tableName))
@@ -81,13 +75,13 @@ bool SqlDataHandler::isTableExist(QString& tableName)
 }
 
 // 查询数据表
-void SqlDataHandler::quertTable()
+void SqlDataHandler::QuertTable()
 {
     QSqlQuery sqlQuery;
 
     if(!sqlQuery.exec("SELECT * FROM {xxx}"))
     {
-        qDebug() << tr("ERROR: Fail to query table.");
+        DebugOut(tr("ERROR: Fail to query table."));
     }
     else
     {
@@ -96,52 +90,84 @@ void SqlDataHandler::quertTable()
             int id = sqlQuery.value(0).toInt();
             QString name = sqlQuery.value(1).toString();
             int age = sqlQuery.value(2).toInt();
-            qDebug()<<tr("%1 %2 %3").arg(id).arg(name).arg(age);
+            DebugOut(tr("%1 %2 %3").arg(id).arg(name).arg(age));
         }
     }
 }
 
 // 插入单条数据
-void SqlDataHandler::signleDataInsert(w2dba &singleData)
+void SqlDataHandler::signleDataInsert(device_data &singleData)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("");
     // sqlQuery.bindValue("xxx",xxx);
     if(!sqlQuery.exec())
     {
-        qDebug()<< tr("ERROR: Fail to insert data.") << sqlQuery.lastError();
+        DebugOut(tr("ERROR: Fail to insert data.") + sqlQuery.lastError().text());
     }
     else
     {
-        //
     }
+}
+
+bool SqlDataHandler::QuerySql(QString extern_query)
+{
+    QSqlQuery query;
+    if(query.exec(extern_query))
+    {
+        DebugOut("Sql query successed! [" + query.lastQuery() + "]");
+        return true;
+    }
+    else
+    {
+        DebugOut("Sql query failed! " \
+                 "Error statement:" + query.lastQuery() + \
+                 "Error reason:" + query.lastError().text());
+        return false;
+    }
+}
+
+int SqlDataHandler::QuertSqlData(QString column , QString table)
+{
+    QSqlQuery query;
+    query.exec(QString("select %0 from %1").arg(column).arg(table));
+    query.next();
+    return query.value(0).toInt();
 }
 
 // 插入多条数据
-void SqlDataHandler::moreInsertData(QList<w2dba>& moredb)
+void SqlDataHandler::MoreInsertData(int device_id ,QList<int> data_list)
 {
+    QString str =QString("device_%0").arg(device_id);
+    if(IsTableExist(str) == false)
+    {
+        QuerySql(QString("create table device_%0 (id int,temperature int,humidity int,smoke_density int,light_intensity int,battery_level int,x_speed int,x_acceleration int,x_displacement int,y_speed int,y_acceleration int,y_displacement int,z_speed int,z_acceleration int,z_displacement int,current int);").arg(device_id));
+    }
     // 进行多个数据的插入时，可以利用绑定进行批处理
-    QSqlQuery sqlQuery;
-    sqlQuery.prepare("INSERT INTO student VALUES(?,?,?)");
-    QVariantList idList,nameList,ageList;
-    for(int i=0; i< moredb.size(); i++)
-    {
-        idList <<  moredb.at(i).id;
-        nameList << moredb.at(i).name;
-        ageList << moredb.at(i).age;
-    }
-    sqlQuery.addBindValue(idList);
-    sqlQuery.addBindValue(nameList);
-    sqlQuery.addBindValue(ageList);
+    QSqlQuery query;
+    query.prepare(QString("insert into device_%0 values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").arg(device_id));
 
-    if (!sqlQuery.execBatch()) // 进行批处理，如果出错就输出错误
-    {
-        qDebug() << sqlQuery.lastError();
-    }
+    query.addBindValue(data_list.at(0));
+    query.addBindValue(data_list.at(1));
+    query.addBindValue(data_list.at(2));
+    query.addBindValue(data_list.at(3));
+    query.addBindValue(data_list.at(4));
+    query.addBindValue(data_list.at(5));
+    query.addBindValue(data_list.at(6));
+    query.addBindValue(data_list.at(7));
+    query.addBindValue(data_list.at(8));
+    query.addBindValue(data_list.at(9));
+    query.addBindValue(data_list.at(10));
+    query.addBindValue(data_list.at(11));
+    query.addBindValue(data_list.at(12));
+    query.addBindValue(data_list.at(13));
+    query.addBindValue(data_list.at(14));
+    query.addBindValue(data_list.at(15));
+    query.exec(); // 进行批处理，如果出错就输出错误
 }
 
 // 修改数据
-void SqlDataHandler::modifyData(int id, QString name, int age)
+void SqlDataHandler::ModifyData(int id, QString name, int age)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare("UPDATE student SET name=?,age=? WHERE id=?");
@@ -150,43 +176,43 @@ void SqlDataHandler::modifyData(int id, QString name, int age)
     sqlQuery.addBindValue(id);
     if(!sqlQuery.exec())
     {
-        qDebug() << sqlQuery.lastError();
+        DebugOut(sqlQuery.lastError().text());
     }
     else
     {
-        qDebug() << tr("updated data success!");
+        DebugOut(tr("updated data success!"));
     }
 }
 
 // 删除数据
-void SqlDataHandler::deleteData(int id)
+void SqlDataHandler::DeleteData(int id)
 {
     QSqlQuery sqlQuery;
 
     sqlQuery.exec(QString("DELETE FROM student WHERE id = %1").arg(id));
     if(!sqlQuery.exec())
     {
-        qDebug()<<sqlQuery.lastError();
+        DebugOut(sqlQuery.lastError().text());
     }
     else
     {
-        qDebug() << tr("Deleted data success!");
+        DebugOut(tr("Deleted data success!"));
     }
 }
 
 // 删除数据表
-void SqlDataHandler::deleteTable(QString& tableName)
+void SqlDataHandler::DeleteTable(QString& tableName)
 {
     QSqlQuery sqlQuery;
 
     sqlQuery.exec(QString("DROP TABLE %1").arg(tableName));
     if(sqlQuery.exec())
     {
-        qDebug() << sqlQuery.lastError();
+        DebugOut(sqlQuery.lastError().text());
     }
     else
     {
-        qDebug() << tr("Deleted table success");
+        DebugOut(tr("Deleted table success"));
     }
 }
 

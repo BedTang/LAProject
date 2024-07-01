@@ -44,7 +44,7 @@ private:
 
     TcpHandle *tcp_;
 
-    SqlDataHandler *database_;
+    SqlDataHandler *sqldb_;
 
     QTimer *timer_;
     QTimer *real_time_timer_;
@@ -64,7 +64,7 @@ private:
 
     QList<int> data_list_;
 
-    static int tcp_server_port_;
+    // static int tcp_server_port_;
 
 public slots:
     void AddNewDeviceToTab(QString ip);

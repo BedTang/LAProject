@@ -8,7 +8,6 @@
 #include <QHeaderView>
 
 #include <QDateTime>
-#include <QDebug>
 
 class TableView : public QWidget
 {

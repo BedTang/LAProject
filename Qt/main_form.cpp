@@ -14,14 +14,11 @@ inline void DebugOut(QString message)
     qDebug()<<Time.toString("[ hh:mm:ss ] ")+message;
 }
 
-int MainForm::tcp_server_port_ = 8080;
-
 MainForm::MainForm(QWidget *parent)
     : QWidget(parent)
     , ui_(new Ui::MainForm)
     , timer_(new QTimer(this))
     , time_count_(0)
-    , setting_form_(new SettingForm(nullptr, tcp_server_port_))
 {
     // UI初始化
     ui_->setupUi(this);
@@ -42,18 +39,11 @@ MainForm::MainForm(QWidget *parent)
     table_view_ = new TableView(this, ui_->devices_table_view_);
 
     // 数据库初始化
-    // database_ = new SqlDataHandler();
+    sqldb_ = new SqlDataHandler();
+    sqldb_->OpenDatabase();
+    sqldb_->CheckDefaultTable();
 
-    // SqlDataHandler sqldb;
-
-    // while(char tmep=sqldb.OpenDatabase())
-    // {
-    //     switch (tmep) {
-    //     case 0:break;
-    //     case 1:return;
-    //     case 2:exit(1);break;
-    //     }
-    // }
+    setting_form_ = new SettingForm(nullptr, sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
 
     // 定时器
     online_check_timer_ = new QTimer(this);
@@ -103,7 +93,7 @@ void MainForm::AddDevice(QHostAddress current_ip) // 添加设备
 {
     DebugOut("MainForm::AddDevice()<<");
     data_list_ = json_->ReciveDataHandler(device_list_ ,tcp_->GetMessage());
-    DebugOut(QString(data_list_.at(0)));
+    sqldb_->MoreInsertData(data_list_.at(0) ,data_list_);
     QString mqtt_json = json_->PackageDeviceDataToJson(data_list_);
     setting_form_->GetMqttPoint()->SetJsonMessage(mqtt_json);
     if(!online_device_list_.contains(current_ip))
@@ -138,14 +128,14 @@ void MainForm::StartServerBtnClicked() // TCP服务器控制
 {
     if(ui_->start_server->text()==tr("启动服务器"))
     {
-        tcp_->ServerListening(server_status_ ,tcp_server_port_);
+        tcp_->ServerListening(server_status_ ,sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
         ui_->logBrowser->append(tr("当前服务器端口:") + QString::number(tcp_->GetPort()));
         ui_->start_server->setText(tr("关闭服务器"));
         return;
     }
     if(ui_->start_server->text()==tr("关闭服务器"))
     {
-        tcp_->ServerListening(server_status_ ,tcp_server_port_);
+        tcp_->ServerListening(server_status_ ,sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
         ui_->start_server->setText(tr("启动服务器"));
         return;
     }

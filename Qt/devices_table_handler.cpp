@@ -71,10 +71,8 @@ void TableView::UpdateTableContent(int device_id)
     for (int i = 0; i < table_model_->rowCount(); ++i) {
         QModelIndex index;
         index = table_model_->index(i,0);
-        qDebug()<<tr(QString(table_model_->data(index).toString()).toUtf8());
         if(table_model_->data(index).toInt() == device_id)
         {
-            qDebug()<<"OK";
             index = table_model_->index(i ,4);
             // table_model_->data(index).toString() = updateRealTimeData();
             table_model_->setData(index ,GetCurrentStringTime());
@@ -89,7 +87,6 @@ void TableView::ModifyOnlineStatus(bool online_flag, int device_id)
         index = table_model_->index(i,0);
         if(table_model_->data(index).toInt() == device_id)
         {
-            qDebug()<<online_flag;
             index = table_model_->index(i ,2);
             if(online_flag == true)
             {

@@ -2,7 +2,6 @@
 #define SERIAL_FORM_H
 
 #include <QWidget>
-#include <QDebug>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 

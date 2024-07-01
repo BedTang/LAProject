@@ -65,7 +65,6 @@ void SerialForm::serialPort_readyRead()    //串口接收
 {
     QByteArray receiveBuf;
     receiveBuf=serial->readAll();
-    qDebug()<<receiveBuf;
 
     receiveNum+=receiveBuf.size();
 
@@ -177,8 +176,6 @@ void SerialForm::on_serialSwitchBtn_clicked()  //开关串口
         if(!serial->isOpen())
         {
             QMessageBox::about(NULL,"提示","打开串口失败");\
-
-            qDebug()<<"11";
             return;
         }
 
@@ -217,7 +214,6 @@ void SerialForm::on_scanSerialBtn_clicked()
     foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts())
     {
         m_serialPortName << info.portName();
-        qDebug()<<"serialPortName : "<<info.portName();
     }
     ui->serialPortList->clear();
     ui->serialPortList->addItems(m_serialPortName);
