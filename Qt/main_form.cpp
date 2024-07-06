@@ -1,6 +1,6 @@
 #include "main_form.h"
 
-#include <QSortFilterProxyModel>
+// #include <QSortFilterProxyModel>
 
 inline QString GetCurrentStringTime()
 {
@@ -54,7 +54,7 @@ MainForm::MainForm(QWidget *parent)
 
     // 状态栏
     ui_->statusBar->setSizeGripEnabled(false);
-
+    // showFullScreen();
     // 信号与槽
     connect(timer_,SIGNAL(timeout()), this, SLOT(TimeMessage()));
     connect(ui_->start_server, &QPushButton::clicked, this, &MainForm::StartServerBtnClicked);
@@ -95,7 +95,7 @@ void MainForm::AddDevice(QHostAddress current_ip) // 添加设备
     data_list_ = json_->ReciveDataHandler(device_list_ ,tcp_->GetMessage());
     sqldb_->MoreInsertData(data_list_.at(0) ,data_list_);
     QString mqtt_json = json_->PackageDeviceDataToJson(data_list_);
-    setting_form_->GetMqttPoint()->SetJsonMessage(mqtt_json);
+    setting_form_->GetMqttPoint()->SetJsonMessage(mqtt_json ,data_list_.at(0));
     if(!online_device_list_.contains(current_ip))
     {
         online_device_list_.append(current_ip);
@@ -129,7 +129,7 @@ void MainForm::StartServerBtnClicked() // TCP服务器控制
     if(ui_->start_server->text()==tr("启动服务器"))
     {
         tcp_->ServerListening(server_status_ ,sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
-        ui_->logBrowser->append(tr("当前服务器端口:") + QString::number(tcp_->GetPort()));
+        ui_->logBrowser->append(tr("当前服务器端口:") + QString::number(tcp_->GetPort())+"\n");
         ui_->start_server->setText(tr("关闭服务器"));
         return;
     }
@@ -144,6 +144,23 @@ void MainForm::StartServerBtnClicked() // TCP服务器控制
 void MainForm::SaveBtnClicked() // 数据保存
 {
     DebugOut("SaveBtnClicked()<<");
+
+    for (int var = 1; var < ui_->devices_tab->count(); ++var) {
+        QProcess *p;
+        p=new QProcess();
+        p->start("sqlite3 LAProject.db");
+        QString cmd2=".mode box \r\n";
+        QString cmd3=QString(".output device_%0.txt \r\n").arg(var);
+        QString cmd4=QString("select * from device_%0; \r\n").arg((var));
+        QString cmd=cmd2+cmd3+cmd4;
+        /* 转为char*并写入 */
+        QByteArray qbarr = cmd.toLatin1();
+        char *ch = qbarr.data();
+        qint64 len = cmd.length();
+        p->write(ch, len);
+        p->waitForFinished(1000);	//避免阻塞，等待1秒
+        p->close();
+    }
 }
 
 void MainForm::SettingBtnClicked() // 显示设置界面
@@ -160,7 +177,10 @@ void MainForm::CleanDataBtnClicked() // 清空数据
     device_list_.clear();
     online_device_list_.clear();
     table_view_->DeleteModelData();
-    ui_->devices_tab->removeTab(1);
+    for (int var = 1; var < ui_->devices_tab->count(); ++var) {
+        ui_->devices_tab->removeTab(var);
+    }
+    table_view_->ExternInit();
 }
 
 void MainForm::TableClicked(const QModelIndex &index) // 设备列表向设备标签页跳转

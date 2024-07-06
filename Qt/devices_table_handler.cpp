@@ -99,3 +99,8 @@ void TableView::ModifyOnlineStatus(bool online_flag, int device_id)
         }
     }
 }
+
+void TableView::ExternInit()
+{
+    initTable(table_);
+}

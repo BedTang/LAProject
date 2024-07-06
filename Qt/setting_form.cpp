@@ -2,42 +2,43 @@
 #include "ui_setting_form.h"
 
 SettingForm::SettingForm(QWidget *parent, int port)
-    : QWidget(parent)
-    , ui(new Ui::SettingForm)
-    , port(port)
+    : QWidget(parent,Qt::WindowStaysOnTopHint)
+    , ui_(new Ui::SettingForm)
+    , port_(port)
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
     this->setWindowTitle("设置");
     setAttribute(Qt::WA_QuitOnClose,false);
-    ui->lineEdit->setText(QString::number(port));
-    mqttform = new MqttForm();
+    ui_->PortLineEdit->setText(QString::number(port));
+    mqtt_form_ = new MqttForm();
+    mqtt_form_->InitMqttServer();
+    connect(ui_->PortBtn, &QPushButton::clicked, this ,&SettingForm::PortBtn);
+    connect(ui_->MQTTFormBtn, &QPushButton::clicked, this ,&SettingForm::MqttFormBtn);
 }
 
 SettingForm::~SettingForm()
 {
-    delete ui;
+    delete ui_;
 }
 
 MqttForm *SettingForm::GetMqttPoint()
 {
-    return mqttform;
+    return mqtt_form_;
 }
 
-
-void SettingForm::on_MQTTFormBtn_clicked()
+void SettingForm::PortBtn()
 {
-    mqttform->show();
+    emit ChangePort(ui_->PortLineEdit->text().toInt());
 }
 
-
-void SettingForm::on_SerialFormBtn_clicked()
+void SettingForm::MqttFormBtn()
 {
-    SerialForm *serialform=new SerialForm;
-    serialform->show();
+    mqtt_form_->show();
 }
+
 
 void SettingForm::on_pushButton_clicked()
 {
-    port=ui->lineEdit->text().toInt();
+    exit(0);
 }
 

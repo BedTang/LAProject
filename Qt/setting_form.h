@@ -20,20 +20,21 @@ public:
 
     MqttForm* GetMqttPoint();
 
+private:
+    Ui::SettingForm *ui_;
+
+    MqttForm *mqtt_form_;
+
+    int port_;
+
 private slots:
-    void on_MQTTFormBtn_clicked();
-
-    void on_SerialFormBtn_clicked();
-
+    void PortBtn();
+    void MqttFormBtn();
 
     void on_pushButton_clicked();
 
-private:
-    Ui::SettingForm *ui;
-
-    MqttForm *mqttform;
-
-    int port;
+signals:
+    void ChangePort(int);
 };
 
 #endif // SETTING_FORM_H

@@ -24,11 +24,14 @@ public:
     MqttForm(QWidget *parent = nullptr);
     ~MqttForm();
 
-    void SetJsonMessage(QString);
+    void SetJsonMessage(QString ,int);
+    void InitMqttServer();
 
 private:
     Ui::MqttForm *ui_;
     QMqttClient *mqtt_client_;
+    QMqttClient *mqtt_client_2;
+    QMqttClient *mqtt_client_3;
     QMqttTopicName topic_;
     QByteArray message_;
 
@@ -41,11 +44,11 @@ private:
     void GetDevcieData(QList<int>);
     QList<int> ReturnDeviceData();
 
-    void InitMqttServer();
+
 
     void IsServerOnline();
 
-    void PublishMessage();
+    void PublishMessage(int);
 
 private slots:
     void MqttClientConnected();

@@ -23,6 +23,7 @@ public:
     QStandardItemModel* GetModelObject();
     void UpdateTableContent(int);
     void ModifyOnlineStatus(bool ,int);
+    void ExternInit();
 
 private:
     void initTable(QTableView*);

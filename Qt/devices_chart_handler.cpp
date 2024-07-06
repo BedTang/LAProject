@@ -54,7 +54,7 @@ ChartView::ChartView(QWidget *parent ,TableView *table_object ,int device_id)
         // chart_view_list
         chart_view_part_ = new QChartView(this);
         chart_view_part_->setContentsMargins(0,0,0,0);
-        // chart_view_part_->set
+        chart_view_part_->setRubberBand(QChartView::RectangleRubberBand);
         chart_view_part_->setSizePolicy(sizePolice);
         // chart_view_part_->setMargins
         chart_view_list.append(chart_view_part_);
@@ -74,6 +74,10 @@ ChartView::ChartView(QWidget *parent ,TableView *table_object ,int device_id)
 
         widget_part_->setLayout(pLayout);
         widget_part_list.append(widget_part_);
+
+
+
+
     }
 
     InitStackedWidget();
@@ -112,23 +116,21 @@ inline void ChartView::InitStackedWidget()
 void ChartView::InitChartPart()
 {
     QDateTimeAxis *axisX_ = new QDateTimeAxis(this);
-    QValueAxis *axisY_ = new QValueAxis(this);
+    QValueAxis *axisY_left_ = new QValueAxis(this);
+    QValueAxis *axisY_right_ = new QValueAxis(this);
 
     temperature_line_ = new QLineSeries(this);
     humidity_line_ = new QLineSeries(this);
     smoke_density_line_ = new QLineSeries(this);
     light_intensity_line_ = new QLineSeries(this);
-    chart_part_scatter_  = new QScatterSeries(this);
-    chart_part_scatter2_  = new QScatterSeries(this);
 
     chart_part_->addAxis(axisX_, Qt::AlignBottom);
-    chart_part_->addAxis(axisY_, Qt::AlignLeft);
+    chart_part_->addAxis(axisY_left_, Qt::AlignLeft);
+    chart_part_->addAxis(axisY_right_, Qt::AlignRight);
     chart_part_->addSeries(temperature_line_);
     chart_part_->addSeries(humidity_line_);
     chart_part_->addSeries(smoke_density_line_);
     chart_part_->addSeries(light_intensity_line_);
-    chart_part_->addSeries(chart_part_scatter_);
-    chart_part_->addSeries(chart_part_scatter2_);
 
     // 设置X轴
     axisX_->setTickCount(7);// 刻度线
@@ -137,54 +139,45 @@ void ChartView::InitChartPart()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,300);
-    axisY_->setGridLineVisible(true);
-    axisY_->setTickCount(6);
-    axisY_->setMinorTickCount(5);
+    axisY_left_->setRange(0,100);
+    axisY_left_->setGridLineVisible(true);
+    axisY_left_->setTickCount(6);
+    axisY_left_->setMinorTickCount(5);
+    axisY_left_->setTitleText("温度\n湿度");
+
+    axisY_right_->setRange(0,1000);
+    axisY_right_->setGridLineVisible(true);
+    axisY_right_->setTickCount(6);
+    axisY_right_->setMinorTickCount(5);
+    axisY_right_->setTitleText("烟雾\n光强");
 
     // 温度
     temperature_line_->setName(tr("温度"));
     temperature_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
-    temperature_line_->attachAxis(axisY_);
+    temperature_line_->attachAxis(axisY_left_);
     temperature_line_->setPointsVisible(true);
 
     // 湿度
     humidity_line_->setName(tr("湿度"));
     humidity_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
-    humidity_line_->attachAxis(axisY_);
+    humidity_line_->attachAxis(axisY_left_);
     humidity_line_->setPointsVisible(true);
 
     // 烟雾浓度
     smoke_density_line_->setName(tr("烟雾浓度"));
     smoke_density_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
-    smoke_density_line_->attachAxis(axisY_);
+    smoke_density_line_->attachAxis(axisY_right_);
     smoke_density_line_->setPointsVisible(true);
 
     // 光照强度
     light_intensity_line_->setName(tr("光照强度"));
     light_intensity_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
-    light_intensity_line_->attachAxis(axisY_);
+    light_intensity_line_->attachAxis(axisY_right_);
     light_intensity_line_->setPointsVisible(true);
 
     chart_view_list.at(0)->setChart(chart_part_);
     chart_view_list.at(0)->setRenderHint(QPainter::Antialiasing);
 
-    // 散点图（边框）
-    chart_part_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part_scatter_->setBorderColor(QColor(21, 100, 255)); // 离散点边框颜色
-    chart_part_scatter_->setBrush(QBrush(QColor(21, 100, 255)));// 离散点背景色
-    chart_part_scatter_->setMarkerSize(7); // 离散点大小
-    chart_part_scatter_->attachAxis(axisX_);
-    chart_part_scatter_->attachAxis(axisY_);
-
-    // 散点图（中心）
-    chart_part_scatter2_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part_scatter2_->setMarkerSize(3);// 点大小
-    chart_part_scatter2_->attachAxis(axisX_);
-    chart_part_scatter2_->attachAxis(axisY_);
-
-    chart_part_->legend()->markers(chart_part_scatter_).first()->setVisible(false);// 隐藏图例
-    chart_part_->legend()->markers(chart_part_scatter2_).first()->setVisible(false);
 
     // 数据点显示
     point_value_label_->setStyleSheet(QString("QLabel{color:#1564FF;"
@@ -197,10 +190,10 @@ void ChartView::InitChartPart()
     point_value_label_->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     point_value_label_->hide();
 
-    connect(chart_part_scatter_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    // connect(humidity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    // connect(smoke_density_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    // connect(light_intensity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(temperature_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(humidity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(smoke_density_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(light_intensity_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
 }
 
 void ChartView::InitChartPart1()
@@ -209,15 +202,11 @@ void ChartView::InitChartPart1()
     QValueAxis *axisY_ = new QValueAxis();
 
     current_line_ = new QLineSeries();
-    chart_part1_scatter_  = new QScatterSeries();
-    chart_part1_scatter2_  = new QScatterSeries();
 
     chart_part1_->addAxis(axisX_, Qt::AlignBottom);
     chart_part1_->addAxis(axisY_, Qt::AlignLeft);
     chart_part1_->addSeries(current_line_);
 
-    chart_part1_->addSeries(chart_part1_scatter_);
-    chart_part1_->addSeries(chart_part1_scatter2_);
 
     // 设置X轴
     axisX_->setTickCount(5);// 刻度线
@@ -225,7 +214,7 @@ void ChartView::InitChartPart1()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,300);
+    axisY_->setRange(0,1000);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -235,23 +224,6 @@ void ChartView::InitChartPart1()
     current_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
     current_line_->attachAxis(axisY_);
     current_line_->setPointsVisible(true);
-
-    // 散点图（边框）
-    chart_part1_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part1_scatter_->setBorderColor(QColor(21, 100, 255)); // 离散点边框颜色
-    chart_part1_scatter_->setBrush(QBrush(QColor(21, 100, 255)));// 离散点背景色
-    chart_part1_scatter_->setMarkerSize(8); // 离散点大小
-    chart_part1_scatter_->attachAxis(axisX_);
-    chart_part1_scatter_->attachAxis(axisY_);
-
-    // 散点图（中心）
-    chart_part1_scatter2_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part1_scatter2_->setMarkerSize(4);// 点大小
-    chart_part1_scatter2_->attachAxis(axisX_);
-    chart_part1_scatter2_->attachAxis(axisY_);
-
-    chart_part1_->legend()->markers(chart_part1_scatter_).first()->setVisible(false);// 隐藏图例
-    chart_part1_->legend()->markers(chart_part1_scatter2_).first()->setVisible(false);
 
     chart_view_list.at(1)->setChart(chart_part1_);
     chart_view_list.at(1)->setRenderHint(QPainter::Antialiasing);
@@ -268,7 +240,6 @@ void ChartView::InitChartPart1()
     point_value_label_->hide();
 
     connect(current_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
-    // connect(harmonics_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
 }
 
 void ChartView::InitChartPart2()
@@ -279,25 +250,21 @@ void ChartView::InitChartPart2()
     x_speed_line_ = new QLineSeries(this);
     x_acceleration_line_ = new QLineSeries(this);
     x_displacement_line_ = new QLineSeries(this);
-    chart_part2_scatter_  = new QScatterSeries(this);
-    chart_part2_scatter2_  = new QScatterSeries(this);
 
     chart_part2_->addAxis(axisX_, Qt::AlignBottom);
     chart_part2_->addAxis(axisY_, Qt::AlignLeft);
     chart_part2_->addSeries(x_speed_line_);
     chart_part2_->addSeries(x_acceleration_line_);
     chart_part2_->addSeries(x_displacement_line_);
-    chart_part2_->addSeries(chart_part2_scatter_);
-    chart_part2_->addSeries(chart_part2_scatter2_);
+
 
     // 设置X轴
     axisX_->setTickCount(7);// 刻度线
     axisX_->setFormat(tr("hh:mm:ss"));// 格式
-    // axisX_->setTitleText(tr("时间"));// 名称
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,300);
+    axisY_->setRange(0,1000);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -318,23 +285,6 @@ void ChartView::InitChartPart2()
     x_displacement_line_->attachAxis(axisX_);// 将line附在 axisXDate 上
     x_displacement_line_->attachAxis(axisY_);
     x_displacement_line_->setPointsVisible(true);
-
-    // 散点图（边框）
-    chart_part2_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part2_scatter_->setBorderColor(QColor(21, 100, 255)); // 离散点边框颜色
-    chart_part2_scatter_->setBrush(QBrush(QColor(21, 100, 255)));// 离散点背景色
-    chart_part2_scatter_->setMarkerSize(7); // 离散点大小
-    chart_part2_scatter_->attachAxis(axisX_);
-    chart_part2_scatter_->attachAxis(axisY_);
-
-    // 散点图（中心）
-    chart_part2_scatter2_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part2_scatter2_->setMarkerSize(3);// 点大小
-    chart_part2_scatter2_->attachAxis(axisX_);
-    chart_part2_scatter2_->attachAxis(axisY_);
-
-    chart_part2_->legend()->markers(chart_part2_scatter_).first()->setVisible(false);// 隐藏图例
-    chart_part2_->legend()->markers(chart_part2_scatter2_).first()->setVisible(false);
 
     chart_view_list.at(2)->setChart(chart_part2_);
     chart_view_list.at(2)->setRenderHint(QPainter::Antialiasing);
@@ -363,16 +313,12 @@ void ChartView::InitChartPart3()
     y_speed_line_ = new QLineSeries(this);
     y_acceleration_line_ = new QLineSeries(this);
     y_displacement_line_ = new QLineSeries(this);
-    chart_part3_scatter_  = new QScatterSeries(this);
-    chart_part3_scatter2_  = new QScatterSeries(this);
 
     chart_part3_->addAxis(axisX_, Qt::AlignBottom);
     chart_part3_->addAxis(axisY_, Qt::AlignLeft);
     chart_part3_->addSeries(y_speed_line_);
     chart_part3_->addSeries(y_acceleration_line_);
     chart_part3_->addSeries(y_displacement_line_);
-    chart_part3_->addSeries(chart_part3_scatter_);
-    chart_part3_->addSeries(chart_part3_scatter2_);
 
     // 设置X轴
     axisX_->setTickCount(7);// 刻度线
@@ -381,7 +327,7 @@ void ChartView::InitChartPart3()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,300);
+    axisY_->setRange(0,1000);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -404,23 +350,6 @@ void ChartView::InitChartPart3()
     y_displacement_line_->attachAxis(axisY_);
     y_displacement_line_->setPointsVisible(true);
 
-    // 散点图（边框）
-    chart_part3_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part3_scatter_->setBorderColor(QColor(21, 100, 255)); // 离散点边框颜色
-    chart_part3_scatter_->setBrush(QBrush(QColor(21, 100, 255)));// 离散点背景色
-    chart_part3_scatter_->setMarkerSize(7); // 离散点大小
-    chart_part3_scatter_->attachAxis(axisX_);
-    chart_part3_scatter_->attachAxis(axisY_);
-
-    // 散点图（中心）
-    chart_part3_scatter2_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part3_scatter2_->setMarkerSize(3);// 点大小
-    chart_part3_scatter2_->attachAxis(axisX_);
-    chart_part3_scatter2_->attachAxis(axisY_);
-
-    chart_part3_->legend()->markers(chart_part3_scatter_).first()->setVisible(false);// 隐藏图例
-    chart_part3_->legend()->markers(chart_part3_scatter2_).first()->setVisible(false);
-
     chart_view_list.at(3)->setChart(chart_part3_);
     chart_view_list.at(3)->setRenderHint(QPainter::Antialiasing);
 
@@ -435,7 +364,9 @@ void ChartView::InitChartPart3()
     point_value_label_->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     point_value_label_->hide();
 
-    connect(chart_part3_scatter_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(y_speed_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(y_acceleration_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(y_displacement_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
 }
 
 void ChartView::InitChartPart4()
@@ -446,16 +377,12 @@ void ChartView::InitChartPart4()
     z_speed_line_ = new QLineSeries(this);
     z_acceleration_line_ = new QLineSeries(this);
     z_displacement_line_ = new QLineSeries(this);
-    chart_part4_scatter_  = new QScatterSeries(this);
-    chart_part4_scatter2_  = new QScatterSeries(this);
 
     chart_part4_->addAxis(axisX_, Qt::AlignBottom);
     chart_part4_->addAxis(axisY_, Qt::AlignLeft);
     chart_part4_->addSeries(z_speed_line_);
     chart_part4_->addSeries(z_acceleration_line_);
     chart_part4_->addSeries(z_displacement_line_);
-    chart_part4_->addSeries(chart_part4_scatter_);
-    chart_part4_->addSeries(chart_part4_scatter2_);
 
     // 设置X轴
     axisX_->setTickCount(7);// 刻度线
@@ -464,7 +391,7 @@ void ChartView::InitChartPart4()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,300);
+    axisY_->setRange(0,1000);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -487,23 +414,6 @@ void ChartView::InitChartPart4()
     z_displacement_line_->attachAxis(axisY_);
     z_displacement_line_->setPointsVisible(true);
 
-    // 散点图（边框）
-    chart_part4_scatter_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part4_scatter_->setBorderColor(QColor(21, 100, 255)); // 离散点边框颜色
-    chart_part4_scatter_->setBrush(QBrush(QColor(21, 100, 255)));// 离散点背景色
-    chart_part4_scatter_->setMarkerSize(7); // 离散点大小
-    chart_part4_scatter_->attachAxis(axisX_);
-    chart_part4_scatter_->attachAxis(axisY_);
-
-    // 散点图（中心）
-    chart_part4_scatter2_->setMarkerShape(QScatterSeries::MarkerShapeCircle);// 圆形的点
-    chart_part4_scatter2_->setMarkerSize(3);// 点大小
-    chart_part4_scatter2_->attachAxis(axisX_);
-    chart_part4_scatter2_->attachAxis(axisY_);
-
-    chart_part4_->legend()->markers(chart_part4_scatter_).first()->setVisible(false);// 隐藏图例
-    chart_part4_->legend()->markers(chart_part4_scatter2_).first()->setVisible(false);
-
     chart_view_list.at(4)->setChart(chart_part4_);
     chart_view_list.at(4)->setRenderHint(QPainter::Antialiasing);
 
@@ -518,7 +428,9 @@ void ChartView::InitChartPart4()
     point_value_label_->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     point_value_label_->hide();
 
-    connect(chart_part4_scatter_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(z_speed_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(z_acceleration_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
+    connect(z_displacement_line_, &QScatterSeries::hovered, this, &ChartView::PointHoverd);//用于鼠标移动到点上显示数值
 }
 
 void ChartView::OnlineCheckSlot()
@@ -549,9 +461,9 @@ void ChartView::PointHoverd(const QPointF &point, bool state)
     QDateTime time = QDateTime::currentDateTime();
     if (state)
     {
-        point_value_label_->setText(QString::asprintf(time.toString("hh:mm:ss").toUtf8()+"\n%1.0f", point.y()));
+        point_value_label_->setText(QString::asprintf("\n%1.0f", point.y()));
         QPoint curPos = mapFromGlobal(QCursor::pos());
-        point_value_label_->move(curPos.x() - point_value_label_->width() / 2, curPos.y() - point_value_label_->height() * 1.5);//移动数值
+        point_value_label_->move(curPos.x() - point_value_label_->width() / 2, curPos.y() - point_value_label_->height());//移动数值
         point_value_label_->show();
     }
     else
@@ -565,48 +477,20 @@ void ChartView::ReceiveDataToUpdate(QList<int> data_list)
     humidity_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(2));
     smoke_density_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(3));
     light_intensity_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(4));
-    chart_part_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(1));
-    chart_part_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(2));
-    chart_part_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(3));
-    chart_part_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(4));
-    chart_part_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(1));
-    chart_part_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(2));
-    chart_part_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(3));
-    chart_part_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(4));
 
     current_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(15));
-    chart_part1_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(15));
-    chart_part1_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(15));
 
     x_speed_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(6));
     x_acceleration_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(7));
     x_displacement_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(8));
-    chart_part2_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(6));
-    chart_part2_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(7));
-    chart_part2_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(8));
-    chart_part2_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(6));
-    chart_part2_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(7));
-    chart_part2_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(8));
 
     y_speed_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(9));
     y_acceleration_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(10));
     y_displacement_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(11));
-    chart_part3_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(9));
-    chart_part3_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(10));
-    chart_part3_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(11));
-    chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(9));
-    chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(10));
-    chart_part3_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(11));
 
     z_speed_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(12));
     z_acceleration_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(13));
     z_displacement_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(14));
-    chart_part4_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(12));
-    chart_part4_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(13));
-    chart_part4_scatter_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(14));
-    chart_part4_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(12));
-    chart_part4_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(13));
-    chart_part4_scatter2_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(14));
 
     online_flag_ = true;
     internal_table_model_->ModifyOnlineStatus(true ,device_id_);

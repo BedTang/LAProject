@@ -62,13 +62,15 @@ void TcpHandle::ReadServerData()
                       .arg(tcp_client_list_[i]->peerPort());
 
         // 若地址与上次消息地址不同，则需显示此次消息的客户端地址
-        if(ip_port != ip_port_pre)
-            ui_->logBrowser->append(ip_port);
-
+        // if(ip_port != ip_port_pre)
+        {
+            // ui_->logBrowser->append(ip_port);
+            // ui_->logBrowser->insertPlainText(current_client_msg_);
+        }
         // 处理接收到的数据
         current_client_msg_= buffer;
         current_client_msg_= current_client_msg_.simplified();
-        ui_->logBrowser->append(current_client_msg_);
+        ui_->logBrowser->insertPlainText(ip_port+current_client_msg_+"\n");
 
         DebugOut("ReadServerData()<<Request to add a device.");
         DebugOut("ReadServerData()<<Current ip address:"+tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]);

@@ -87,30 +87,20 @@ private:
     QLineSeries *humidity_line_;
     QLineSeries *smoke_density_line_;
     QLineSeries *light_intensity_line_;
-    QScatterSeries *chart_part_scatter_;
-    QScatterSeries *chart_part_scatter2_;
 
     QLineSeries *current_line_;
-    QScatterSeries *chart_part1_scatter_;
-    QScatterSeries *chart_part1_scatter2_;
 
     QLineSeries *x_speed_line_;
     QLineSeries *x_acceleration_line_;
     QLineSeries *x_displacement_line_;
-    QScatterSeries *chart_part2_scatter_;
-    QScatterSeries *chart_part2_scatter2_;
 
     QLineSeries *y_speed_line_;
     QLineSeries *y_acceleration_line_;
     QLineSeries *y_displacement_line_;
-    QScatterSeries *chart_part3_scatter_;
-    QScatterSeries *chart_part3_scatter2_;
 
     QLineSeries *z_speed_line_;
     QLineSeries *z_acceleration_line_;
     QLineSeries *z_displacement_line_;
-    QScatterSeries *chart_part4_scatter_;
-    QScatterSeries *chart_part4_scatter2_;
 
     QPushButton *switch_next_chart_button_;
     QPushButton *switch_previous_chart_button_;

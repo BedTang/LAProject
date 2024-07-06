@@ -1,5 +1,4 @@
 #include "sqlite_handler.h"
-#include "qdebug.h"
 
 extern void DebugOut(QString);
 
@@ -141,7 +140,7 @@ void SqlDataHandler::MoreInsertData(int device_id ,QList<int> data_list)
     QString str =QString("device_%0").arg(device_id);
     if(IsTableExist(str) == false)
     {
-        QuerySql(QString("create table device_%0 (id int,temperature int,humidity int,smoke_density int,light_intensity int,battery_level int,x_speed int,x_acceleration int,x_displacement int,y_speed int,y_acceleration int,y_displacement int,z_speed int,z_acceleration int,z_displacement int,current int,timestamp int);").arg(device_id));
+        QuerySql(QString("create table device_%0 (ID int,Temperature int,Humidity int,Smoke int,Light int,Battery int,X_V int,X_A int,X_D int,Y_V int,Y_A int,Y_D int,Z_V int,Z_A int,Z_D int,Current int,Time int);").arg(device_id));
     }
     // 进行多个数据的插入时，可以利用绑定进行批处理
     QSqlQuery query;
@@ -163,7 +162,8 @@ void SqlDataHandler::MoreInsertData(int device_id ,QList<int> data_list)
     query.addBindValue(data_list.at(13));
     query.addBindValue(data_list.at(14));
     query.addBindValue(data_list.at(15));
-    query.exec(); // 进行批处理，如果出错就输出错误
+    if(!query.exec())
+        DebugOut("Error"); // 进行批处理，如果出错就输出错误
 }
 
 // 修改数据

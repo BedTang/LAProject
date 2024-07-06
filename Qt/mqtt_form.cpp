@@ -5,15 +5,17 @@ extern QString GetCurrentStringTime();
 extern void DebugOut(QString);
 
 MqttForm::MqttForm(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent,Qt::WindowStaysOnTopHint)
     , ui_(new Ui::MqttForm)
 {
     setAttribute(Qt::WA_QuitOnClose,false);
 
     ui_->setupUi(this);
-    this->setWindowTitle("MQTT工具");
+    this->setWindowTitle("MQTT调试工具");
 
     mqtt_client_=new QMqttClient(this);
+    mqtt_client_2=new QMqttClient(this);
+    mqtt_client_3=new QMqttClient(this);
 
     connect(ui_->connect_button_ ,&QPushButton::clicked ,this ,&MqttForm::ConnectButtonSlot);
     connect(ui_->ping_button_ ,&QPushButton::clicked ,this ,&MqttForm::PingButtonSlot);
@@ -33,11 +35,11 @@ MqttForm::~MqttForm()
     delete ui_;
 }
 
-void MqttForm::SetJsonMessage(QString message)
+void MqttForm::SetJsonMessage(QString message ,int id)
 {
     DebugOut("MqttForm::SetJsonMessage()<<");
     json_message = message;
-    PublishMessage();
+    PublishMessage(id);
 }
 
 void MqttForm::GetDevcieData(QList<int> list)
@@ -60,26 +62,49 @@ void MqttForm::InitMqttServer()
     mqtt_client_->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
     mqtt_client_->setKeepAlive(60);
     mqtt_client_->connectToHost();
+
+    mqtt_client_2->setHostname(ui_->server_host_line_->text());
+    mqtt_client_2->setPort((ui_->server_port_line_->text().toInt()));
+    mqtt_client_2->setClientId("Node2");
+    mqtt_client_2->setUsername(ui_->client_user_line_->text());
+    mqtt_client_2->setPassword("version=2018-10-31&res=products%2Fzdgol22rNA%2Fdevices%2FNode2&et=1748431311&method=md5&sign=4AmUi0BYbZbKQDLz%2BWV8aQ%3D%3D");
+    mqtt_client_2->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
+    mqtt_client_2->setKeepAlive(60);
+    mqtt_client_2->connectToHost();
+
+    mqtt_client_3->setHostname(ui_->server_host_line_->text());
+    mqtt_client_3->setPort((ui_->server_port_line_->text().toInt()));
+    mqtt_client_3->setClientId("Node3");
+    mqtt_client_3->setUsername(ui_->client_user_line_->text());
+    mqtt_client_3->setPassword("version=2018-10-31&res=products%2Fzdgol22rNA%2Fdevices%2FNode2&et=1748431311&method=md5&sign=rW7Ut22I9gdaqh7CBnOmIA%3D%3D");
+    mqtt_client_3->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
+    mqtt_client_3->setKeepAlive(60);
+    mqtt_client_3->connectToHost();
 }
 
 void MqttForm::IsServerOnline()
 {
-    // 预计废弃
+
 }
 
-void MqttForm::PublishMessage()
+void MqttForm::PublishMessage(int id)
 {
     DebugOut("MqttForm::PublishMessage()<<");
-    mqtt_client_->setHostname(ui_->server_host_line_->text());
-    mqtt_client_->setPort((ui_->server_port_line_->text().toInt()));
-    mqtt_client_->setClientId(ui_->client_id_line_->text());
-    mqtt_client_->setUsername(ui_->client_user_line_->text());
-    mqtt_client_->setPassword(ui_->client_password_line_->text());
-    mqtt_client_->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
-    mqtt_client_->setKeepAlive(60);
-    mqtt_client_->connectToHost();
-    topic_=*new QMqttTopicName("$sys/zdgol22rNA/Node1/thing/property/post");
-    mqtt_client_->publish(topic_ ,json_message.toUtf8());
+    topic_=*new QMqttTopicName(QString("$sys/zdgol22rNA/Node%0/thing/property/post").arg(id));
+    switch (id) {
+    case 1:
+        mqtt_client_->publish(topic_ ,json_message.toUtf8());
+        break;
+    case 2:
+        mqtt_client_2->publish(topic_ ,json_message.toUtf8());
+        break;
+    case 3:
+        mqtt_client_3->publish(topic_ ,json_message.toUtf8());
+        break;
+    default:
+        break;
+    }
+
 }
 
 void MqttForm::MqttClientConnected()   //连接成功

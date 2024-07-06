@@ -197,19 +197,6 @@
         <property name="spacing">
          <number>0</number>
         </property>
-        <item row="1" column="0">
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="0" column="0">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -287,7 +274,7 @@
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>保存</string>
+                 <string>保存数据</string>
                 </property>
                </widget>
               </item>
@@ -308,7 +295,7 @@
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>清空数据（测试按钮）</string>
+                 <string>清空数据</string>
                 </property>
                </widget>
               </item>
@@ -351,6 +338,42 @@
            </layout>
           </item>
          </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image:url(:/res/1.png);
+background-size:cover;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
