@@ -87,7 +87,7 @@ void MainForm::AddNewDeviceToTab(QString ip) // 创建新的设备标签
     {
         DebugOut("AddNewDeviceToTab()<<if(device_list_.contains(data_list_.at(0)))");
         ui_->devices_tab_->addTab(chart_view_->GetStackedWidgetObject(),tr("设备ID：%0").arg(data_list_.at(0)));
-        table_view_->addData(data_list_.at(0) ,ip);
+        table_view_->addData(data_list_.at(0) ,ip ,data_list_.at(4));
     }
 }
 

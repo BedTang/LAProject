@@ -17,12 +17,12 @@ public:
     TableView(QWidget *parent = nullptr, QTableView *table = nullptr);
     QStandardItemModel* GetTableModel();
 
-    void addData(int device_id ,QString ip);
+    void addData(int device_id ,QString ip ,int);
     void deleteView(int index);
     void DeleteModelData();
     QStandardItemModel* GetModelObject();
     void UpdateTableContent(int);
-    void ModifyOnlineStatus(bool ,int);
+    void ModifyOnlineStatus(bool ,int ,int);
     void ExternInit();
 
 private:

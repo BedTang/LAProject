@@ -437,12 +437,12 @@ void ChartView::OnlineCheckSlot()
 {
     if(online_flag_ == true)
     {
-        internal_table_model_->ModifyOnlineStatus(online_flag_ ,device_id_);
+        internal_table_model_->ModifyOnlineStatus(online_flag_ ,device_id_ ,data_list_.at(5));
         online_flag_ = false;
     }
     else if(online_flag_ == false)
     {
-        internal_table_model_->ModifyOnlineStatus(online_flag_ ,device_id_);
+        internal_table_model_->ModifyOnlineStatus(online_flag_ ,device_id_ ,data_list_.at(5));
     }
 }
 
@@ -472,6 +472,7 @@ void ChartView::PointHoverd(const QPointF &point, bool state)
 
 void ChartView::ReceiveDataToUpdate(QList<int> data_list)
 {
+    data_list_ = data_list;
     DebugOut("ChartView::ReceiveDataToUpdate()<<Add Data Point");
     temperature_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(1));
     humidity_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(2));
@@ -493,7 +494,7 @@ void ChartView::ReceiveDataToUpdate(QList<int> data_list)
     z_displacement_line_->append(QDateTime::currentMSecsSinceEpoch(),data_list.at(14));
 
     online_flag_ = true;
-    internal_table_model_->ModifyOnlineStatus(true ,device_id_);
+    internal_table_model_->ModifyOnlineStatus(true ,device_id_ ,data_list.at(5));
 }
 
 void ChartView::SwitchNextChartSlot()

@@ -50,6 +50,7 @@ public:
     bool GetOnlineFlag();
 
 private:
+    QList<int> data_list_;
     QTimer *timer;
     QTimer *online_check_timer_;
 

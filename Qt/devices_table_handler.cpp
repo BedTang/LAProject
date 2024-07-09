@@ -16,13 +16,14 @@ QStandardItemModel* TableView::GetTableModel()
     return table_model_;
 }
 
-void TableView::addData(int device_id ,QString ip)
+void TableView::addData(int device_id ,QString ip ,int battery)
 {
     QList<QStandardItem*> add_items;
     // QStandardItem *item = new QStandardItem();
     add_items << new QStandardItem(QString("%0").arg(device_id))
               << new QStandardItem(QString("%0").arg(ip))
               << new QStandardItem("在线")
+              << new QStandardItem(QString("%0").arg(battery))
               << new QStandardItem(GetCurrentStringTime())
               << new QStandardItem(GetCurrentStringTime());
     table_model_->appendRow(add_items);
@@ -50,6 +51,7 @@ void TableView::initTable(QTableView *table)
     header<<tr("名称")
            <<tr("地址")
            <<tr("状态")
+           <<tr("电量")
            <<tr("上线时间")
            <<tr("最后在线时间");
     table_model_->setHorizontalHeaderLabels(header);
@@ -80,7 +82,7 @@ void TableView::UpdateTableContent(int device_id)
     }
 }
 
-void TableView::ModifyOnlineStatus(bool online_flag, int device_id)
+void TableView::ModifyOnlineStatus(bool online_flag, int device_id ,int battery)
 {
     for (int i = 0; i < table_model_->rowCount(); ++i) {
         QModelIndex index;
@@ -96,6 +98,8 @@ void TableView::ModifyOnlineStatus(bool online_flag, int device_id)
             {
                 table_model_->setData(index ,tr("离线"));
             }
+            index = table_model_->index(i ,3);
+            table_model_->setData(index ,tr("%0").arg(battery));
         }
     }
 }
