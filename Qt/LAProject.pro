@@ -12,6 +12,7 @@ SOURCES += \
     devices_chart_handler.cpp \
     devices_data_handler.cpp \
     devices_table_handler.cpp \
+    history_form.cpp \
     main.cpp \
     main_form.cpp \
     mqtt_form.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     devices_chart_handler.h \
     devices_data_handler.h \
     devices_table_handler.h \
+    history_form.h \
     main_form.h \
     mqtt_form.h \
     serial_form.h \
@@ -32,6 +34,7 @@ HEADERS += \
     tcp_handle.h
 
 FORMS += \
+    history_form.ui \
     main_form.ui \
     mqtt_form.ui \
     serial_form.ui \

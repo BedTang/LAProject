@@ -3,9 +3,15 @@
 
 #include <QWidget>
 
-#include <qmqttclient.h>
-#include <qmqttmessage.h>
-#include <qmqtttopicname.h>
+#ifdef Q_OS_WIN
+    #include <qmqttclient.h>
+    #include <qmqttmessage.h>
+    #include <qmqtttopicname.h>
+#else
+    #include </root/qtmqtt-5.15.2/src/mqtt/qmqttclient.h>
+    #include </root/qtmqtt-5.15.2/src/mqtt/qmqttmessage.h>
+    #include </root/qtmqtt-5.15.2/src/mqtt/qmqtttopicname.h>
+#endif
 
 #include <QNetworkRequest>
 #include <QMessageBox>

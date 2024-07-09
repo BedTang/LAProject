@@ -264,7 +264,7 @@ void ChartView::InitChartPart2()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,1000);
+    axisY_->setRange(0,40);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -327,7 +327,7 @@ void ChartView::InitChartPart3()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,1000);
+    axisY_->setRange(0,40);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);
@@ -391,7 +391,7 @@ void ChartView::InitChartPart4()
     axisX_->setRange(QDateTime::currentDateTime(),QDateTime::currentDateTime().addSecs(60));// 范围
 
     // Y轴
-    axisY_->setRange(0,1000);
+    axisY_->setRange(0,40);
     axisY_->setGridLineVisible(true);
     axisY_->setTickCount(6);
     axisY_->setMinorTickCount(5);

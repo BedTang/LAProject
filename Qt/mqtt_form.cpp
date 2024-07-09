@@ -5,7 +5,7 @@ extern QString GetCurrentStringTime();
 extern void DebugOut(QString);
 
 MqttForm::MqttForm(QWidget *parent)
-    : QWidget(parent,Qt::WindowStaysOnTopHint)
+    : QWidget(parent ,Qt::WindowStaysOnTopHint)
     , ui_(new Ui::MqttForm)
 {
     setAttribute(Qt::WA_QuitOnClose,false);
@@ -72,14 +72,6 @@ void MqttForm::InitMqttServer()
     mqtt_client_2->setKeepAlive(60);
     mqtt_client_2->connectToHost();
 
-    mqtt_client_3->setHostname(ui_->server_host_line_->text());
-    mqtt_client_3->setPort((ui_->server_port_line_->text().toInt()));
-    mqtt_client_3->setClientId("Node3");
-    mqtt_client_3->setUsername(ui_->client_user_line_->text());
-    mqtt_client_3->setPassword("version=2018-10-31&res=products%2Fzdgol22rNA%2Fdevices%2FNode2&et=1748431311&method=md5&sign=rW7Ut22I9gdaqh7CBnOmIA%3D%3D");
-    mqtt_client_3->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
-    mqtt_client_3->setKeepAlive(60);
-    mqtt_client_3->connectToHost();
 }
 
 void MqttForm::IsServerOnline()
@@ -104,7 +96,6 @@ void MqttForm::PublishMessage(int id)
     default:
         break;
     }
-
 }
 
 void MqttForm::MqttClientConnected()   //连接成功
@@ -207,4 +198,3 @@ void MqttForm::on_pushButton_clicked()
 {
     jsoner->PackageDeviceDataToJson(ReturnDeviceData());
 }
-

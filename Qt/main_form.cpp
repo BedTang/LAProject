@@ -24,8 +24,8 @@ MainForm::MainForm(QWidget *parent)
     ui_->setupUi(this);
     this->setWindowTitle(tr("分布式工业节点与电机智能监测系统"));
 
-    ui_->devices_tab->tabBar()->setTabButton(0 ,QTabBar::RightSide ,nullptr);
-    ui_->devices_tab->setContentsMargins(0,0,0,0);
+    ui_->devices_tab_->tabBar()->setTabButton(0 ,QTabBar::RightSide ,nullptr);
+    ui_->devices_tab_->setContentsMargins(0,0,0,0);
     // ui_->tab->setStyleSheet("border-image:url(:/0.jpg)");
 
     ui_->splitter_->setStretchFactor(0,2);
@@ -43,7 +43,9 @@ MainForm::MainForm(QWidget *parent)
     sqldb_->OpenDatabase();
     sqldb_->CheckDefaultTable();
 
-    setting_form_ = new SettingForm(nullptr, sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
+    setting_form_ = new SettingForm(nullptr, sqldb_->QuertTcpPort("tcp_server_port_" ,"setting"));
+
+    history_form_ = new HistoryForm(nullptr ,sqldb_);
 
     // 定时器
     online_check_timer_ = new QTimer(this);
@@ -57,11 +59,11 @@ MainForm::MainForm(QWidget *parent)
     // showFullScreen();
     // 信号与槽
     connect(timer_,SIGNAL(timeout()), this, SLOT(TimeMessage()));
-    connect(ui_->start_server, &QPushButton::clicked, this, &MainForm::StartServerBtnClicked);
-    connect(ui_->save_button, &QPushButton::clicked, this, &MainForm::SaveBtnClicked);
-    connect(ui_->test_button, &QPushButton::clicked, this, &MainForm::CleanDataBtnClicked);
-    connect(ui_->setting_button, &QPushButton::clicked, this, &MainForm::SettingBtnClicked);
-    connect(ui_->devices_tab ,&QTabWidget::tabCloseRequested ,this ,&MainForm::DeviceTabCloseTabBtnClicked);
+    connect(ui_->start_server_, &QPushButton::clicked, this, &MainForm::StartServerBtnClicked);
+    connect(ui_->save_button_, &QPushButton::clicked, this, &MainForm::SaveBtnClicked);
+    connect(ui_->history_button_, &QPushButton::clicked, this, &MainForm::CleanDataBtnClicked);
+    connect(ui_->setting_button_, &QPushButton::clicked, this, &MainForm::SettingBtnClicked);
+    connect(ui_->devices_tab_ ,&QTabWidget::tabCloseRequested ,this ,&MainForm::DeviceTabCloseTabBtnClicked);
     connect(ui_->devices_table_view_, &QTableView::clicked, this, &MainForm::TableClicked);
     connect(tcp_, &TcpHandle::RequestAddDevice, this,&MainForm::AddDevice);
     // connect(tcp_ ,&tcpHandle::RequestDataHandle ,json_ ,&jsonHandle::ReciveDataHandler);
@@ -84,7 +86,7 @@ void MainForm::AddNewDeviceToTab(QString ip) // 创建新的设备标签
     if(device_list_.contains(data_list_.at(0)))
     {
         DebugOut("AddNewDeviceToTab()<<if(device_list_.contains(data_list_.at(0)))");
-        ui_->devices_tab->addTab(chart_view_->GetStackedWidgetObject(),tr("设备ID：%0").arg(data_list_.at(0)));
+        ui_->devices_tab_->addTab(chart_view_->GetStackedWidgetObject(),tr("设备ID：%0").arg(data_list_.at(0)));
         table_view_->addData(data_list_.at(0) ,ip);
     }
 }
@@ -119,24 +121,24 @@ void MainForm::DeviceTabCloseTabBtnClicked(int index) // 关闭指定设备标�
     chart_view_ = qobject_cast<class ChartView *>(sender());
     delete chart_view_object_map_.value(1);
     chart_view_object_map_.remove(1);
-    ui_->devices_tab->removeTab(index);
+    ui_->devices_tab_->removeTab(index);
     delete chart_view_;
     // table_view_->deleteView(index);// 暂时取消设备列表的删除
 }
 
 void MainForm::StartServerBtnClicked() // TCP服务器控制
 {
-    if(ui_->start_server->text()==tr("启动服务器"))
+    if(ui_->start_server_->text()==tr("启动服务器"))
     {
-        tcp_->ServerListening(server_status_ ,sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
-        ui_->logBrowser->append(tr("当前服务器端口:") + QString::number(tcp_->GetPort())+"\n");
-        ui_->start_server->setText(tr("关闭服务器"));
+        tcp_->ServerListening(server_status_ ,sqldb_->QuertTcpPort("tcp_server_port_" ,"setting"));
+        ui_->logBrowser_->append(tr("当前服务器端口:") + QString::number(tcp_->GetPort())+"\n");
+        ui_->start_server_->setText(tr("关闭服务器"));
         return;
     }
-    if(ui_->start_server->text()==tr("关闭服务器"))
+    if(ui_->start_server_->text()==tr("关闭服务器"))
     {
-        tcp_->ServerListening(server_status_ ,sqldb_->QuertSqlData("tcp_server_port_" ,"setting"));
-        ui_->start_server->setText(tr("启动服务器"));
+        tcp_->ServerListening(server_status_ ,sqldb_->QuertTcpPort("tcp_server_port_" ,"setting"));
+        ui_->start_server_->setText(tr("启动服务器"));
         return;
     }
 }
@@ -145,7 +147,7 @@ void MainForm::SaveBtnClicked() // 数据保存
 {
     DebugOut("SaveBtnClicked()<<");
 
-    for (int var = 1; var < ui_->devices_tab->count(); ++var) {
+    for (int var = 1; var < ui_->devices_tab_->count(); ++var) {
         QProcess *p;
         p=new QProcess();
         p->start("sqlite3 LAProject.db");
@@ -171,27 +173,28 @@ void MainForm::SettingBtnClicked() // 显示设置界面
 
 void MainForm::CleanDataBtnClicked() // 清空数据
 {
-    DebugOut("CleanDataBtnClicked()<<");
-    ui_->logBrowser->clearHistory();
-    ui_->logBrowser->clear();
-    device_list_.clear();
-    online_device_list_.clear();
-    table_view_->DeleteModelData();
-    for (int var = 1; var < ui_->devices_tab->count(); ++var) {
-        ui_->devices_tab->removeTab(var);
-    }
-    table_view_->ExternInit();
+    // DebugOut("CleanDataBtnClicked()<<");
+    // ui_->logBrowser->clearHistory();
+    // ui_->logBrowser->clear();
+    // device_list_.clear();
+    // online_device_list_.clear();
+    // table_view_->DeleteModelData();
+    // for (int var = 1; var < ui_->devices_tab->count(); ++var) {
+    //     ui_->devices_tab->removeTab(var);
+    // }
+    // table_view_->ExternInit();
+    history_form_->show();
 }
 
 void MainForm::TableClicked(const QModelIndex &index) // 设备列表向设备标签页跳转
 {
     QModelIndex index_data = table_view_->GetTableModel()->index(index.row(),0);
     int table_id = table_view_->GetTableModel()->data(index_data).toInt();
-    for (int i = 0; i < ui_->devices_tab->count(); ++i)
+    for (int i = 0; i < ui_->devices_tab_->count(); ++i)
     {
-        if(ui_->devices_tab->tabText(i) == QString("设备ID：%0").arg(table_id))
+        if(ui_->devices_tab_->tabText(i) == QString("设备ID：%0").arg(table_id))
         {
-            ui_->devices_tab->setCurrentIndex(i);
+            ui_->devices_tab_->setCurrentIndex(i);
         }
     }
 }

@@ -19,6 +19,8 @@
 // TCP处理
 #include "tcp_handle.h"
 
+#include "history_form.h"
+
 QT_CHARTS_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
@@ -55,6 +57,8 @@ private:
     TableView *table_view_;
 
     SettingForm *setting_form_;
+
+    HistoryForm *history_form_;
 
     QMap<int ,ChartView*> chart_view_object_map_;
 

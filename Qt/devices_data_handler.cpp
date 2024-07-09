@@ -42,6 +42,7 @@ QString JsonHandler::PackageDeviceDataToJson(QList<int> data_list)
     params_json.insert("humidity" ,params_humidity_json);
     params_json.insert("light_intensity" ,params_light_intensity_json);
     params_json.insert("smoke_density" ,params_smoke_density_json);
+    params_json.insert("battery_level" ,params_battery_level_json);
     params_json.insert("x_speed" ,params_x_speed_json);
     params_json.insert("x_acceleration" ,params_x_acceleration_json);
     params_json.insert("x_displacement" ,params_x_displacement_json);
@@ -103,15 +104,15 @@ QList<int> JsonHandler::ReciveDataHandler(QList<int> &list, QString str)
     return_data_list.append(smoke_density_value_.toInt());
     return_data_list.append(light_intensity_value_.toInt());
     return_data_list.append(battery_level_value_.toInt());
-    return_data_list.append(x_speed_value_.toInt());
-    return_data_list.append(x_acceleration_value_.toInt());
-    return_data_list.append(x_displacement_value_.toInt());
-    return_data_list.append(y_speed_value_.toInt());
-    return_data_list.append(y_acceleration_value_.toInt());
-    return_data_list.append(y_displacement_value_.toInt());
-    return_data_list.append(z_speed_value_.toInt());
-    return_data_list.append(z_acceleration_value_.toInt());
-    return_data_list.append(z_displacement_value_.toInt());
+    return_data_list.append(x_speed_value_.toInt()/10);
+    return_data_list.append(x_acceleration_value_.toInt()/10);
+    return_data_list.append(x_displacement_value_.toInt()/10);
+    return_data_list.append(y_speed_value_.toInt()/10);
+    return_data_list.append(y_acceleration_value_.toInt()/10);
+    return_data_list.append(y_displacement_value_.toInt()/10);
+    return_data_list.append(z_speed_value_.toInt()/10);
+    return_data_list.append(z_acceleration_value_.toInt()/10);
+    return_data_list.append(z_displacement_value_.toInt()/10);
     return_data_list.append(current_value_.toInt());
 
     if(!list.contains(device_id_value_.toInt()))

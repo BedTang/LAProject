@@ -35,7 +35,7 @@ void TcpHandle::RetrieveNativeIp()
             {
                 if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol)   
                 {
-                    ui_->logBrowser->append("本机IP地址："+entry.ip().toString());
+                    ui_->logBrowser_->append("本机IP地址："+entry.ip().toString());
                     // ui_->host_ip_box->addItem(entry.ip().toString());
                 }
             }
@@ -70,7 +70,7 @@ void TcpHandle::ReadServerData()
         // 处理接收到的数据
         current_client_msg_= buffer;
         current_client_msg_= current_client_msg_.simplified();
-        ui_->logBrowser->insertPlainText(ip_port+current_client_msg_+"\n");
+        ui_->logBrowser_->insertPlainText(ip_port+current_client_msg_+"\n");
 
         DebugOut("ReadServerData()<<Request to add a device.");
         DebugOut("ReadServerData()<<Current ip address:"+tcp_client_list_[i]->peerAddress().toString().split("::ffff:")[1]);

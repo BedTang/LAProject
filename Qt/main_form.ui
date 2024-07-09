@@ -112,6 +112,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="logGroupBox">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -138,7 +141,7 @@
            <number>0</number>
           </property>
           <item row="0" column="0">
-           <widget class="QTextBrowser" name="logBrowser">
+           <widget class="QTextBrowser" name="logBrowser_">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -152,7 +155,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QTabWidget" name="devices_tab">
+     <widget class="QTabWidget" name="devices_tab_">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -213,9 +216,9 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="title_label_">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;分布式工业节点与电机智能监测系统&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;XXX&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;XXX&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;XXX&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;XXX&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;XXX&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;分布式工业节点与电机智能监测系统&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -237,7 +240,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="start_server">
+               <widget class="QPushButton" name="start_server_">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -258,7 +261,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="save_button">
+               <widget class="QPushButton" name="save_button_">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -279,7 +282,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="test_button">
+               <widget class="QPushButton" name="history_button_">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -295,12 +298,12 @@
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>清空数据</string>
+                 <string>历史数据</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="setting_button">
+               <widget class="QPushButton" name="setting_button_">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
@@ -340,7 +343,7 @@
          </layout>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="socchina_img_label_">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -355,7 +358,7 @@
           </property>
           <property name="styleSheet">
            <string notr="true">border-image:url(:/res/1.png);
-background-size:cover;</string>
+</string>
           </property>
           <property name="text">
            <string/>

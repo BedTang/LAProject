@@ -10,6 +10,9 @@
 #include <QObject>
 #include <QVariant>
 
+#include <QStandardItemModel>
+#include <QHeaderView>
+#include <QTableView>
 
 typedef struct
 {
@@ -35,24 +38,23 @@ class SqlDataHandler:QObject
 {
 public:
     SqlDataHandler();
-    void CloseDatabase(void);
-    void DeleteData(int id);
-    void DeleteTable(QString& tableName);
-    void CheckDefaultTable();
+
+    int QuertTcpPort(QString ,QString);
     bool IsTableExist(QString&);
-    void ModifyData(int id, QString name, int age);
-    void MoreInsertData(int ,QList<int>);
-    bool OpenDatabase();
-    void QuertTable();
-    void signleDataInsert(device_data &singleData);
+    int OpenDatabase();
     bool QuerySql(QString);
-    bool QuerySql(QString ,QString ,QString);
-    int QuertSqlData(QString ,QString);
+    void MoreInsertData(int ,QList<int>);
     void WriteDataToSql();
+    void GetHistoryData(int ,QStandardItemModel* ,QTableView*);
+    void WipeHistoryData(int);
+    void CloseDatabase(void);
+    void CheckDefaultTable();
+    // void DeleteData(int id);
+    // void DeleteTable(QString& tableName);
+    // void ModifyData(int id, QString name, int age);
 
 private:
     QSqlDatabase database_;
-    QString query_string_;
 
 };
 
